@@ -5,7 +5,6 @@ namespace Streamiz.Kafka.Net.Errors
     /// <summary>
     /// Signals that a method has been invoked at an illegal or inappropriate time.
     /// </summary>
-    [Serializable]
     public class IllegalStateException : Exception
     {
         /// <summary>
