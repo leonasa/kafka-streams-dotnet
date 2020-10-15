@@ -80,7 +80,7 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
 
         public List<TopicPartitionOffset> Committed(TimeSpan timeout)
         {
-            return cluster.Comitted(this);
+            return cluster.Committed(this);
         }
 
         public List<TopicPartitionOffset> Committed(IEnumerable<TopicPartition> partitions, TimeSpan timeout)
