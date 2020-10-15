@@ -38,10 +38,10 @@ namespace Streamiz.Kafka.Net.Processors
     /// </summary>
     internal class GlobalThreadState : ThreadStateTransitionValidator
     {
-        public static GlobalThreadState CREATED = new GlobalThreadState(1, 2).Order(0).Named("CREATED");
-        public static GlobalThreadState RUNNING = new GlobalThreadState(2).Order(1).Named("RUNNING");
-        public static GlobalThreadState PENDING_SHUTDOWN = new GlobalThreadState(3).Order(2).Named("PENDING_SHUTDOWN");
-        public static GlobalThreadState DEAD = new GlobalThreadState().Order(3).Named("DEAD");
+        public static readonly GlobalThreadState CREATED = new GlobalThreadState(1, 2).Order(0).Named("CREATED");
+        public static readonly GlobalThreadState RUNNING = new GlobalThreadState(2).Order(1).Named("RUNNING");
+        public static readonly GlobalThreadState PENDING_SHUTDOWN = new GlobalThreadState(3).Order(2).Named("PENDING_SHUTDOWN");
+        public static readonly GlobalThreadState DEAD = new GlobalThreadState().Order(3).Named("DEAD");
 
         /// <summary>
         /// Name of the state
