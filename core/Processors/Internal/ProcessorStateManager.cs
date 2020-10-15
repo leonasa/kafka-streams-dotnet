@@ -117,6 +117,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
 
         public void RegisterGlobalStateStores(IDictionary<string, IStateStore> globalStateStores)
         {
+            throw new NotSupportedException();
         }
 
         #endregion

@@ -30,6 +30,6 @@ namespace Streamiz.Kafka.Net.Processors.Internal
             return createdTasks;
         }
 
-        public abstract T CreateTask(IConsumer<byte[], byte[]> consumer, TaskId id, IEnumerable<TopicPartition> partition);
+        public abstract T CreateTask(IConsumer<byte[], byte[]> consumer, TaskId id, IEnumerable<TopicPartition> partitions);
     }
 }

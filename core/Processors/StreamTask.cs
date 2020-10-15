@@ -62,7 +62,6 @@ namespace Streamiz.Kafka.Net.Processors
                     logPrefix,
                     $"record-queue-{p.Topic}-{id.Id}-{id.Partition}",
                     sourceTimestampExtractor,
-                    p,
                     sourceProcessor);
                 partitionsQueue.Add(p, queue);
                 processors.Add(sourceProcessor);

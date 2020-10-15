@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Streamiz.Kafka.Net.SerDes;
 
 namespace Streamiz.Kafka.Net.Processors
@@ -23,7 +24,7 @@ namespace Streamiz.Kafka.Net.Processors
 
         public void Close()
         {
-            
+            throw new NotSupportedException();
         }
 
         public void Init(ProcessorContext context)

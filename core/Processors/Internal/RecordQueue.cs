@@ -20,26 +20,22 @@ namespace Streamiz.Kafka.Net.Processors.Internal
         private long partitionTime = -1;
 
         private readonly ITimestampExtractor timestampExtractor;
-        private readonly TopicPartition topicPartition;
         private readonly ISourceProcessor sourceProcessor;
 
         public RecordQueue(
             string logPrefix,
             string nameQueue,
             ITimestampExtractor timestampExtractor,
-            TopicPartition topicPartition,
             ISourceProcessor sourceProcessor)
         {
             this.logPrefix = $"{logPrefix}- recordQueue [{nameQueue}] ";
             queue = new List<ConsumeResult<byte[], byte[]>>();
 
             this.timestampExtractor = timestampExtractor;
-            this.topicPartition = topicPartition;
             this.sourceProcessor = sourceProcessor;
         }
 
-        public long HeadRecordTimestamp
-            => currentRecord == null ? -1 : currentRecord.Message.Timestamp.UnixTimestampMs;
+        public long HeadRecordTimestamp => currentRecord?.Message.Timestamp.UnixTimestampMs ?? -1;
 
         public ISourceProcessor Processor => sourceProcessor;
 

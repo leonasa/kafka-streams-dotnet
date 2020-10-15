@@ -40,6 +40,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph.Nodes
 
         public void ReuseSourceTopicForChangeLog(bool shouldReuseSourceTopicForChangelog)
         {
+            throw new NotSupportedException();
         }
 
         public override string ToString()

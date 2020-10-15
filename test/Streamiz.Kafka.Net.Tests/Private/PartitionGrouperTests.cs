@@ -21,8 +21,8 @@ namespace Streamiz.Kafka.Net.Tests.Private
             var partitions = new Dictionary<TopicPartition, RecordQueue>();
             var sourceProcessor = new SourceProcessor<string, string>("source1", "test", serdes, serdes, timestampEx);
             var sourceProcessor2 = new SourceProcessor<string, string>("source2", "test2", serdes, serdes, timestampEx);
-            var recordQueue = new RecordQueue("", "source_queue", timestampEx, topicPart1, sourceProcessor);
-            var recordQueue2 = new RecordQueue("", "source2_queue", timestampEx, topicPart2, sourceProcessor2);
+            var recordQueue = new RecordQueue("", "source_queue", timestampEx, sourceProcessor);
+            var recordQueue2 = new RecordQueue("", "source2_queue", timestampEx, sourceProcessor2);
             partitions.Add(topicPart1, recordQueue);
             partitions.Add(topicPart2, recordQueue2);
             return partitions;
