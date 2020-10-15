@@ -199,16 +199,6 @@ namespace Streamiz.Kafka.Net
             public static bool operator !=(State a, State b) => a?.Ordinal != b?.Ordinal;
 
             /// <summary>
-            /// Override Equals method
-            /// </summary>
-            /// <param name="obj"></param>
-            /// <returns></returns>
-            public override bool Equals(object obj)
-            {
-                return obj is State && Equals((State)obj);
-            }
-
-            /// <summary>
             /// Override GetHashCode method
             /// </summary>
             /// <returns></returns>
@@ -224,6 +214,16 @@ namespace Streamiz.Kafka.Net
             public override string ToString()
             {
                 return $"{Name}";
+            }
+            
+            /// <summary>
+            /// Override Equals method
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <returns></returns>
+            public override bool Equals(object obj)
+            {
+                return obj is State && Equals((State)obj);
             }
 
             /// <summary>
