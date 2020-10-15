@@ -1,11 +1,11 @@
-﻿using Confluent.Kafka;
-using Streamiz.Kafka.Net.Errors;
-using Streamiz.Kafka.Net.Kafka;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
+using Confluent.Kafka;
+using Streamiz.Kafka.Net.Errors;
+using Streamiz.Kafka.Net.Kafka;
 using static Streamiz.Kafka.Net.Mock.Kafka.MockConsumerInformation;
 
 namespace Streamiz.Kafka.Net.Mock.Kafka
@@ -38,7 +38,7 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
         public List<string> Topics { get; set; }
         public MockConsumer Consumer { get; set; }
         public IConsumerRebalanceListener RebalanceListener { get; set; }
-        public bool Assigned { get; set; } = false;
+        public bool Assigned { get; set; }
         public List<MockTopicPartitionOffset> TopicPartitionsOffset { get; set; }
 
         public override int GetHashCode()
@@ -118,7 +118,7 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
                     Topics = new List<string>(topics),
                     RebalanceListener = consumer.Listener,
                     Partitions = new List<TopicPartition>(),
-                    TopicPartitionsOffset = new List<MockConsumerInformation.MockTopicPartitionOffset>()
+                    TopicPartitionsOffset = new List<MockTopicPartitionOffset>()
                 };
                 consumers.Add(consumer.Name, cons);
 
@@ -185,83 +185,111 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
         {
             foreach (var group in consumerGroups.Keys)
             {
-                var map = new Dictionary<MockConsumerInformation, List<TopicPartition>>();
-                var newPartitions = new Dictionary<MockConsumerInformation, List<TopicPartition>>();
-                var cons = consumerGroups[group];
-                foreach (var c in cons)
-                {
-                    var consumer = consumers[c];
-                    map.Add(consumer, consumer.Partitions);
-                }
+                var map = GenerateMap(group);
 
-                if (map.Any(kv => !kv.Key.Assigned)) // If one consumer in this group is unassigned
-                {
-                    // get all partitions for rebalancing
-                    var allPartitions = map.SelectMany(kv => kv.Value);
-                    // get all topics from all partitions
-                    var allTopics = allPartitions.Select(t => t.Topic).Distinct();
-                    allTopics = allTopics.Union(map.SelectMany(kv => kv.Key.Topics)).Distinct().ToList();
+                if (map.All(kv => kv.Key.Assigned)) 
+                    continue;
+                
+                var newPartitions = BuildNewPartitions(map);
 
-                    foreach (var topic in allTopics)
-                    {
-                        var topicPartitionNumber = topics[topic].PartitionNumber;
-                        var numberConsumerSub = map.Count(kv => kv.Key.Topics.Contains(topic));
-                        int numbPartEach = topicPartitionNumber / numberConsumerSub;
-                        int modulo = topicPartitionNumber % numberConsumerSub;
-
-                        int j = 0, i = 0;
-
-                        foreach (var consumer in map.Where(kv => kv.Key.Topics.Contains(topic)).Select(kv => kv.Key))
-                        {
-                            List<TopicPartition> parts = null;
-                            if (i == numberConsumerSub - 1)
-                                parts = new List<TopicPartition>(Generate(topic, j, numbPartEach + modulo));
-                            else
-                                parts = new List<TopicPartition>(Generate(topic, j, numbPartEach));
-
-                            if (newPartitions.ContainsKey(consumer))
-                                newPartitions[consumer].AddRange(parts);
-                            else
-                                newPartitions.Add(consumer, parts);
-
-                            ++i;
-                            j += numbPartEach;
-                        }
-                    }
-
-                    foreach (var consumer in map.Select(kv => kv.Key))
-                    {
-                        if (consumer.Partitions.Count > 0)
-                        {
-                            consumer.Partitions.Clear();
-                            var pList = consumer.TopicPartitionsOffset.Select(f => new TopicPartitionOffset(f.Topic, f.Partition, f.OffsetComitted)).ToList();
-                            consumer.RebalanceListener?.PartitionsRevoked(consumer.Consumer, pList);
-                        }
-
-                        if (newPartitions.ContainsKey(consumer))
-                        {
-                            var parts = newPartitions[consumer];
-                            consumer.Partitions.AddRange(parts);
-                            foreach (var k in parts)
-                            {
-                                if (!consumer.TopicPartitionsOffset.Any(m => m.Topic.Equals(k.Topic) && m.Partition.Equals(k.Partition)))
-                                {
-                                    consumer.TopicPartitionsOffset.Add(new MockTopicPartitionOffset
-                                    {
-                                        OffsetComitted = 0,
-                                        OffsetConsumed = 0,
-                                        Partition = k.Partition,
-                                        Topic = k.Topic
-                                    });
-                                }
-                            }
-
-                            consumer.RebalanceListener?.PartitionsAssigned(consumer.Consumer, consumer.Partitions);
-                            consumer.Assigned = true;
-                        }
-                    }
-                }
+                Rebalance(map, newPartitions);
             }
+        }
+
+        private void Rebalance(Dictionary<MockConsumerInformation, List<TopicPartition>> map, Dictionary<MockConsumerInformation, List<TopicPartition>> newPartitions)
+        {
+            foreach (var consumer in map.Select(kv => kv.Key))
+            {
+                if (consumer.Partitions.Count > 0)
+                {
+                    consumer.Partitions.Clear();
+                    var pList = consumer.TopicPartitionsOffset.Select(f => new TopicPartitionOffset(f.Topic, f.Partition, f.OffsetComitted)).ToList();
+                    consumer.RebalanceListener?.PartitionsRevoked(consumer.Consumer, pList);
+                }
+
+                if (!newPartitions.ContainsKey(consumer)) 
+                    continue;
+                
+                var partitions = newPartitions[consumer];
+                consumer.Partitions.AddRange(partitions);
+                consumer.TopicPartitionsOffset.AddRange(GenerateTopicPartitionsOffset(partitions, consumer));
+                consumer.RebalanceListener?.PartitionsAssigned(consumer.Consumer, consumer.Partitions);
+                consumer.Assigned = true;
+            }
+        }
+
+        private IEnumerable<MockTopicPartitionOffset> GenerateTopicPartitionsOffset(List<TopicPartition> partitions, MockConsumerInformation consumer)
+        {
+            return partitions.Where(partition => !ConsumerHasOffSetInTopicOrPartition(consumer, partition))
+                            .Select(k => new MockTopicPartitionOffset
+            {
+                OffsetComitted = 0,
+                OffsetConsumed = 0,
+                Partition = k.Partition,
+                Topic = k.Topic
+            });
+        }
+
+        private bool ConsumerHasOffSetInTopicOrPartition(MockConsumerInformation consumer, TopicPartition k)
+        {
+            return consumer.TopicPartitionsOffset.Any(partitionOffset => partitionOffset.Topic.Equals(k.Topic) && partitionOffset.Partition.Equals(k.Partition));
+        }
+
+        private Dictionary<MockConsumerInformation, List<TopicPartition>>  BuildNewPartitions(Dictionary<MockConsumerInformation, List<TopicPartition>> map)
+        {
+            Dictionary<MockConsumerInformation, List<TopicPartition>> newPartitions = new Dictionary<MockConsumerInformation, List<TopicPartition>>();
+            var allTopics = map.SelectMany(kv => kv.Value).Select(t => t.Topic).Distinct().Union(map.SelectMany(kv => kv.Key.Topics)).Distinct().ToList();
+
+            foreach (var topic in allTopics)
+            {
+                BuildPartitionsToTopics(map, topic, newPartitions);
+            }
+
+            return newPartitions;
+        }
+
+        private void BuildPartitionsToTopics(Dictionary<MockConsumerInformation, List<TopicPartition>> map, string topic, Dictionary<MockConsumerInformation, List<TopicPartition>> newPartitions)
+        {
+            var topicPartitionNumber = topics[topic].PartitionNumber;
+            var numberConsumerSub = map.Count(kv => kv.Key.Topics.Contains(topic));
+            int numbPartEach = topicPartitionNumber / numberConsumerSub;
+            int modulo = topicPartitionNumber % numberConsumerSub;
+
+            int j = 0, i = 0;
+
+            foreach (var consumer in map.Where(kv => kv.Key.Topics.Contains(topic)).Select(kv => kv.Key))
+            {
+                var parts = BuildTopicPartitions(i, numberConsumerSub, topic, j, numbPartEach, modulo).ToList();
+
+                if (newPartitions.ContainsKey(consumer))
+                    newPartitions[consumer].AddRange(parts);
+                else
+                    newPartitions.Add(consumer, parts);
+
+                ++i;
+                j += numbPartEach;
+            }
+        }
+
+        private IEnumerable<TopicPartition> BuildTopicPartitions(int i, int numberConsumerSub, string topic, int j, int numbPartEach, int modulo)
+        {
+            if (i == numberConsumerSub - 1)
+                return Generate(topic, j, numbPartEach + modulo);
+            
+            return Generate(topic, j, numbPartEach);
+        }
+
+        private Dictionary<MockConsumerInformation, List<TopicPartition>> GenerateMap(string group)
+        {
+            var map = new Dictionary<MockConsumerInformation, List<TopicPartition>>();
+            var cons = consumerGroups[group];
+            foreach (var c in cons)
+            {
+                var consumer = consumers[c];
+                map.Add(consumer, consumer.Partitions);
+            }
+
+            return map;
         }
 
         internal void Assign(MockConsumer mockConsumer, IEnumerable<TopicPartition> topicPartitions)
@@ -293,7 +321,7 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
 
                         foreach (var cus in customerToRebalance)
                         {
-                            var parts = cus.Partitions.Join(topicPartitions, (t) => t, (t) => t, (t1, t2) => t1);
+                            var parts = cus.Partitions.Join(topicPartitions, t => t, t => t, (t1, t2) => t1);
                             var pList = cus.TopicPartitionsOffset.Select(f => new TopicPartitionOffset(f.Topic, f.Partition, f.OffsetComitted)).ToList();
                             cus.RebalanceListener?.PartitionsRevoked(cus.Consumer, pList);
                             foreach (var j in parts)
@@ -411,10 +439,8 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
 
                 return c.TopicPartitionsOffset.Select(t => new TopicPartitionOffset(new TopicPartition(t.Topic, t.Partition), t.OffsetComitted)).ToList();
             }
-            else
-            {
-                throw new StreamsException($"Consumer {mockConsumer.Name} unknown !");
-            }
+
+            throw new StreamsException($"Consumer {mockConsumer.Name} unknown !");
         }
 
         internal void Commit(MockConsumer mockConsumer, IEnumerable<TopicPartitionOffset> offsets)
@@ -487,10 +513,8 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
 
                 return result;
             }
-            else
-            {
-                throw new StreamsException($"Consumer {mockConsumer.Name} unknown !");
-            }
+
+            throw new StreamsException($"Consumer {mockConsumer.Name} unknown !");
         }
 
         internal ConsumeResult<byte[], byte[]> Consume(MockConsumer mockConsumer, CancellationToken cancellationToken)
