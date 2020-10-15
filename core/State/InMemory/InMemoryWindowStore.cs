@@ -282,8 +282,7 @@ namespace Streamiz.Kafka.Net.State.InMemory
                 return null;
         }
 
-        public IWindowStoreEnumerator<byte[]> Fetch(Bytes key, DateTime from, DateTime to)
-            => Fetch(key, from.GetMilliseconds(), to.GetMilliseconds());
+        public IWindowStoreEnumerator<byte[]> Fetch(Bytes key, DateTime from, DateTime to) => Fetch(key, from.GetMilliseconds(), to.GetMilliseconds());
 
         public IWindowStoreEnumerator<byte[]> Fetch(Bytes key, long from, long to)
         {

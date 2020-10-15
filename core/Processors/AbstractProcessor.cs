@@ -18,9 +18,9 @@ namespace Streamiz.Kafka.Net.Processors
         public string Name { get; set; }
         public IList<string> StateStores { get; protected set; }
 
-        public ISerDes<K> KeySerDes => Key is ISerDes<K> ? (ISerDes<K>)Key : null;
+        public ISerDes<K> KeySerDes => Key as ISerDes<K>;
 
-        public ISerDes<V> ValueSerDes => Value is ISerDes<V> ? (ISerDes<V>)Value : null;
+        public ISerDes<V> ValueSerDes => Value as ISerDes<V>;
 
         public ISerDes Key { get; internal set; } = null;
 
@@ -163,32 +163,44 @@ namespace Streamiz.Kafka.Net.Processors
 
         public void Process(object key, object value)
         {
-            bool throwException = false;
+            key = DeserializeKey(key);
 
-            if (key != null && key is byte[])
-            {
-                if (KeySerDes != null)
-                    key = Key.DeserializeObject(key as byte[], GetSerializationContext(true));
-                else
-                    throwException = true;
-            }
+            value = DeserializeValue(value);
 
-            if (value != null && value is byte[])
+            if ((key == null || key is K) && (value == null || value is V))
+                Process((K)key, (V)value);
+        }
+
+        private object DeserializeValue(object value)
+        {
+            if (value != null && value is byte[] valueBytes)
             {
                 if (ValueSerDes != null)
-                    value = Value.DeserializeObject(value as byte[], GetSerializationContext(false));
+                    value = Value.DeserializeObject(valueBytes, GetSerializationContext(false));
                 else
-                    throwException = true;
+                {
+                    log.Error($"{logPrefix}Impossible to receive source data because keySerdes and/or valueSerdes is not set ! KeySerdes : {(KeySerDes != null ? KeySerDes.GetType().Name : "NULL")} | ValueSerdes : {(ValueSerDes != null ? ValueSerDes.GetType().Name : "NULL")}.");
+                    throw new StreamsException($"{logPrefix}The value serdes is not compatible to the actual value for this processor. Change the default value serdes in StreamConfig or provide correct Serdes via method parameters(using the DSL)");
+                }
             }
 
-            if (throwException)
+            return value;
+        }
+
+        private object DeserializeKey(object key)
+        {
+            if (key != null && key is byte[] keyBytes)
             {
-                var s = KeySerDes == null ? "key" : "value";
-                log.Error($"{logPrefix}Impossible to receive source data because keySerdes and/or valueSerdes is not setted ! KeySerdes : {(KeySerDes != null ? KeySerDes.GetType().Name : "NULL")} | ValueSerdes : {(ValueSerDes != null ? ValueSerDes.GetType().Name : "NULL")}.");
-                throw new StreamsException($"{logPrefix}The {s} serdes is not compatible to the actual {s} for this processor. Change the default {s} serdes in StreamConfig or provide correct Serdes via method parameters(using the DSL)");
+                if (KeySerDes != null)
+                    key = Key.DeserializeObject(keyBytes, GetSerializationContext(true));
+                else
+                {
+                    log.Error($"{logPrefix}Impossible to receive source data because keySerdes and/or valueSerdes is not set ! KeySerdes : {(KeySerDes != null ? KeySerDes.GetType().Name : "NULL")} | ValueSerdes : {(ValueSerDes != null ? ValueSerDes.GetType().Name : "NULL")}.");
+                    throw new StreamsException($"{logPrefix}The key serdes is not compatible to the actual key for this processor. Change the default key serdes in StreamConfig or provide correct Serdes via method parameters(using the DSL)");
+                }
             }
-            else if ((key == null || key is K) && (value == null || value is V))
-                Process((K)key, (V)value);
+
+            return key;
         }
 
         #endregion
@@ -201,7 +213,7 @@ namespace Streamiz.Kafka.Net.Processors
 
         public override bool Equals(object obj)
         {
-            return obj is AbstractProcessor<K, V> && ((AbstractProcessor<K, V>)obj).Name.Equals(Name);
+            return obj is AbstractProcessor<K, V> processor && processor.Name.Equals(Name);
         }
 
         public override int GetHashCode()
