@@ -12,6 +12,7 @@ namespace Streamiz.Kafka.Net.Errors
     /// to backoff and retry when handling this exception.
     /// 
     /// </summary>
+    [Serializable]
     public class InvalidStateStoreException : Exception
     {
         /// <summary>

@@ -5,6 +5,7 @@ namespace Streamiz.Kafka.Net.Errors
     /// <summary>
     /// Indicates a processor state operation (e.g. put, get) has failed.
     /// </summary>
+    [Serializable]
     public class ProcessorStateException : Exception
     {
         /// <summary>

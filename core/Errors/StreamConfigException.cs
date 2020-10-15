@@ -5,6 +5,7 @@ namespace Streamiz.Kafka.Net.Errors
     /// <summary>
     /// Signals that the configuration in your stream is incorrect or maybe a property is missing
     /// </summary>
+    [Serializable]
     public class StreamConfigException : Exception
     {
         /// <summary>
