@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace assignor_tasks
 {
-    internal class Consumer
+    internal class Consumer : IDisposable
     {
         private readonly IConsumer<string, string> consumer;
         private readonly string topic;
@@ -46,10 +46,10 @@ namespace assignor_tasks
         {
             thread.Start();
         }
-    
+
         public void Dispose()
         {
-            consumer.Dispose();
+            consumer?.Dispose();
         }
     }
 }
