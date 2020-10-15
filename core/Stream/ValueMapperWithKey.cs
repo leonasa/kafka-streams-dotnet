@@ -19,10 +19,10 @@ namespace Streamiz.Kafka.Net.Stream
         /// <summary>
         /// Map the given [key and ]value to a new value.
         /// </summary>
-        /// <param name="keyReadonly">the readonly key</param>
+        /// <param name="readOnlyKey">the readonly key</param>
         /// <param name="value">the value to be mapped</param>
         /// <returns>the new value</returns>
-        VR Apply(K keyReadonly, V value);
+        VR Apply(K readOnlyKey, V value);
     }
 
     internal class WrappedValueMapperWithKey<K, V, VR> : IValueMapperWithKey<K, V, VR>

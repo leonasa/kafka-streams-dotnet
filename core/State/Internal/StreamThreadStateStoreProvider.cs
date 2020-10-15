@@ -2,19 +2,16 @@
 using System.Linq;
 using System.Collections.Generic;
 using Streamiz.Kafka.Net.Errors;
-using Streamiz.Kafka.Net.Processors.Internal;
 
 namespace Streamiz.Kafka.Net.State.Internal
 {
     internal class StreamThreadStateStoreProvider
     {
         private readonly IThread streamThread;
-        private readonly InternalTopologyBuilder internalTopologyBuilder;
 
-        public StreamThreadStateStoreProvider(IThread streamThread, InternalTopologyBuilder internalTopologyBuilder)
+        public StreamThreadStateStoreProvider(IThread streamThread)
         {
             this.streamThread = streamThread;
-            this.internalTopologyBuilder = internalTopologyBuilder;
         }
 
         public IEnumerable<T> Stores<T, K, V>(StoreQueryParameters<T, K, V> storeQueryParameters) 

@@ -15,9 +15,9 @@ namespace Streamiz.Kafka.Net.Table.Internal
 {
     internal class KGroupedTable
     {
-        internal static string AGGREGATE_NAME = "KTABLE-AGGREGATE-";
+        internal static readonly string AGGREGATE_NAME = "KTABLE-AGGREGATE-";
 
-        internal static string REDUCE_NAME = "KTABLE-REDUCE-";
+        internal static readonly string REDUCE_NAME = "KTABLE-REDUCE-";
     }
 
     internal class KGroupedTable<K, V> : AbstractStream<K, V>, IKGroupedTable<K, V>
@@ -167,7 +167,6 @@ namespace Streamiz.Kafka.Net.Table.Internal
                                     materializedInternal.KeySerdes,
                                     materializedInternal.ValueSerdes,
                                     SetSourceNodes,
-                                    materializedInternal.QueryableStoreName,
                                     aggregateSupplier,
                                     statefulProcessorNode,
                                     builder);

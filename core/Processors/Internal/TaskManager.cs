@@ -11,7 +11,6 @@ namespace Streamiz.Kafka.Net.Processors.Internal
         private readonly ILog log = Logger.GetLogger(typeof(TaskManager));
         private readonly InternalTopologyBuilder builder;
         private readonly TaskCreator taskCreator;
-        private readonly IAdminClient adminClient;
 
         private readonly IDictionary<TopicPartition, TaskId> partitionsToTaskId = new Dictionary<TopicPartition, TaskId>();
         private readonly IDictionary<TaskId, StreamTask> activeTasks = new Dictionary<TaskId, StreamTask>();
@@ -29,7 +28,6 @@ namespace Streamiz.Kafka.Net.Processors.Internal
         {
             this.builder = builder;
             this.taskCreator = taskCreator;
-            this.adminClient = adminClient;
         }
 
         public TaskManager(InternalTopologyBuilder builder, TaskCreator taskCreator, IAdminClient adminClient, IConsumer<byte[], byte[]> consumer)

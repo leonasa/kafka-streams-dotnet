@@ -22,7 +22,6 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph.Nodes
         private readonly ProcessorParameters<K, V> processorParameters;
         private readonly String sourceName;
         private readonly bool isGlobalKTable;
-        private bool shouldReuseSourceTopicForChangelog = false;
 
         public TableSourceNode(string topicName, string streamGraphNode,
                 string sourceName, ConsumedInternal<K, V> consumed,
@@ -41,7 +40,6 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph.Nodes
 
         public void ReuseSourceTopicForChangeLog(bool shouldReuseSourceTopicForChangelog)
         {
-            this.shouldReuseSourceTopicForChangelog = shouldReuseSourceTopicForChangelog;
         }
 
         public override string ToString()

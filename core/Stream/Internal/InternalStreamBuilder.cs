@@ -76,7 +76,6 @@ namespace Streamiz.Kafka.Net.Stream.Internal
                                     consumed.KeySerdes,
                                     consumed.ValueSerdes,
                                     new List<string> { sourceName },
-                                    materialized.QueryableStoreName,
                                     tableSource,
                                     tableSourceNode,
                                     this);

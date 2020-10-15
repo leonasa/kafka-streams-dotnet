@@ -107,8 +107,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
                 leftStreamParams,
                 rightStreamParams,
                 leftWindowStore,
-                rightWindowStore,
-                joined);
+                rightWindowStore);
 
             builder.AddGraphNode(new List<StreamGraphNode> { leftStreamsGraphNode, rightStreamsGraphNode }, joinNode);
 

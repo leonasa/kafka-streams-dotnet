@@ -26,9 +26,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         {
             aggregateBuilder = new GroupedStreamAggregateBuilder<K, V>(
                 builder,
-                grouped,
                 sourceNodes,
-                name,
                 Node);
         }
 

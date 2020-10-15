@@ -7,7 +7,6 @@ namespace assignor_tasks
     internal class Consumer : IDisposable
     {
         private readonly IConsumer<string, string> consumer;
-        private readonly string topic;
         private readonly int timeout;
         private readonly System.Threading.CancellationToken token;
         private readonly Thread thread;
@@ -15,7 +14,6 @@ namespace assignor_tasks
         public Consumer(IConsumer<string, string> c1, string topic, int v, System.Threading.CancellationToken token)
         {
             consumer = c1;
-            this.topic = topic;
             timeout = v;
             this.token = token;
 

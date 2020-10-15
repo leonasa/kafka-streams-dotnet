@@ -27,6 +27,6 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
             this.QueryableName = StoreName;
         }
 
-        public IProcessor<K, V> Get() => new KTableSourceProcessor<K, V>(this.StoreName, this.QueryableName, this.sendOldValues);
+        public IProcessor<K, V> Get() => new KTableSourceProcessor<K, V>(this.QueryableName, this.sendOldValues);
     }
 }

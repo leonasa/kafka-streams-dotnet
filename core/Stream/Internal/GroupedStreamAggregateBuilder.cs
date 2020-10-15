@@ -11,17 +11,13 @@ namespace Streamiz.Kafka.Net.Stream.Internal
     internal class GroupedStreamAggregateBuilder<K, V>
     {
         private readonly InternalStreamBuilder builder;
-        private readonly Grouped<K, V> grouped;
         private readonly List<string> sourceNodes;
-        private readonly string name;
         private readonly StreamGraphNode node;
 
-        public GroupedStreamAggregateBuilder(InternalStreamBuilder builder, Grouped<K, V> grouped, List<string> sourceNodes, string name, StreamGraphNode node)
+        public GroupedStreamAggregateBuilder(InternalStreamBuilder builder, List<string> sourceNodes, StreamGraphNode node)
         {
             this.builder = builder;
-            this.grouped = grouped;
             this.sourceNodes = sourceNodes;
-            this.name = name;
             this.node = node;
         }
 
@@ -47,7 +43,6 @@ namespace Streamiz.Kafka.Net.Stream.Internal
                                     keySerdes,
                                     valueSerdes,
                                     sourceNodes,
-                                    queryableStoreName,
                                     aggregateSupplier,
                                     statefulProcessorNode,
                                     builder);

@@ -15,6 +15,6 @@ namespace Streamiz.Kafka.Net.State.Internal.Builder
         }
 
         public override WindowStore<K, V> Build()
-            => new WrappedWindowStore<K, V>(supplier.Get(), supplier.WindowSize.Value, keySerdes, valueSerdes);
+            => new WrappedWindowStore<K, V>(supplier.Get(), keySerdes, valueSerdes);
     }
 }

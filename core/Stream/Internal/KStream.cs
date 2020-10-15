@@ -599,7 +599,6 @@ namespace Streamiz.Kafka.Net.Stream.Internal
                 keySerdesOv,
                 valueSerdesOv,
                 SetSourceNodes,
-                materialized.QueryableStoreName,
                 tableSource,
                 tableNode,
                 builder);

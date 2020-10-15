@@ -9,16 +9,16 @@ namespace Streamiz.Kafka.Net.State.Enumerator
 
         object IEnumerator.Current => null;
 
-        public void Dispose()
-        {
-
-        }
 
         public bool MoveNext() => false;
 
         public K PeekNextKey() => default;
 
         public void Reset() { }
+
+        public void Dispose()
+        {
+        }
     }
 
     internal class EmptyWindowStoreIterator<V> : IWindowStoreEnumerator<V>

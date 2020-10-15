@@ -1,4 +1,6 @@
-﻿using Streamiz.Kafka.Net.Crosscutting;
+﻿using System;
+using System.Collections.Generic;
+using Streamiz.Kafka.Net.Crosscutting;
 using Streamiz.Kafka.Net.Processors;
 using Streamiz.Kafka.Net.SerDes;
 using Streamiz.Kafka.Net.State;
@@ -9,8 +11,6 @@ using Streamiz.Kafka.Net.Stream.Internal.Graph;
 using Streamiz.Kafka.Net.Stream.Internal.Graph.Nodes;
 using Streamiz.Kafka.Net.Table.Internal.Graph;
 using Streamiz.Kafka.Net.Table.Internal.Graph.Nodes;
-using System;
-using System.Collections.Generic;
 
 namespace Streamiz.Kafka.Net.Table.Internal
 {
@@ -45,9 +45,8 @@ namespace Streamiz.Kafka.Net.Table.Internal
 
     internal class KTable<K, S, V> : AbstractStream<K, V>, IKTable<K, V>, IKTableGetter<K, V>
     {
-        private readonly IProcessorSupplier<K, S> processorSupplier = null;
-        private readonly IProcessorSupplier<K, Change<S>> tableProcessorSupplier = null;
-        private readonly string queryableStoreName;
+        private readonly IProcessorSupplier<K, S> processorSupplier;
+        private readonly IProcessorSupplier<K, Change<S>> tableProcessorSupplier;
 
         public bool SendOldValues { get; protected set; }
 
@@ -62,31 +61,31 @@ namespace Streamiz.Kafka.Net.Table.Internal
                     source.Materialize();
                     return new KTableSourceValueGetterSupplier<K, V>(source.QueryableName);
                 }
-                else if (processorSupplier is IKStreamAggProcessorSupplier<K, V>)
+
+                if (processorSupplier is IKStreamAggProcessorSupplier<K, V>)
                 {
                     return ((IKStreamAggProcessorSupplier<K, V>)processorSupplier).View();
                 }
-                else if (tableProcessorSupplier != null && tableProcessorSupplier is IKTableProcessorSupplier<K, S, V>)
+
+                if (tableProcessorSupplier != null && tableProcessorSupplier is IKTableProcessorSupplier<K, S, V>)
                 {
                     return ((IKTableProcessorSupplier<K, S, V>)tableProcessorSupplier).View;
                 }
-                else
-                    return null;
+
+                return null;
             }
         }
 
-        internal KTable(string name, ISerDes<K> keySerde, ISerDes<V> valSerde, List<string> sourceNodes, String queryableStoreName, IProcessorSupplier<K, Change<S>> processorSupplier, StreamGraphNode streamsGraphNode, InternalStreamBuilder builder)
+        internal KTable(string name, ISerDes<K> keySerde, ISerDes<V> valSerde, List<string> sourceNodes, IProcessorSupplier<K, Change<S>> processorSupplier, StreamGraphNode streamsGraphNode, InternalStreamBuilder builder)
             : base(name, keySerde, valSerde, sourceNodes, streamsGraphNode, builder)
         {
             tableProcessorSupplier = processorSupplier;
-            this.queryableStoreName = queryableStoreName;
         }
 
-        internal KTable(string name, ISerDes<K> keySerde, ISerDes<V> valSerde, List<string> sourceNodes, String queryableStoreName, IProcessorSupplier<K, S> processorSupplier, StreamGraphNode streamsGraphNode, InternalStreamBuilder builder)
+        internal KTable(string name, ISerDes<K> keySerde, ISerDes<V> valSerde, List<string> sourceNodes, IProcessorSupplier<K, S> processorSupplier, StreamGraphNode streamsGraphNode, InternalStreamBuilder builder)
             : base(name, keySerde, valSerde, sourceNodes, streamsGraphNode, builder)
         {
             this.processorSupplier = processorSupplier;
-            this.queryableStoreName = queryableStoreName;
         }
 
         #region KTable Impl
@@ -160,7 +159,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
         public IKTable<K, VR> MapValues<VR>(IValueMapperWithKey<K, V, VR> mapperWithKey, string named = null)
             => MapValues(mapperWithKey, null, named);
 
-        public IKTable<K, VR> MapValues<VR>(IValueMapperWithKey<K, V, VR> mapperWithKey, Materialized<K, VR, IKeyValueStore<Bytes, byte[]>> materialized, string named)
+        public IKTable<K, VR> MapValues<VR>(IValueMapperWithKey<K, V, VR> mapperWithKey, Materialized<K, VR, IKeyValueStore<Bytes, byte[]>> materialized, string named = null)
             => DoMapValues(mapperWithKey, named, materialized);
 
         #endregion
@@ -259,7 +258,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
             StoreBuilder<TimestampedKeyValueStore<K, V>> storeBuilder;
 
             if (predicate == null)
-                throw new ArgumentNullException($"Filter() doesn't allow null predicate function");
+                throw new ArgumentNullException("Filter() doesn't allow null predicate function");
 
             if (materializedInternal != null)
             {
@@ -306,7 +305,6 @@ namespace Streamiz.Kafka.Net.Table.Internal
                                     keySerde,
                                     valueSerde,
                                     SetSourceNodes,
-                                    queryableStoreName,
                                     processorSupplier,
                                     tableNode,
                                     builder);
@@ -315,7 +313,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
         private IKTable<K, VR> DoMapValues<VR>(IValueMapperWithKey<K, V, VR> mapper, string named, Materialized<K, VR, IKeyValueStore<Bytes, byte[]>> materializedInternal)
         {
             if (mapper == null)
-                throw new ArgumentNullException($"MapValues() doesn't allow null mapper function");
+                throw new ArgumentNullException("MapValues() doesn't allow null mapper function");
 
             ISerDes<K> keySerde;
             ISerDes<VR> valueSerde;
@@ -367,7 +365,6 @@ namespace Streamiz.Kafka.Net.Table.Internal
                 keySerde,
                 valueSerde,
                 SetSourceNodes,
-                queryableStoreName,
                 processorSupplier,
                 tableNode,
                 builder

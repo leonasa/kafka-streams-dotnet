@@ -9,7 +9,7 @@ namespace Streamiz.Kafka.Net.State.Internal
         private bool initStoreSerdes = false;
 
         public TimestampedWindowStoreImpl(WindowStore<Bytes, byte[]> wrapped, long windowSizeMs, ISerDes<K> keySerdes, ISerDes<ValueAndTimestamp<V>> valueSerdes)
-            : base(wrapped, windowSizeMs, keySerdes, valueSerdes)
+            : base(wrapped, keySerdes, valueSerdes)
         {
         }
 

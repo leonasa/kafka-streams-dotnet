@@ -11,7 +11,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
         private readonly IProcessorSupplier<K, V> processorSupplier;
 
         internal KTableGrouped(string name, ISerDes<KR> keySerde, ISerDes<VR> valSerde, List<string> sourceNodes, string queryableStoreName, IProcessorSupplier<K, V> processorSupplier, StreamGraphNode streamsGraphNode, InternalStreamBuilder builder)
-            : base(name, keySerde, valSerde, sourceNodes, queryableStoreName, (IProcessorSupplier<KR, V>)null, streamsGraphNode, builder)
+            : base(name, keySerde, valSerde, sourceNodes, (IProcessorSupplier<KR, V>)null, streamsGraphNode, builder)
         {
             this.processorSupplier = processorSupplier;
         }

@@ -21,13 +21,13 @@ namespace Streamiz.Kafka.Net.Tests.Private
         public void Setup()
         {
             inmemorystore = new InMemoryWindowStore("store", TimeSpan.FromMinutes(20), 1000 * 2);
-            wrapped = new WrappedWindowStore<string, int>(inmemorystore, 1000 * 2, new StringSerDes(),  new Int32SerDes());
+            wrapped = new WrappedWindowStore<string, int>(inmemorystore, new StringSerDes(),  new Int32SerDes());
         }
 
         [Test]
         public void TestWithUnknwonSerdes()
         { 
-            wrapped = new WrappedWindowStore<string, int>(inmemorystore, 1000 * 2, null,  null);
+            wrapped = new WrappedWindowStore<string, int>(inmemorystore, null,  null);
             var id = new TaskId { Id = 0,  Partition = 0 };
             var stateManager = new ProcessorStateManager(id, new List<Confluent.Kafka.TopicPartition> { new Confluent.Kafka.TopicPartition("test", 0) });
             var context = new ProcessorContext(null, new StreamConfig(), stateManager);
@@ -38,7 +38,7 @@ namespace Streamiz.Kafka.Net.Tests.Private
         [Test]
         public void TestWithUnknwonSerdes2()
         {
-            wrapped = new WrappedWindowStore<string, int>(inmemorystore, 1000 * 2, null, null);
+            wrapped = new WrappedWindowStore<string, int>(inmemorystore, null, null);
             var id = new TaskId { Id = 0,  Partition = 0 };
             var stateManager = new ProcessorStateManager(id, new List<Confluent.Kafka.TopicPartition> { new Confluent.Kafka.TopicPartition("test", 0) });
             var context = new ProcessorContext(null, new StreamConfig(), stateManager);

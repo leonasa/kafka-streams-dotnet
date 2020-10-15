@@ -9,7 +9,6 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph.Nodes
         private readonly ProcessorParameters<K, V2> windowedRightParams;
         private readonly StoreBuilder<WindowStore<K, V1>> windowedLeftStoreBuilder;
         private readonly StoreBuilder<WindowStore<K, V2>> windowedRightStoreBuilder;
-        private readonly StreamJoinProps<K, V1, V2> joinedProps;
 
         public StreamStreamJoinNode(
             string name,
@@ -20,15 +19,13 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph.Nodes
             ProcessorParameters<K, V1> windowedLeftParams,
             ProcessorParameters<K, V2> windowedRightParams,
             StoreBuilder<WindowStore<K, V1>> windowedLeftStoreBuilder,
-            StoreBuilder<WindowStore<K, V2>> windowedRightStoreBuilder,
-            StreamJoinProps<K, V1, V2> joinedProps)
+            StoreBuilder<WindowStore<K, V2>> windowedRightStoreBuilder)
             : base(name, valueJoiner, joinLeftParams, joinRightParams, joinMergeParams, null, null)
         {
             this.windowedLeftParams = windowedLeftParams;
             this.windowedRightParams = windowedRightParams;
             this.windowedLeftStoreBuilder = windowedLeftStoreBuilder;
             this.windowedRightStoreBuilder = windowedRightStoreBuilder;
-            this.joinedProps = joinedProps;
         }
 
         public override void WriteToTopology(InternalTopologyBuilder builder)

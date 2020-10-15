@@ -6,16 +6,14 @@ namespace Streamiz.Kafka.Net.Processors
 {
     internal class KTableSourceProcessor<K, V> : AbstractProcessor<K, V>
     {
-        private readonly string storeName;
         private readonly string queryableName;
         private readonly bool sendOldValues;
 
         private TimestampedKeyValueStore<K, V> store;
         private TimestampedTupleForwarder<K, V> tupleForwarder;
 
-        public KTableSourceProcessor(string storeName, string queryableName, bool sendOldValues)
+        public KTableSourceProcessor(string queryableName, bool sendOldValues)
         {
-            this.storeName = storeName;
             this.queryableName = queryableName;
             this.sendOldValues = sendOldValues;
         }

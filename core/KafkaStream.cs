@@ -337,7 +337,7 @@ namespace Streamiz.Kafka.Net
 
                 threadState.Add(threads[i].Id, threads[i].State);
 
-                stateStoreProviders.Add(new StreamThreadStateStoreProvider(threads[i], this.topology.Builder));
+                stateStoreProviders.Add(new StreamThreadStateStoreProvider(threads[i]));
             }
 
             var manager = new StreamStateManager(this, threadState, globalThreadState);
