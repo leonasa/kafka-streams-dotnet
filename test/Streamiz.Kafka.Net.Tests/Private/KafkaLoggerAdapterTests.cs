@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using log4net;
 using log4net.Core;
 using log4net.Repository;
 using log4net.Repository.Hierarchy;
 using NUnit.Framework;
-using Streamiz.Kafka.Net.Crosscutting;
 using Streamiz.Kafka.Net.Kafka.Internal;
 using Streamiz.Kafka.Net.Mock.Kafka;
 

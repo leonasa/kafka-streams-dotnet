@@ -1,11 +1,9 @@
 ﻿using Confluent.Kafka;
 using Streamiz.Kafka.Net.Errors;
 using Streamiz.Kafka.Net.State;
-using Streamiz.Kafka.Net.State.Internal;
 using Streamiz.Kafka.Net.Stream;
 using Streamiz.Kafka.Net.Stream.Internal;
 using Streamiz.Kafka.Net.Stream.Internal.Graph.Nodes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 

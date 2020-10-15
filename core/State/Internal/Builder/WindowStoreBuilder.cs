@@ -1,6 +1,5 @@
 ﻿using Streamiz.Kafka.Net.SerDes;
 using Streamiz.Kafka.Net.State.Supplier;
-using System;
 
 namespace Streamiz.Kafka.Net.State.Internal.Builder
 {

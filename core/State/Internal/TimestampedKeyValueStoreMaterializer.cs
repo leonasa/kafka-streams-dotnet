@@ -2,7 +2,6 @@
 using Streamiz.Kafka.Net.State.InMemory;
 using Streamiz.Kafka.Net.State.Supplier;
 using Streamiz.Kafka.Net.Table;
-using System;
 
 namespace Streamiz.Kafka.Net.State.Internal
 {

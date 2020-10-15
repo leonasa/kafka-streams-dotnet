@@ -11,18 +11,18 @@ namespace Streamiz.Kafka.Net.Crosscutting
                 set.Add(v);
         }
 
-        internal static void RemoveAll<T>(this ISet<T> set, IEnumerable<T> values)
-        {
-            foreach (var v in values)
-                set.Remove(v);
-        }
-
         internal static V Get<K,V>(this IDictionary<K,V> map, K key)
         {
             if (map.ContainsKey(key))
                 return map[key];
             else
                 return default(V);
+        }
+
+        internal static void RemoveAll<T>(this ISet<T> set, IEnumerable<T> values)
+        {
+            foreach (var v in values)
+                set.Remove(v);
         }
 
         internal static void RemoveAll<K,V>(this IDictionary<K, V> map, IEnumerable<K> keys)

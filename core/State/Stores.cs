@@ -3,8 +3,6 @@ using Streamiz.Kafka.Net.State.InMemory;
 using Streamiz.Kafka.Net.State.Internal.Builder;
 using Streamiz.Kafka.Net.State.Supplier;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Streamiz.Kafka.Net.State
 {

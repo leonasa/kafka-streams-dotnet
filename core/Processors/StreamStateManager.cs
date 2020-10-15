@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Streamiz.Kafka.Net.Crosscutting;
 using Streamiz.Kafka.Net.Processors.Internal;
 using log4net;
