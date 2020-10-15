@@ -424,7 +424,7 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
             int j = 0;
             for (int i = 0; i < otherConsumers.Count; ++i)
             {
-                var partitions = ExtracctTopicPartitions(i, otherConsumers, consumer, j, partEach, modulo);
+                var partitions = ExtractTopicPartitions(i, otherConsumers, consumer, j, partEach, modulo);
 
                 otherConsumers[i].Partitions.AddRange(partitions);
                 otherConsumers[i].TopicPartitionsOffset = BuildTopicPartitionsOffset(partitions, otherConsumers[i]).ToList();
@@ -452,19 +452,9 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
             }
         }
 
-        private static List<TopicPartition> ExtracctTopicPartitions(int i, List<MockConsumerInformation> otherConsumers, MockConsumerInformation consumer, int j, int partEach, int modulo)
+        private static List<TopicPartition> ExtractTopicPartitions(int i, List<MockConsumerInformation> otherConsumers, MockConsumerInformation consumer, int j, int partEach, int modulo)
         {
-            List<TopicPartition> parts;
-            if (i == otherConsumers.Count - 1)
-            {
-                parts = consumer.Partitions.GetRange(j, j + partEach + modulo);
-            }
-            else
-            {
-                parts = consumer.Partitions.GetRange(j, j + partEach);
-            }
-
-            return parts;
+            return i == otherConsumers.Count - 1 ? consumer.Partitions.GetRange(j, j + partEach + modulo) : consumer.Partitions.GetRange(j, j + partEach);
         }
 
         private List<MockConsumerInformation> OtherConsumerInTheSameGroup(MockConsumer mockConsumer)

@@ -19,41 +19,45 @@ namespace Streamiz.Kafka.Net.State.Internal
         {
             // TODO: handle 'staleStoresEnabled' and 'partition' when they are added to StoreQueryParameters
 
-            if (this.streamThread.State == ThreadState.DEAD)
+            if (streamThread.State == ThreadState.DEAD)
             {
-                return Enumerable.Empty<T>();
+                yield break;
             }
-            if (!(this.streamThread.State == ThreadState.RUNNING))
+            if (!(streamThread.State == ThreadState.RUNNING))
             {
-                throw new InvalidStateStoreException($"Cannot get state store {storeQueryParameters.StoreName} because " +
-                    $"the stream thread is {streamThread.State}, not RUNNING");
+                throw new InvalidStateStoreException($"Cannot get state store {storeQueryParameters.StoreName} because the stream thread is {streamThread.State}, not RUNNING");
             }
 
-            List<T> stores = new List<T>();
             foreach (var streamTask in streamThread.ActiveTasks)
             {
-                IStateStore store = streamTask.GetStore(storeQueryParameters.StoreName);
-                if (store != null && storeQueryParameters.QueryableStoreType.Accepts(store))
+                var store = Store(storeQueryParameters, streamTask);
+                if (store != null) 
+                    yield return store;
+            }
+        }
+
+        private T Store<T, K, V>(StoreQueryParameters<T, K, V> storeQueryParameters, ITask streamTask) where T : class
+        {
+            var stateStore = streamTask.GetStore(storeQueryParameters.StoreName);
+            if (stateStore != null && storeQueryParameters.QueryableStoreType.Accepts(stateStore))
+            {
+                if (!stateStore.IsOpen)
                 {
-                    if (!store.IsOpen)
-                    {
-                        throw new InvalidStateStoreException($"Cannot get state store {storeQueryParameters.StoreName} for task {streamTask} because the " +
-                            $"store is not open. The state store may have migrated to another instances.");
-                    }
-                    else if (store is TimestampedWindowStore<K, V> && storeQueryParameters.QueryableStoreType is WindowStoreType<K, V>) {
-                        T t = new ReadOnlyWindowStoreFacade<K, V>(store as TimestampedWindowStore<K, V>) as T;
-                        stores.Add(t);
-                    }
-                    if (store is TimestampedKeyValueStore<K, V> && storeQueryParameters.QueryableStoreType is KeyValueStoreType<K, V>)
-                    {
-                        T t = new ReadOnlyKeyValueStoreFacade<K, V>(store as TimestampedKeyValueStore<K, V>) as T;
-                        stores.Add(t);
-                    }
-                    else if (store is T)
-                        stores.Add(store as T);
+                    throw new InvalidStateStoreException($"Cannot get state store {storeQueryParameters.StoreName} for task {streamTask} because the store is not open. The state store may have migrated to another instances.");
+                }
+
+                switch (stateStore)
+                {
+                    case TimestampedWindowStore<K, V> windowStore when storeQueryParameters.QueryableStoreType is WindowStoreType<K, V>:
+                        return new ReadOnlyWindowStoreFacade<K, V>(windowStore) as T;
+                    case TimestampedKeyValueStore<K, V> valueStore when storeQueryParameters.QueryableStoreType is KeyValueStoreType<K, V>:
+                        return new ReadOnlyKeyValueStoreFacade<K, V>(valueStore) as T;
+                    case T store:
+                        return store;
                 }
             }
-            return stores;
+
+            return null;
         }
     }
 }
