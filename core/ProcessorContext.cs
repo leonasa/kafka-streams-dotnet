@@ -11,12 +11,12 @@ namespace Streamiz.Kafka.Net
     /// </summary>
     public class ProcessorContext
     {
-        internal AbstractTask Task { get; private set; }
-        internal SerDesContext SerDesContext { get; private set; }
-        internal IStreamConfig Configuration { get; private set; }
+        internal AbstractTask Task { get; }
+        internal SerDesContext SerDesContext { get; }
+        internal IStreamConfig Configuration { get; }
         internal IRecordContext RecordContext { get; private set; }
         internal IRecordCollector RecordCollector { get; private set; }
-        internal IStateManager States { get; private set; }
+        internal IStateManager States { get; }
 
         /// <summary>
         /// Current application id

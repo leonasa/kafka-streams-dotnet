@@ -13,9 +13,8 @@ namespace Streamiz.Kafka.Net.Processors.Internal
         private readonly ILog log;
         private readonly string logPrefix;
         private readonly IDictionary<string, IStateStore> registeredStores = new Dictionary<string, IStateStore>();
-        private IDictionary<string, IStateStore> globalStateStores = new Dictionary<string, IStateStore>();
 
-        public IEnumerable<TopicPartition> Partition { get; private set; }
+        public IEnumerable<TopicPartition> Partition { get; }
 
         public IEnumerable<string> StateStoreNames => registeredStores.Keys;
 
@@ -118,7 +117,6 @@ namespace Streamiz.Kafka.Net.Processors.Internal
 
         public void RegisterGlobalStateStores(IDictionary<string, IStateStore> globalStateStores)
         {
-            this.globalStateStores = globalStateStores;
         }
 
         #endregion

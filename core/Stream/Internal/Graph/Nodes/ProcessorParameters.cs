@@ -5,8 +5,8 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph.Nodes
 {
     internal class ProcessorParameters<K, V>
     {
-        public IProcessorSupplier<K, V> Processor { get; private set; }
-        public string ProcessorName { get; private set; }
+        public IProcessorSupplier<K, V> Processor { get; }
+        public string ProcessorName { get; }
 
         public ProcessorParameters(IProcessorSupplier<K, V> processorSupplier, String processorName)
         {

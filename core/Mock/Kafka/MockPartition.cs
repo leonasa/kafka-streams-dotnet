@@ -12,7 +12,7 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
         }
 
         public int Size { get; private set; } = 0;
-        public long LowOffset { get; private set; } = 0;
+        public long LowOffset { get; } = 0;
         public long HighOffset { get; private set; } = 0;
 
         internal void AddMessageInLog(byte[] key, byte[] value)

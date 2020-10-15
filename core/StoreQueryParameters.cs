@@ -38,12 +38,12 @@ namespace Streamiz.Kafka.Net
         /// <summary>
         /// The name of the state store that should be queried.
         /// </summary>
-        public string StoreName { get; private set; }
+        public string StoreName { get; }
 
         /// <summary>
         /// The <see cref="IQueryableStoreType{T, K, V}"/> for which key is queried by the user.
         /// </summary>
-        public IQueryableStoreType<T, K, V> QueryableStoreType { get; private set; }
+        public IQueryableStoreType<T, K, V> QueryableStoreType { get; }
 
         internal StoreQueryParameters(string storeName, IQueryableStoreType<T, K, V> queryableStoreType, int? partition, bool staleStores)
         {

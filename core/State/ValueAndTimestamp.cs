@@ -17,12 +17,12 @@
         /// <summary>
         /// Return the wrapped value
         /// </summary>
-        public V Value { get; private set; }
+        public V Value { get; }
 
         /// <summary>
         /// Return the wrapped timestamp of value
         /// </summary>
-        public long Timestamp { get; private set; }
+        public long Timestamp { get; }
 
         private ValueAndTimestamp(long timestamp, V value)
         {

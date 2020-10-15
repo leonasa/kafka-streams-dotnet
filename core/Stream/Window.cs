@@ -23,12 +23,12 @@ namespace Streamiz.Kafka.Net.Stream
         /// <summary>
         /// Start datetime of this window.
         /// </summary>
-        public DateTime StartTime { get; private set; }
+        public DateTime StartTime { get; }
 
         /// <summary>
         /// End datetime of this window.
         /// </summary>
-        public DateTime EndTime { get; private set; }
+        public DateTime EndTime { get; }
 
         /// <summary>
         /// Total time of this window.

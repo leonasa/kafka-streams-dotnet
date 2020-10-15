@@ -26,7 +26,7 @@ namespace Streamiz.Kafka.Net.Processors
 
         public ISerDes Value { get; internal set; } = null;
 
-        public IList<IProcessor> Next { get; private set; } = new List<IProcessor>();
+        public IList<IProcessor> Next { get; } = new List<IProcessor>();
 
         #region Ctor
 

@@ -26,9 +26,9 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
 
         public string MemberId => groupId;
 
-        public List<TopicPartition> Assignment { get; private set; } = new List<TopicPartition>();
+        public List<TopicPartition> Assignment { get; } = new List<TopicPartition>();
 
-        public List<string> Subscription { get; private set; } = new List<string>();
+        public List<string> Subscription { get; } = new List<string>();
 
         public IConsumerGroupMetadata ConsumerGroupMetadata => null;
 
