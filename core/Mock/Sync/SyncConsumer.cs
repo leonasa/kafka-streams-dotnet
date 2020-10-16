@@ -135,17 +135,22 @@ namespace Streamiz.Kafka.Net.Mock.Sync
         public List<TopicPartitionOffset> Committed(TimeSpan timeout)
         {
             List<TopicPartitionOffset> r = new List<TopicPartitionOffset>();
-            foreach (var kp in offsets)
-                r.Add(new TopicPartitionOffset(new TopicPartition(kp.Key, 0), kp.Value.OffsetCommitted));
+            foreach (var (key, value) in offsets)
+                r.Add(new TopicPartitionOffset(new TopicPartition(key, 0), value.OffsetCommitted));
             return r;
         }
 
         public List<TopicPartitionOffset> Committed(IEnumerable<TopicPartition> partitions, TimeSpan timeout)
         {
             List<TopicPartitionOffset> r = new List<TopicPartitionOffset>();
-            foreach (var kp in offsets)
-                if(partitions.Select(t => t.Topic).Distinct().Contains(kp.Key))
-                    r.Add(new TopicPartitionOffset(new TopicPartition(kp.Key, 0), kp.Value.OffsetCommitted));
+            
+            var topicPartitions = partitions.ToList();
+            foreach (var (key, value) in offsets)
+            {
+                if(topicPartitions.Select(t => t.Topic).Distinct().Contains(key))
+                    r.Add(new TopicPartitionOffset(new TopicPartition(key, 0), value.OffsetCommitted));
+            }
+
             return r;
         }
 
@@ -219,8 +224,10 @@ namespace Streamiz.Kafka.Net.Mock.Sync
 
         public void Subscribe(IEnumerable<string> topics)
         {
-            Subscription.AddRange(topics);
-            foreach (var t in topics)
+            var collection = topics.ToList();
+
+            Subscription.AddRange(collection);
+            foreach (var t in collection)
             {
                 if (!offsets.ContainsKey(t))
                 {
@@ -244,9 +251,9 @@ namespace Streamiz.Kafka.Net.Mock.Sync
 
         public void Unassign()
         {
-            var offsets = this.Committed(TimeSpan.FromSeconds(1));
+            var topicPartitionOffsets = this.Committed(TimeSpan.FromSeconds(1));
             Assignment.Clear();
-            Listener?.PartitionsRevoked(this, offsets);
+            Listener?.PartitionsRevoked(this, topicPartitionOffsets);
         }
 
         public void Unsubscribe()

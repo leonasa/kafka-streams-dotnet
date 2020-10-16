@@ -98,11 +98,7 @@ namespace Streamiz.Kafka.Net.Mock
         {
             var r = this.ReadRecord();
 
-            return 
-                r != null ? new ConsumeResult<K, V>{
-                                Message = new Message<K, V> { Key = r.Key, Value = r.Value, Timestamp = new Timestamp(r.Timestamp.HasValue ? r.Timestamp.Value : DateTime.Now) }
-                            } 
-                        : null;
+            return r != null ? new ConsumeResult<K, V> {Message = new Message<K, V> {Key = r.Key, Value = r.Value, Timestamp = new Timestamp(r.Timestamp ?? DateTime.Now)}} : null;
         }
 
         #endregion
@@ -118,17 +114,23 @@ namespace Streamiz.Kafka.Net.Mock
             List<ConsumeResult<K, V>> records = new List<ConsumeResult<K, V>>();
             foreach(var record in pipe.ReadList())
             {
-                var key = record.Key != null ?
-                    (keySerdes != null ? 
-                        keySerdes.Deserialize(record.Key, new SerializationContext(MessageComponentType.Key, pipe.TopicName)) :
-                        (K)configuration.DefaultKeySerDes.DeserializeObject(record.Key, new SerializationContext(MessageComponentType.Key, pipe.TopicName))) 
-                    : default;
+                K key;
+                if (record.Key != null)
+                    if (keySerdes != null)
+                        key = keySerdes.Deserialize(record.Key, new SerializationContext(MessageComponentType.Key, pipe.TopicName));
+                    else
+                        key = (K) configuration.DefaultKeySerDes.DeserializeObject(record.Key, new SerializationContext(MessageComponentType.Key, pipe.TopicName));
+                else
+                    key = default;
 
-                var value = record.Value != null ?
-                    (valueSerdes != null ?
-                        valueSerdes.Deserialize(record.Value, new SerializationContext(MessageComponentType.Value, pipe.TopicName)) :
-                        (V)configuration.DefaultValueSerDes.DeserializeObject(record.Value, new SerializationContext(MessageComponentType.Value, pipe.TopicName))) 
-                    : default;
+                V value;
+                if (record.Value != null)
+                    if (valueSerdes != null)
+                        value = valueSerdes.Deserialize(record.Value, new SerializationContext(MessageComponentType.Value, pipe.TopicName));
+                    else
+                        value = (V) configuration.DefaultValueSerDes.DeserializeObject(record.Value, new SerializationContext(MessageComponentType.Value, pipe.TopicName));
+                else
+                    value = default;
 
                 records.Add(new ConsumeResult<K, V>{
                     Message = new Message<K, V> { Key = key, Value = value, Timestamp = new Timestamp(DateTime.Now) }

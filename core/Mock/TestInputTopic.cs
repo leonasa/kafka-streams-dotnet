@@ -57,11 +57,10 @@ namespace Streamiz.Kafka.Net.Mock
             {
                 if (keySerdes != null)
                     return keySerdes.Serialize(key, new Confluent.Kafka.SerializationContext(Confluent.Kafka.MessageComponentType.Key, pipe.TopicName));
-                else
-                    return configuration.DefaultKeySerDes.SerializeObject(key, new Confluent.Kafka.SerializationContext(Confluent.Kafka.MessageComponentType.Key, pipe.TopicName));
+                return configuration.DefaultKeySerDes.SerializeObject(key, new Confluent.Kafka.SerializationContext(Confluent.Kafka.MessageComponentType.Key, pipe.TopicName));
             }
-            else
-                return null;
+
+            return null;
         }
 
         private byte[] GetValueBytes(V value)
@@ -70,11 +69,10 @@ namespace Streamiz.Kafka.Net.Mock
             {
                 if (valueSerdes != null)
                     return valueSerdes.Serialize(value, new Confluent.Kafka.SerializationContext(Confluent.Kafka.MessageComponentType.Value, pipe.TopicName));
-                else
-                    return configuration.DefaultValueSerDes.SerializeObject(value, new Confluent.Kafka.SerializationContext(Confluent.Kafka.MessageComponentType.Value, pipe.TopicName));
+                return configuration.DefaultValueSerDes.SerializeObject(value, new Confluent.Kafka.SerializationContext(Confluent.Kafka.MessageComponentType.Value, pipe.TopicName));
             }
-            else
-                return null;
+
+            return null;
         }
 
         #region Pipe One Input
