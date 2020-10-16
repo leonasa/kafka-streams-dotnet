@@ -10,7 +10,7 @@ namespace Streamiz.Kafka.Net.Processors
 {
     internal abstract class AbstractProcessor<K, V> : IProcessor<K, V>
     {
-        protected ILog log = null;
+        protected ILog log;
         protected string logPrefix = "";
 
         public ProcessorContext Context { get; protected set; }
@@ -22,9 +22,9 @@ namespace Streamiz.Kafka.Net.Processors
 
         public ISerDes<V> ValueSerDes => Value as ISerDes<V>;
 
-        public ISerDes Key { get; internal set; } = null;
+        public ISerDes Key { get; internal set; }
 
-        public ISerDes Value { get; internal set; } = null;
+        public ISerDes Value { get; internal set; }
 
         public IList<IProcessor> Next { get; } = new List<IProcessor>();
 

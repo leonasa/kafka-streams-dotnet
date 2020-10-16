@@ -7,8 +7,8 @@ namespace Streamiz.Kafka.Net
     /// </summary>
     internal class StreamOptions
     {
-        internal string Named { get; private set; } = null;
-        internal ITimestampExtractor Extractor { get; private set; } = null;
+        internal string Named { get; private set; }
+        internal ITimestampExtractor Extractor { get; private set; }
 
         private static StreamOptions Create() => Create(null, null);
 

@@ -9,7 +9,7 @@ namespace Streamiz.Kafka.Net.State.Internal
         WrappedKeyValueStore<K, ValueAndTimestamp<V>>,
         TimestampedKeyValueStore<K, V>
     {
-        private bool initStoreSerdes = false;
+        private bool initStoreSerdes;
 
         public TimestampedKeyValueStoreImpl(IKeyValueStore<Bytes, byte[]> wrapped, ISerDes<K> keySerdes, ISerDes<ValueAndTimestamp<V>> valueSerdes)
             : base(wrapped, keySerdes, valueSerdes)

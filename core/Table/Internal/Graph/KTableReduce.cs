@@ -9,7 +9,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
         private readonly Reducer<V> adder;
         private readonly Reducer<V> substractor;
 
-        private bool sendOldValues = false;
+        private bool sendOldValues;
 
 
         public KTableReduce(string storeName, Reducer<V> adder, Reducer<V> substractor)

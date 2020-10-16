@@ -15,7 +15,7 @@ namespace Streamiz.Kafka.Net.Processors
         protected IConsumer<byte[], byte[]> consumer;
         protected bool taskInitialized;
         protected bool commitNeeded = false;
-        protected bool commitRequested = false;
+        protected bool commitRequested;
         protected IStateManager stateMgr;
         protected ILog log;
         protected readonly string logPrefix = "";

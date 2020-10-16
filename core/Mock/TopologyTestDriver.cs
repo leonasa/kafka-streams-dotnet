@@ -85,7 +85,7 @@ namespace Streamiz.Kafka.Net.Mock
         private readonly IDictionary<string, IPipeInput> inputs = new Dictionary<string, IPipeInput>();
         private readonly IDictionary<string, IPipeOutput> outputs = new Dictionary<string, IPipeOutput>();
 
-        private readonly IBehaviorTopologyTestDriver behavior = null;
+        private readonly IBehaviorTopologyTestDriver behavior;
 
         /// <summary>
         /// Create a new test diver instance.

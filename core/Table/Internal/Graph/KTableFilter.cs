@@ -46,7 +46,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
         private readonly Func<K, V, bool> predicate;
         private readonly bool filterNot;
         private readonly string queryableStoreName;
-        private bool sendOldValues = false;
+        private bool sendOldValues;
 
         public KTableFilter(IKTableGetter<K, V> parent, Func<K, V, bool> predicate, bool filterNot, string queryableStoreName)
         {

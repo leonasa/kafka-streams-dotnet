@@ -11,9 +11,9 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
             Size = 0;
         }
 
-        public int Size { get; private set; } = 0;
+        public int Size { get; private set; }
         public long LowOffset { get; } = 0;
-        public long HighOffset { get; private set; } = 0;
+        public long HighOffset { get; private set; }
 
         internal void AddMessageInLog(byte[] key, byte[] value)
         {

@@ -4,7 +4,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
 {
     internal class KTableSource<K, V> : IProcessorSupplier<K, V>
     {
-        private bool sendOldValues = false;
+        private bool sendOldValues;
 
         public string StoreName { get; }
         public string QueryableName { get; private set; }

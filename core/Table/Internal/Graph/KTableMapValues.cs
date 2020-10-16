@@ -41,7 +41,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
         private readonly IKTableGetter<K, V> parentTable;
         private readonly IValueMapperWithKey<K, V, VR> mapper;
         private readonly string queryableName;
-        private bool sendOldValues = false;
+        private bool sendOldValues;
 
         public KTableMapValues(IKTableGetter<K, V> parent, IValueMapperWithKey<K, V, VR> mapper, string queryableName)
         {

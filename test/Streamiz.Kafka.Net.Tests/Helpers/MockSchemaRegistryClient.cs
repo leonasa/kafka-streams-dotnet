@@ -15,7 +15,7 @@ namespace Streamiz.Kafka.Net.Tests.Helpers
             public int Id { get; set; }
         }
 
-        private int id = 0;
+        private int id;
         private readonly List<string> subjects = new List<string>();
         private readonly Dictionary<string, List<RegisterSchema>> schemas = new Dictionary<string, List<RegisterSchema>>();
 

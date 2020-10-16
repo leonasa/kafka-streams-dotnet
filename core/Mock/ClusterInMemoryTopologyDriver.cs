@@ -15,9 +15,9 @@ namespace Streamiz.Kafka.Net.Mock
     {
         private readonly IStreamConfig configuration;
         private readonly IStreamConfig topicConfiguration;
-        private readonly IPipeBuilder pipeBuilder = null;
-        private readonly IThread threadTopology = null;
-        private readonly IKafkaSupplier kafkaSupplier = null;
+        private readonly IPipeBuilder pipeBuilder;
+        private readonly IThread threadTopology;
+        private readonly IKafkaSupplier kafkaSupplier;
         private readonly CancellationToken token;
         private readonly TimeSpan startTimeout;
 

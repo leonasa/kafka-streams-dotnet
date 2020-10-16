@@ -8,7 +8,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph
     {
         private readonly string storeName;
         private readonly Reducer<V> reducer;
-        private bool sendOldValues = false;
+        private bool sendOldValues;
 
         public KStreamReduce(string storeName, Reducer<V> reducer)
         {

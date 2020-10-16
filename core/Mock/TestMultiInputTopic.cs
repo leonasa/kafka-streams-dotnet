@@ -26,7 +26,7 @@ namespace Streamiz.Kafka.Net.Mock
     /// <typeparam name="V">Value type</typeparam>
     public class TestMultiInputTopic<K, V>
     {
-        private DateTime? lastDate = null;
+        private DateTime? lastDate;
         private readonly Dictionary<string, IPipeInput> pipes;
         private readonly IStreamConfig configuration;
         private readonly ISerDes<K> keySerdes;

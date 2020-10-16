@@ -22,11 +22,11 @@ namespace Streamiz.Kafka.Net.State.InMemory
         private readonly Func<InMemoryWindowStoreIteratorWrapper, bool> closingCallback;
         private readonly bool allKeys;
 
-        protected int indexIt = 0;
-        protected int valueIndexIt = 0;
+        protected int indexIt;
+        protected int valueIndexIt;
         protected KeyValuePair<Bytes, byte[]>? next;
 
-        protected bool disposed = false;
+        protected bool disposed;
 
         public long CurrentTime { get; private set; }
 
@@ -247,7 +247,7 @@ namespace Streamiz.Kafka.Net.State.InMemory
 
         public bool Persistent => false;
 
-        public bool IsOpen { get; private set; } = false;
+        public bool IsOpen { get; private set; }
 
         public IKeyValueEnumerator<Windowed<Bytes>, byte[]> All()
         {

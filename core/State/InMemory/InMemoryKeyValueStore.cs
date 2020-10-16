@@ -10,7 +10,7 @@ namespace Streamiz.Kafka.Net.State.InMemory
     /// </summary>
     public class InMemoryKeyValueStore : IKeyValueStore<Bytes, byte[]>
     {
-        private int size = 0;
+        private int size;
         private readonly IDictionary<Bytes, byte[]> map = new Dictionary<Bytes, byte[]>(new BytesComparer());
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Streamiz.Kafka.Net.State.InMemory
         /// <summary>
         /// Is open
         /// </summary>
-        public bool IsOpen { get; private set; } = false;
+        public bool IsOpen { get; private set; }
 
         /// <summary>
         /// Calculate approximate the number of entries in the state store

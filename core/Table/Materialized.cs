@@ -29,7 +29,7 @@ namespace Streamiz.Kafka.Net.Table
     public class Materialized<K, V, S>
         where S : IStateStore
     {
-        private bool queriable = false;
+        private bool queriable;
 
         /// <summary>
         /// Name of state store

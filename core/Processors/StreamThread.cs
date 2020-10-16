@@ -89,7 +89,7 @@ namespace Streamiz.Kafka.Net.Processors
         private readonly InternalTopologyBuilder builder;
         private readonly TimeSpan consumeTimeout;
         private readonly string logPrefix = "";
-        private readonly long commitTimeMs = 0;
+        private readonly long commitTimeMs;
         private CancellationToken token;
         private DateTime lastCommit = DateTime.Now;
         
@@ -127,9 +127,9 @@ namespace Streamiz.Kafka.Net.Processors
 
         public string Name { get; }
 
-        public bool IsRunning { get; private set; } = false;
+        public bool IsRunning { get; private set; }
 
-        public bool IsDisposable { get; private set; } = false;
+        public bool IsDisposable { get; private set; }
 
         public bool ThrowException { get; set; } = true;
 

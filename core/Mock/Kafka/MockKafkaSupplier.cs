@@ -11,7 +11,7 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
     /// </summary>
     internal class MockKafkaSupplier : IKafkaSupplier
     {
-        private readonly MockCluster cluster = null;
+        private readonly MockCluster cluster;
 
         public MockKafkaSupplier(int defaultNumberPartitions = 1)
         {

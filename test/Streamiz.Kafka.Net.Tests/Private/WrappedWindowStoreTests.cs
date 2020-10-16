@@ -14,8 +14,8 @@ namespace Streamiz.Kafka.Net.Tests.Private
 {
     public class WrappedWindowStoreTests
     {
-        private WrappedWindowStore<string, int> wrapped = null;
-        private InMemoryWindowStore inmemorystore = null;
+        private WrappedWindowStore<string, int> wrapped;
+        private InMemoryWindowStore inmemorystore;
 
         [SetUp]
         public void Setup()

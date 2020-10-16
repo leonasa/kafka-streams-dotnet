@@ -13,7 +13,7 @@ namespace Streamiz.Kafka.Net.SerDes
         /// <summary>
         /// initialized boolean
         /// </summary>
-        protected bool isInitialized = false;
+        protected bool isInitialized;
 
         /// <summary>
         /// Deserialize a record value from a byte array into an object.

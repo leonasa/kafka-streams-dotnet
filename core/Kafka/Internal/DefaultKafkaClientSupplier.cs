@@ -5,7 +5,7 @@ namespace Streamiz.Kafka.Net.Kafka.Internal
 {
     internal class DefaultKafkaClientSupplier : IKafkaSupplier
     {
-        private readonly KafkaLoggerAdapter loggerAdapter = null;
+        private readonly KafkaLoggerAdapter loggerAdapter;
 
         public DefaultKafkaClientSupplier(KafkaLoggerAdapter loggerAdapter)
         {

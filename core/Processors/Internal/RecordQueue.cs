@@ -16,7 +16,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
         private readonly ILog log = Logger.GetLogger(typeof(RecordQueue));
 
         private readonly List<ConsumeResult<byte[], byte[]>> queue;
-        private ConsumeResult<byte[], byte[]> currentRecord = null;
+        private ConsumeResult<byte[], byte[]> currentRecord;
         private long partitionTime = -1;
 
         private readonly ITimestampExtractor timestampExtractor;

@@ -11,7 +11,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
         private readonly Aggregator<K, V, T> add;
         private readonly Aggregator<K, V, T> remove;
 
-        private bool sendOldValues = false;
+        private bool sendOldValues;
 
 
         public KTableAggregate(string storeName, Func<T> initializer, Func<K, V, T, T> adder, Func<K, V, T, T> remover)

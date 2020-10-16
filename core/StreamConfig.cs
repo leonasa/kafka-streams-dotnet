@@ -323,16 +323,16 @@ namespace Streamiz.Kafka.Net
 
         #endregion
 
-        private ConsumerConfig _consumerConfig = null;
-        private ProducerConfig _producerConfig = null;
-        private AdminClientConfig _adminClientConfig = null;
-        private ClientConfig _config = null;
+        private ConsumerConfig _consumerConfig;
+        private ProducerConfig _producerConfig;
+        private AdminClientConfig _adminClientConfig;
+        private ClientConfig _config;
 
         private IDictionary<string, string> _internalConsumerConfig = new Dictionary<string, string>();
         private IDictionary<string, string> _internalProducerConfig = new Dictionary<string, string>();
         private IDictionary<string, string> _internalAdminConfig = new Dictionary<string, string>();
 
-        private bool changeGuarantee = false;
+        private bool changeGuarantee;
 
         #region ClientConfig
 

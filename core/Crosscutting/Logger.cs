@@ -17,7 +17,7 @@ namespace Streamiz.Kafka.Net.Crosscutting
     public static class Logger
     {
         private static Level defaultLevel = Level.Debug;
-        private static bool configure = false;
+        private static bool configure;
         private static readonly string LOG_CONFIG_FILE = @"log4net.config";
 
         /// <summary>

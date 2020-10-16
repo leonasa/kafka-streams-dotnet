@@ -12,8 +12,8 @@ namespace Streamiz.Kafka.Net.Mock.Sync
     {
         internal class SyncConsumerOffset
         {
-            public long OffsetCommitted { get; set; } = 0L;
-            public long OffsetConsumed { get; set; } = 0L;
+            public long OffsetCommitted { get; set; }
+            public long OffsetConsumed { get; set; }
 
             public SyncConsumerOffset(long offset)
             {

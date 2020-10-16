@@ -8,7 +8,7 @@ namespace Streamiz.Kafka.Net.Kafka.Internal
 {
     internal class KafkaLoggerAdapter
     {
-        private readonly ILog log = null;
+        private readonly ILog log;
 
         public KafkaLoggerAdapter(IStreamConfig configuration)
             : this(configuration, Logger.GetLogger(typeof(KafkaLoggerAdapter)))

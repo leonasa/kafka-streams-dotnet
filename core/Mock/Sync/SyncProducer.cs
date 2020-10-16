@@ -32,7 +32,7 @@ namespace Streamiz.Kafka.Net.Mock.Sync
         private readonly static object _lock = new object();
         private readonly Dictionary<string, List<Message<byte[], byte[]>>> topics = new Dictionary<string, List<Message<byte[], byte[]>>>();
 
-        private SyncTransaction transaction = null;
+        private SyncTransaction transaction;
 
         private readonly ProducerConfig config;
 

@@ -9,7 +9,7 @@ namespace Streamiz.Kafka.Net.State.Enumerator
         private readonly List<S> storeIterator;
         private readonly Func<S, IKeyValueEnumerator<K, V>> nextIterator;
         private IKeyValueEnumerator<K, V> current;
-        private int index = 0;
+        private int index;
 
         public CompositeKeyValueEnumerator(
             IEnumerable<S> storeEnumerable,

@@ -9,7 +9,7 @@ namespace Streamiz.Kafka.Net.Processors
     {
         protected readonly string queryableStoreName;
         protected readonly bool sendOldValues;
-        private readonly bool throwException = false;
+        private readonly bool throwException;
         protected TimestampedKeyValueStore<KS, VS> store;
         protected TimestampedTupleForwarder<K, V> tupleForwarder;
 
@@ -30,8 +30,8 @@ namespace Streamiz.Kafka.Net.Processors
                 tupleForwarder = new TimestampedTupleForwarder<K, V>(this, sendOldValues);
             }
 
-            if (throwException && (queryableStoreName == null || store == null || tupleForwarder == null))
-                throw new StreamsException($"{logPrefix}Processor {Name} doesn't have queryable store name. Please set a correct name to materialed view !");
+            if (throwException && (queryableStoreName == null || store == null))
+                throw new StreamsException($"{logPrefix}Processor {Name} doesn't have queryable store name. Please set a correct name to materialized view !");
         }
     }
 }

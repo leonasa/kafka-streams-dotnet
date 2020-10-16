@@ -17,13 +17,13 @@ namespace Streamiz.Kafka.Net.Processors
         private readonly IDictionary<TopicPartition, long> consumedOffsets;
         private readonly PartitionGrouper partitionGrouper;
         private readonly IList<IProcessor> processors = new List<IProcessor>();
-        private readonly bool eosEnabled = false;
-        private readonly long maxTaskIdleMs = 0;
+        private readonly bool eosEnabled;
+        private readonly long maxTaskIdleMs;
         private readonly long maxBufferedSize = 100;
 
         private long idleStartTime;
         private IProducer<byte[], byte[]> producer;
-        private bool transactionInFlight = false;
+        private bool transactionInFlight;
         private readonly string threadId;
 
         public StreamTask(string threadId, TaskId id, IEnumerable<TopicPartition> partitions, ProcessorTopology processorTopology, IConsumer<byte[], byte[]> consumer, IStreamConfig configuration, IKafkaSupplier kafkaSupplier, IProducer<byte[], byte[]> producer)

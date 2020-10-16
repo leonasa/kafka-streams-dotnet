@@ -21,7 +21,7 @@ namespace Streamiz.Kafka.Net.Mock
         private readonly IKafkaSupplier supplier;
         private readonly IDictionary<TaskId, StreamTask> tasks = new Dictionary<TaskId, StreamTask>();
         private readonly IDictionary<TaskId, IList<TopicPartition>> partitionsByTaskId = new Dictionary<TaskId, IList<TopicPartition>>();
-        private readonly SyncProducer producer = null;
+        private readonly SyncProducer producer;
 
         public TaskSynchronousTopologyDriver(string clientId, InternalTopologyBuilder topologyBuilder, IStreamConfig configuration, IStreamConfig topicConfiguration, CancellationToken token)
         {

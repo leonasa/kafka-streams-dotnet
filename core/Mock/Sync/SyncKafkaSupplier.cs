@@ -10,7 +10,7 @@ namespace Streamiz.Kafka.Net.Mock.Sync
     /// </summary>
     internal class SyncKafkaSupplier : IKafkaSupplier
     {
-        private SyncProducer producer = null;
+        private SyncProducer producer;
 
         public IAdminClient GetAdmin(AdminClientConfig config) => new SyncAdminClient();
 

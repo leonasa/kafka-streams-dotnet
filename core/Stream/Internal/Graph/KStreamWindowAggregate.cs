@@ -12,7 +12,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph
         private readonly Initializer<Agg> initializer;
         private readonly Aggregator<K, V, Agg> aggregator;
 
-        private bool sendOldValues = false;
+        private bool sendOldValues;
 
         public KStreamWindowAggregate(WindowOptions<W> windowOptions, string storeName, Func<Agg> initializerFunction, Func<K, V, Agg, Agg> aggregatorFunction)
             : this(windowOptions, storeName, new WrappedInitializer<Agg>(initializerFunction), new WrappedAggregator<K, V, Agg>(aggregatorFunction))
