@@ -25,7 +25,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
 
         }
 
-        private string queryableStoreName;
+        private readonly string queryableStoreName;
 
         public KTableSourceValueGetterSupplier(string queryableStoreName)
         {

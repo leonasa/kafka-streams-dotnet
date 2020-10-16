@@ -4,7 +4,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
 {
     internal class Named
     {
-        private static int MAX_NAME_LENGTH = 249;
+        private static readonly int MAX_NAME_LENGTH = 249;
         private readonly string name;
 
         public Named(string name)

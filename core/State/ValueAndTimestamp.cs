@@ -1,6 +1,6 @@
 ﻿namespace Streamiz.Kafka.Net.State
 {
-    internal class ValueAndTimestamp
+    internal static class ValueAndTimestamp
     {
         public static V GetValueOrNull<V>(ValueAndTimestamp<V> valueAndTimestamp)
         {

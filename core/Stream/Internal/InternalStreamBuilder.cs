@@ -15,7 +15,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
 {
     internal class InternalStreamBuilder : INameProvider
     {
-        private static string TABLE_SOURCE_SUFFIX = "-source";
+        private static readonly string TABLE_SOURCE_SUFFIX = "-source";
 
         private int index = -1;
         private static readonly object _locker = new object();

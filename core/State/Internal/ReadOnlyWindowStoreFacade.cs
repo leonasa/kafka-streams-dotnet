@@ -7,7 +7,7 @@ namespace Streamiz.Kafka.Net.State.Internal
 {
     internal class WindowStoreEnumeratorFacade<V> : IWindowStoreEnumerator<V>
     {
-        private IWindowStoreEnumerator<ValueAndTimestamp<V>> windowStoreEnumerator;
+        private readonly IWindowStoreEnumerator<ValueAndTimestamp<V>> windowStoreEnumerator;
 
         public WindowStoreEnumeratorFacade(IWindowStoreEnumerator<ValueAndTimestamp<V>> windowStoreEnumerator)
         {
@@ -43,7 +43,7 @@ namespace Streamiz.Kafka.Net.State.Internal
 
     internal class KeyValueEnumeratorFacade<K, V> : IKeyValueEnumerator<Windowed<K>, V>
     {
-        private IKeyValueEnumerator<Windowed<K>, ValueAndTimestamp<V>> keyValueEnumerator;
+        private readonly IKeyValueEnumerator<Windowed<K>, ValueAndTimestamp<V>> keyValueEnumerator;
 
         public KeyValueEnumeratorFacade(IKeyValueEnumerator<Windowed<K>, ValueAndTimestamp<V>> keyValueEnumerator)
         {
@@ -86,8 +86,7 @@ namespace Streamiz.Kafka.Net.State.Internal
             innerStore = store;
         }
 
-        public IKeyValueEnumerator<Windowed<K>, V> All()
-            => new KeyValueEnumeratorFacade<K, V>(innerStore.All());
+        public IKeyValueEnumerator<Windowed<K>, V> All() => new KeyValueEnumeratorFacade<K, V>(innerStore.All());
 
         public V Fetch(K key, long time)
         {

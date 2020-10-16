@@ -4,7 +4,7 @@ namespace Streamiz.Kafka.Net.State.Internal
 {
     internal class GlobalStateStoreProviderFacade<T, K, V> : IStateStoreProvider<T, K, V> where T : class
     {
-        GlobalStateStoreProvider globalStateStoreProvider;
+        readonly GlobalStateStoreProvider globalStateStoreProvider;
 
         public GlobalStateStoreProviderFacade(GlobalStateStoreProvider globalStateStoreProvider)
         {

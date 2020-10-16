@@ -102,7 +102,7 @@ namespace Streamiz.Kafka.Net.Tests.Private.SerDes
 
     public class SchemaAvroSerDesTests
     {
-        string topic = "person";
+        readonly string topic = "person";
 
         [Test]
         public void DeserializeWithoutInit()

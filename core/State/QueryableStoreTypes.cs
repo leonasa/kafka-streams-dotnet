@@ -12,7 +12,7 @@ namespace Streamiz.Kafka.Net.State
     /// These can be used with <see cref="KafkaStream.Store{T, K, V}(StoreQueryParameters{T, K, V})"/>
     /// to access and query the <see cref="IStateStore"/>s that are part of a <see cref="Topology"/>.
     /// </summary>
-    public class QueryableStoreTypes
+    public static class QueryableStoreTypes
     {
         /// <summary>
         /// A <see cref="IQueryableStoreType{T, K, V}"/> that accepts <see cref="ReadOnlyKeyValueStore{K, V}"/> as T.

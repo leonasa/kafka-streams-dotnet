@@ -237,7 +237,6 @@ namespace Streamiz.Kafka.Net
         #endregion
 
         private readonly Topology topology;
-        private readonly IKafkaSupplier kafkaSupplier;
         private readonly IThread[] threads;
         private readonly string clientId;
         private readonly ILog logger = Logger.GetLogger(typeof(KafkaStream));
@@ -275,14 +274,13 @@ namespace Streamiz.Kafka.Net
         public KafkaStream(Topology topology, IStreamConfig configuration, IKafkaSupplier kafkaSupplier)
         {
             this.topology = topology;
-            this.kafkaSupplier = kafkaSupplier;
 
             // check if ApplicationId & BootstrapServers has been set
             if (string.IsNullOrEmpty(configuration.ApplicationId) || string.IsNullOrEmpty(configuration.BootstrapServers))
                 throw new StreamConfigException($"Stream configuration is not correct. Please set ApplicationId and BootstrapServers as minimal.");
 
-            var processID = Guid.NewGuid();
-            clientId = string.IsNullOrEmpty(configuration.ClientId) ? $"{configuration.ApplicationId.ToLower()}-{processID}" : configuration.ClientId;
+            var processId = Guid.NewGuid();
+            clientId = string.IsNullOrEmpty(configuration.ClientId) ? $"{configuration.ApplicationId.ToLower()}-{processId}" : configuration.ClientId;
             logPrefix = $"stream-application[{configuration.ApplicationId}] ";
 
             logger.Info($"{logPrefix} Start creation of the stream application with this configuration: {configuration}");
@@ -324,14 +322,14 @@ namespace Streamiz.Kafka.Net
             {
                 var threadId = $"{configuration.ApplicationId.ToLower()}-stream-thread-{i}";
 
-                var adminClient = this.kafkaSupplier.GetAdmin(configuration.ToAdminConfig(StreamThread.GetSharedAdminClientId(clientId)));
+                var adminClient = kafkaSupplier.GetAdmin(configuration.ToAdminConfig(StreamThread.GetSharedAdminClientId(clientId)));
 
                 threads[i] = StreamThread.Create(
                     threadId,
                     clientId,
                     this.topology.Builder,
                     configuration,
-                    this.kafkaSupplier,
+                    kafkaSupplier,
                     adminClient,
                     i);
 

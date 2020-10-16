@@ -8,7 +8,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
 {
     internal class ProcessorStateManager : IStateManager
     {
-        private static string STATE_CHANGELOG_TOPIC_SUFFIX = "-changelog";
+        private static readonly string STATE_CHANGELOG_TOPIC_SUFFIX = "-changelog";
 
         private readonly ILog log;
         private readonly string logPrefix;
