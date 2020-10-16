@@ -117,7 +117,6 @@ namespace Streamiz.Kafka.Net.Processors
                 }
             }
             commitNeeded = false;
-            commitRequested = false;
         }
 
         private IProducer<byte[], byte[]> CreateEOSProducer()
@@ -227,8 +226,6 @@ namespace Streamiz.Kafka.Net.Processors
                 producer.BeginTransaction();
                 transactionInFlight = true;
             }
-
-            taskInitialized = true;
         }
 
         public override bool InitializeStateStores()

@@ -251,11 +251,20 @@ namespace Streamiz.Kafka.Net.Processors.Internal
 
         #region Build
 
+        public ProcessorTopology BuildGlobalStateTopology()
+        {
+            if (!GlobalNodeGroups.Any())
+            {
+                return null;
+            }
+            return BuildTopology(GlobalNodeGroups, null);
+        }
+
         public ProcessorTopology BuildTopology() => BuildTopology((int?)null);
 
         public ProcessorTopology BuildTopology(int? id)
         {
-            ISet<string> nodeGroup = null;
+            ISet<string> nodeGroup;
             if (id.HasValue)
             {
                 var groups = NodeGroups();
@@ -279,18 +288,9 @@ namespace Streamiz.Kafka.Net.Processors.Internal
             return BuildTopology(nodeGroup, null);
         }
 
-        public ProcessorTopology BuildGlobalStateTopology()
-        {
-            if (!GlobalNodeGroups.Any())
-            {
-                return null;
-            }
-            return BuildTopology(GlobalNodeGroups, null);
-        }
-
         public ProcessorTopology BuildTopology(TaskId taskId)
         {
-            ISet<string> nodeGroup = null;
+            ISet<string> nodeGroup;
             if (taskId != null)
             {
                 var groups = NodeGroups();
@@ -326,21 +326,19 @@ namespace Streamiz.Kafka.Net.Processors.Internal
                     var processor = nodeFactory.Build();
                     processors.Add(nodeFactory.Name, processor);
 
-                    if (nodeFactory is IProcessorNodeFactory)
+                    switch (nodeFactory)
                     {
-                        BuildProcessorNode(processors, stateStores, nodeFactory as IProcessorNodeFactory, processor, taskId);
-                    }
-                    else if (nodeFactory is ISourceNodeFactory)
-                    {
-                        BuildSourceNode(sources, nodeFactory as ISourceNodeFactory, processor);
-                    }
-                    else if (nodeFactory is ISinkNodeFactory)
-                    {
-                        BuildSinkNode(processors, sinks, nodeFactory as ISinkNodeFactory, processor);
-                    }
-                    else
-                    {
-                        throw new TopologyException($"Unknown definition class: {nodeFactory.GetType().Name}");
+                        case IProcessorNodeFactory factory:
+                            BuildProcessorNode(processors, stateStores, factory, processor, taskId);
+                            break;
+                        case ISourceNodeFactory sourceNodeFactory:
+                            BuildSourceNode(sources, sourceNodeFactory, processor);
+                            break;
+                        case ISinkNodeFactory sinkNodeFactory:
+                            BuildSinkNode(processors, sinks, sinkNodeFactory, processor);
+                            break;
+                        default:
+                            throw new TopologyException($"Unknown definition class: {nodeFactory.GetType().Name}");
                     }
                 }
             }
@@ -426,9 +424,9 @@ namespace Streamiz.Kafka.Net.Processors.Internal
         private bool IsGlobalSource(string node)
         {
             var factory = nodeFactories[node];
-            if (factory is ISourceNodeFactory)
+            if (factory is ISourceNodeFactory nodeFactory)
             {
-                return globalTopics.Contains(((ISourceNodeFactory)factory).Topic);
+                return globalTopics.Contains(nodeFactory.Topic);
             }
             return false;
         }

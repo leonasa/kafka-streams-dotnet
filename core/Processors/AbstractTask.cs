@@ -12,27 +12,27 @@ namespace Streamiz.Kafka.Net.Processors
     internal abstract class AbstractTask : ITask
     {
         protected readonly IStreamConfig configuration;
-        protected IConsumer<byte[], byte[]> consumer;
-        protected bool taskInitialized;
+        protected readonly IConsumer<byte[], byte[]> consumer;
         protected bool commitNeeded = false;
-        protected bool commitRequested;
-        protected IStateManager stateMgr;
+        protected readonly IStateManager stateMgr;
         protected ILog log;
-        protected readonly string logPrefix = "";
+        protected readonly string logPrefix;
 
         protected AbstractTask(TaskId id, IEnumerable<TopicPartition> partition, ProcessorTopology topology, IConsumer<byte[], byte[]> consumer, IStreamConfig config)
         {
             log = Logger.GetLogger(GetType());
             logPrefix = $"stream-task[{id.Id}|{id.Partition}] ";
 
-            Partition = partition;
+            var topicPartitions = partition.ToList();
+
+            Partition = topicPartitions;
             Id = id;
             Topology = topology;
 
             this.consumer = consumer;
             configuration = config;
 
-            stateMgr = new ProcessorStateManager(id, partition);
+            stateMgr = new ProcessorStateManager(id, topicPartitions);
         }
 
         public ProcessorTopology Topology { get; }
@@ -45,16 +45,17 @@ namespace Streamiz.Kafka.Net.Processors
 
         public ICollection<TopicPartition> ChangelogPartitions { get; internal set; }
 
-        public bool HasStateStores => !(Topology.StateStores.Count == 0);
+        public bool HasStateStores => Topology.StateStores.Count != 0;
 
         public string ApplicationId => configuration.ApplicationId;
 
         public bool CommitNeeded => commitNeeded;
-        public bool CommitRequested => commitRequested;
 
         public bool IsClosed { get; protected set; }
 
-        public void RequestCommit() => commitRequested = true;
+        public void RequestCommit()
+        {
+        }
 
         #region Abstract
 
@@ -79,17 +80,15 @@ namespace Streamiz.Kafka.Net.Processors
 
             log.Debug($"{logPrefix}Initializing state stores");
 
-            foreach (var kv in Topology.StateStores)
+            foreach (var (key, store) in Topology.StateStores)
             {
-                var store = kv.Value;
-                log.Debug($"{logPrefix}Initializing store {kv.Key}");
+                log.Debug($"{logPrefix}Initializing store {key}");
                 store.Init(Context, store);
             }
 
-            foreach (var kv in Topology.GlobalStateStores.Where(k => !Topology.StateStores.ContainsKey(k.Key)))
+            foreach (var (key, store) in Topology.GlobalStateStores.Where(k => !Topology.StateStores.ContainsKey(k.Key)))
             {
-                var store = kv.Value;
-                log.Debug($"{logPrefix}Initializing store {kv.Key}");
+                log.Debug($"{logPrefix}Initializing store {key}");
                 store.Init(Context, store);
             }
         }

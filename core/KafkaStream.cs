@@ -291,7 +291,7 @@ namespace Streamiz.Kafka.Net
             topology.Builder.RewriteTopology(configuration);
 
             // sanity check
-            var processorTopology = topology.Builder.BuildTopology();
+            topology.Builder.BuildTopology();
 
             int numStreamThreads = topology.Builder.HasNoNonGlobalTopology ? 0 : configuration.NumStreamThreads;
 
