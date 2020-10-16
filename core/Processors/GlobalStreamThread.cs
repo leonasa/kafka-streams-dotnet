@@ -127,7 +127,7 @@ namespace Streamiz.Kafka.Net.Processors
             }
         }
 
-        public void Start(CancellationToken token)
+        public void Start(CancellationToken cancellationToken)
         {
             log.Info($"{logPrefix}Starting");
 
@@ -145,7 +145,7 @@ namespace Streamiz.Kafka.Net.Processors
                 throw;
             }
 
-            this.token = token;
+            token = cancellationToken;
 
             thread.Start();
         }
@@ -154,14 +154,14 @@ namespace Streamiz.Kafka.Net.Processors
         {
             try
             {
-                var stateConsumer = new StateConsumer(
+                var consumer = new StateConsumer(
                     globalConsumer,
                     globalStateMaintainer,
                     // if poll time is bigger than int allows something is probably wrong anyway
                     new TimeSpan(0, 0, 0, 0, (int)configuration.PollMs),
                     new TimeSpan(0, 0, 0, 0, (int)configuration.CommitIntervalMs));
-                stateConsumer.Initialize();
-                return stateConsumer;
+                consumer.Initialize();
+                return consumer;
             }
             catch (StreamsException)
             {
@@ -211,7 +211,7 @@ namespace Streamiz.Kafka.Net.Processors
 
         #region IDisposable
 
-        private bool disposed = false;
+        private bool disposed;
 
         public void Dispose()
         {
