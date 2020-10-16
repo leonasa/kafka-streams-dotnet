@@ -8,7 +8,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph
     {
         private readonly string storeName;
         private readonly Initializer<T> initializer;
-        private readonly Aggregator<K, V, T> aggregator;
+        private readonly IAggregator<K, V, T> aggregator;
 
         private bool sendOldValues;
 
@@ -16,7 +16,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph
             : this(storeName, new WrappedInitializer<T>(initializer), new WrappedAggregator<K, V, T>(aggregator))
         {}
 
-        public KStreamAggregate(string storeName, Initializer<T> initializer, Aggregator<K, V, T> aggregator)
+        public KStreamAggregate(string storeName, Initializer<T> initializer, IAggregator<K, V, T> aggregator)
         {
             this.storeName = storeName;
             this.initializer = initializer;

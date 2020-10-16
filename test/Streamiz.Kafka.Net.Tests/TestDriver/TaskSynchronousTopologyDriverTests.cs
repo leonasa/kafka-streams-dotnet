@@ -62,11 +62,11 @@ namespace Streamiz.Kafka.Net.Tests.TestDriver
             var input = driver.CreateInputTopic("test", new StringSerDes(), new StringSerDes());
             var store = driver.GetStateStore<string, string>("store");
             Assert.IsNotNull(store);
-            Assert.IsInstanceOf<ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>>(store);
+            Assert.IsInstanceOf<IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>>(store);
             input.PipeInput("coucou", "1");
 
-            Assert.AreEqual(1, ((ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).All().Count());
-            Assert.AreEqual("1", ((ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).Get("coucou").Value);
+            Assert.AreEqual(1, ((IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).All().Count());
+            Assert.AreEqual("1", ((IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).Get("coucou").Value);
             driver.Dispose();
         }
 
@@ -83,16 +83,16 @@ namespace Streamiz.Kafka.Net.Tests.TestDriver
             var input = driver.CreateInputTopic("test", new StringSerDes(), new StringSerDes());
             var store = driver.GetStateStore<string, string>("store");
             Assert.IsNotNull(store);
-            Assert.IsInstanceOf<ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>>(store);
+            Assert.IsInstanceOf<IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>>(store);
             input.PipeInput("coucou", "1");
 
-            Assert.AreEqual(1, ((ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).All().Count());
-            Assert.AreEqual("1", ((ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).Get("coucou").Value);
+            Assert.AreEqual(1, ((IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).All().Count());
+            Assert.AreEqual("1", ((IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).Get("coucou").Value);
 
             input.PipeInput("coucou", "2");
 
-            Assert.AreEqual(1, ((ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).All().Count());
-            Assert.AreEqual("2", ((ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).Get("coucou").Value);
+            Assert.AreEqual(1, ((IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).All().Count());
+            Assert.AreEqual("2", ((IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).Get("coucou").Value);
             driver.Dispose();
         }
 
@@ -109,16 +109,16 @@ namespace Streamiz.Kafka.Net.Tests.TestDriver
             var input = driver.CreateInputTopic("test", new StringSerDes(), new StringSerDes());
             var store = driver.GetStateStore<string, string>("store");
             Assert.IsNotNull(store);
-            Assert.IsInstanceOf<ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>>(store);
+            Assert.IsInstanceOf<IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>>(store);
             input.PipeInput("coucou", "1");
 
-            Assert.AreEqual(1, ((ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).All().Count());
-            Assert.AreEqual("1", ((ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).Get("coucou").Value);
+            Assert.AreEqual(1, ((IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).All().Count());
+            Assert.AreEqual("1", ((IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).Get("coucou").Value);
 
             input.PipeInput("coucou", null);
 
-            Assert.AreEqual(0, ((ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).All().Count());
-            Assert.AreEqual(null, ((ReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).Get("coucou"));
+            Assert.AreEqual(0, ((IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).All().Count());
+            Assert.AreEqual(null, ((IReadOnlyKeyValueStore<string, ValueAndTimestamp<string>>)store).Get("coucou"));
             driver.Dispose();
         }
 

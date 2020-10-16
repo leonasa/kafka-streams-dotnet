@@ -69,7 +69,7 @@ namespace Streamiz.Kafka.Net.Processors
     ///           </ul>
     /// 
     /// </summary>
-    internal sealed class ThreadState : ThreadStateTransitionValidator, IEquatable<ThreadState>
+    internal sealed class ThreadState : IThreadStateTransitionValidator, IEquatable<ThreadState>
     {
         public static readonly ThreadState CREATED = new ThreadState(0, "CREATED", 1, 5);
         public static readonly ThreadState STARTING = new ThreadState(1, "STARTING", 2, 3, 5);
@@ -106,7 +106,7 @@ namespace Streamiz.Kafka.Net.Processors
             return Equals(RUNNING) || Equals(STARTING) || Equals(PARTITIONS_REVOKED) || Equals(PARTITIONS_ASSIGNED);
         }
 
-        public bool IsValidTransition(ThreadStateTransitionValidator newState)
+        public bool IsValidTransition(IThreadStateTransitionValidator newState)
         {
             return Transitions.Contains(((ThreadState)newState).Ordinal);
         }
@@ -114,10 +114,6 @@ namespace Streamiz.Kafka.Net.Processors
         public static bool operator ==(ThreadState a, ThreadState b) => a?.Ordinal == b?.Ordinal;
         public static bool operator !=(ThreadState a, ThreadState b) => a?.Ordinal != b?.Ordinal;
 
-        public override bool Equals(object obj)
-        {
-            return obj is ThreadState && ((ThreadState)obj).Ordinal.Equals(Ordinal);
-        }
 
         public override int GetHashCode()
         {
@@ -128,7 +124,10 @@ namespace Streamiz.Kafka.Net.Processors
         {
             return $"{Name}";
         }
-
+        public override bool Equals(object obj)
+        {
+            return obj is ThreadState state && state.Ordinal.Equals(Ordinal);
+        }
         public bool Equals(ThreadState other) => this.Ordinal.Equals(other.Ordinal);
     }
 }

@@ -53,8 +53,8 @@ namespace Streamiz.Kafka.Net.Stream.Internal
             var leftStoreSupplier = joined.LeftStoreSupplier;
             var rightStoreSupplier = joined.RightStoreSupplier;
 
-            StoreBuilder<WindowStore<K, V>> leftWindowStore;
-            StoreBuilder<WindowStore<K, V0>> rightWindowStore;
+            IStoreBuilder<IWindowStore<K, V>> leftWindowStore;
+            IStoreBuilder<IWindowStore<K, V0>> rightWindowStore;
 
             AssertUniqueStoreNames(leftStoreSupplier, rightStoreSupplier);
 
@@ -125,7 +125,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
 
         #region Private
 
-        private void AssertWindowSettings(WindowBytesStoreSupplier supplier, JoinWindowOptions joinWindows)
+        private void AssertWindowSettings(IWindowBytesStoreSupplier supplier, JoinWindowOptions joinWindows)
         {
             bool allMatch = supplier.Retention == (joinWindows.Size + joinWindows.GracePeriodMs) &&
                 supplier.WindowSize == joinWindows.Size;
@@ -136,7 +136,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
             }
         }
 
-        private void AssertUniqueStoreNames(WindowBytesStoreSupplier supplier, WindowBytesStoreSupplier otherSupplier)
+        private void AssertUniqueStoreNames(IWindowBytesStoreSupplier supplier, IWindowBytesStoreSupplier otherSupplier)
         {
             if (supplier != null
                 && otherSupplier != null
@@ -146,7 +146,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
             }
         }
 
-        private StoreBuilder<WindowStore<K, V>> JoinWindowStoreBuilder<K, V>(string storeName,
+        private IStoreBuilder<IWindowStore<K, V>> JoinWindowStoreBuilder<K, V>(string storeName,
                                                                              JoinWindowOptions windows,
                                                                              ISerDes<K> keySerde,
                                                                              ISerDes<V> valueSerde)

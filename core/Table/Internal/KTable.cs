@@ -254,7 +254,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
             ISerDes<K> keySerde;
             ISerDes<V> valueSerde;
             String queryableStoreName;
-            StoreBuilder<TimestampedKeyValueStore<K, V>> storeBuilder;
+            IStoreBuilder<ITimestampedKeyValueStore<K, V>> storeBuilder;
 
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate), "Filter() doesn't allow null predicate function");
@@ -317,7 +317,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
             ISerDes<K> keySerde;
             ISerDes<VR> valueSerde;
             String queryableStoreName;
-            StoreBuilder<TimestampedKeyValueStore<K, VR>> storeBuilder;
+            IStoreBuilder<ITimestampedKeyValueStore<K, VR>> storeBuilder;
 
             if (materializedInternal != null)
             {

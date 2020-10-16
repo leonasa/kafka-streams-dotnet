@@ -62,7 +62,7 @@ namespace Streamiz.Kafka.Net.Processors
         }
 
 
-        internal void OnChange(IThread thread, ThreadStateTransitionValidator old, ThreadStateTransitionValidator @new)
+        internal void OnChange(IThread thread, IThreadStateTransitionValidator old, IThreadStateTransitionValidator @new)
         {
             lock (threadStatesLock)
             {
@@ -87,11 +87,11 @@ namespace Streamiz.Kafka.Net.Processors
             }
         }
 
-        internal void OnGlobalThreadStateChange(GlobalStreamThread thread, ThreadStateTransitionValidator old, ThreadStateTransitionValidator @new)
+        internal void OnGlobalThreadStateChange(GlobalStreamThread thread, IThreadStateTransitionValidator old, IThreadStateTransitionValidator @new)
         {
             lock (threadStatesLock)
             {
-                if (thread is GlobalStreamThread)
+                if (thread != null)
                 {
                     GlobalThreadState newState = (GlobalThreadState)@new;
                     globalThreadState = newState;

@@ -6,9 +6,9 @@ namespace Streamiz.Kafka.Net.State.Internal.Builder
     internal class TimestampedWindowStoreBuilder<K, V>
         : AbstractStoreBuilder<K, ValueAndTimestamp<V>, TimestampedWindowStore<K, V>>
     {
-        private readonly WindowBytesStoreSupplier supplier;
+        private readonly IWindowBytesStoreSupplier supplier;
 
-        public TimestampedWindowStoreBuilder(WindowBytesStoreSupplier supplier, ISerDes<K> keySerde, ISerDes<V> valueSerde)
+        public TimestampedWindowStoreBuilder(IWindowBytesStoreSupplier supplier, ISerDes<K> keySerde, ISerDes<V> valueSerde)
             : base(supplier.Name, keySerde, valueSerde == null ? null : new ValueAndTimestampSerDes<V>(valueSerde))
         {
             this.supplier = supplier;

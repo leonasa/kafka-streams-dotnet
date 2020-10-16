@@ -13,7 +13,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
     {
         private readonly IDictionary<string, NodeFactory> nodeFactories = new Dictionary<string, NodeFactory>();
         private readonly IDictionary<string, StateStoreFactory> stateFactories = new Dictionary<string, StateStoreFactory>();
-        private readonly IDictionary<string, StoreBuilder> globalStateBuilders = new Dictionary<string, StoreBuilder>();
+        private readonly IDictionary<string, IStoreBuilder> globalStateBuilders = new Dictionary<string, IStoreBuilder>();
         private readonly IList<string> sourceTopics = new List<string>();
         private readonly ISet<string> globalTopics = new HashSet<string>();
         private readonly QuickUnion<string> nodeGrouper = new QuickUnion<string>();
@@ -24,10 +24,6 @@ namespace Streamiz.Kafka.Net.Processors.Internal
         private readonly IDictionary<string, string> storesToTopics = new Dictionary<string, string>();
         // map from changelog topic name to its corresponding state store.
         private readonly IDictionary<string, string> topicsToStores = new Dictionary<string, string>();
-
-        internal InternalTopologyBuilder()
-        {
-        }
 
         internal IEnumerable<string> GetSourceTopics() => sourceTopics;
 
@@ -70,9 +66,9 @@ namespace Streamiz.Kafka.Net.Processors.Internal
 
                 var nodeFactory = nodeFactories[processorName];
 
-                if (nodeFactory is IProcessorNodeFactory)
+                if (nodeFactory is IProcessorNodeFactory factory)
                 {
-                    ((IProcessorNodeFactory)nodeFactory).AddStateStore(stateStoreName);
+                    factory.AddStateStore(stateStoreName);
                 }
                 else
                 {
@@ -146,13 +142,13 @@ namespace Streamiz.Kafka.Net.Processors.Internal
             nodeGroups = null;
         }
 
-        internal void AddStateStore<S>(StoreBuilder<S> storeBuilder, params string[] processorNames)
+        internal void AddStateStore<S>(IStoreBuilder<S> storeBuilder, params string[] processorNames)
             where S : IStateStore
         {
             AddStateStore<S>(storeBuilder, false, processorNames);
         }
 
-        internal void AddStateStore<S>(StoreBuilder<S> storeBuilder, bool allowOverride, params string[] processorNames)
+        internal void AddStateStore<S>(IStoreBuilder<S> storeBuilder, bool allowOverride, params string[] processorNames)
             where S : IStateStore
         {
             if (!allowOverride && stateFactories.ContainsKey(storeBuilder.Name))
@@ -172,7 +168,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
         }
 
         internal void AddGlobalStore<K, V, S>(string topicName,
-            StoreBuilder<S> storeBuilder,
+            IStoreBuilder<S> storeBuilder,
             string sourceName,
             ConsumedInternal<K, V> consumed,
             ProcessorParameters<K, V> processorParameters) where S : IStateStore

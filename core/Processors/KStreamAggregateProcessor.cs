@@ -7,10 +7,10 @@ namespace Streamiz.Kafka.Net.Processors
     internal class KStreamAggregateProcessor<K, V, T> : StatefullProcessor<K, V, K, T>
     {
         private readonly Initializer<T> initializer;
-        private readonly Aggregator<K, V, T> aggregator;
+        private readonly IAggregator<K, V, T> aggregator;
 
 
-        public KStreamAggregateProcessor(string storeName, bool enableSendOldValues, Initializer<T> initializer, Aggregator<K, V, T> aggregator)
+        public KStreamAggregateProcessor(string storeName, bool enableSendOldValues, Initializer<T> initializer, IAggregator<K, V, T> aggregator)
             : base(storeName, enableSendOldValues)
         {
             this.initializer = initializer;

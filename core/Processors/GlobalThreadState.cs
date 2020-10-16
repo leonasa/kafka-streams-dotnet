@@ -36,7 +36,7 @@ namespace Streamiz.Kafka.Net.Processors
     ///           </ul>
     /// 
     /// </summary>
-    internal class GlobalThreadState : ThreadStateTransitionValidator
+    internal class GlobalThreadState : IThreadStateTransitionValidator
     {
         public static readonly GlobalThreadState CREATED = new GlobalThreadState(1, 2).Order(0).Named("CREATED");
         public static readonly GlobalThreadState RUNNING = new GlobalThreadState(2).Order(1).Named("RUNNING");
@@ -80,7 +80,7 @@ namespace Streamiz.Kafka.Net.Processors
             return Equals(RUNNING);
         }
 
-        public bool IsValidTransition(ThreadStateTransitionValidator newState)
+        public bool IsValidTransition(IThreadStateTransitionValidator newState)
         {
             return Transitions.Contains(((GlobalThreadState)newState).Ordinal);
         }

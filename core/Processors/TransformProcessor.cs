@@ -18,8 +18,8 @@ namespace Streamiz.Kafka.Net.Processors
             KeyValuePair<K1,V1> kp = transformer.Invoke(key, value);
 
             foreach (var n in Next)
-                if (n is IProcessor<K1, V1>)
-                    ((IProcessor<K1, V1>)n).Process(kp.Key, kp.Value);
+                if (n is IProcessor<K1, V1> processor)
+                    processor.Process(kp.Key, kp.Value);
         }
     }
 }

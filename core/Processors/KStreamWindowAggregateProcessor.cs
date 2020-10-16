@@ -12,7 +12,7 @@ namespace Streamiz.Kafka.Net.Processors
         private readonly string storeName;
         private readonly WindowOptions<W> windowOptions;
         private readonly Initializer<Agg> initializer;
-        private readonly Aggregator<K, V, Agg> aggregator;
+        private readonly IAggregator<K, V, Agg> aggregator;
 
         private long observedStreamTime = -1;
         private TimestampedWindowStore<K, Agg> windowStore;
@@ -20,7 +20,7 @@ namespace Streamiz.Kafka.Net.Processors
 
         public KStreamWindowAggregateProcessor(WindowOptions<W> windowOptions,
                 Initializer<Agg> initializer,
-                Aggregator<K, V, Agg> aggregator,
+                IAggregator<K, V, Agg> aggregator,
                 string storeName,
                 bool sendOldValues)
         {

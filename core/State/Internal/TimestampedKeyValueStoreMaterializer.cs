@@ -14,9 +14,9 @@ namespace Streamiz.Kafka.Net.State.Internal
             materialized = materializedInternal;
         }
 
-        public StoreBuilder<TimestampedKeyValueStore<K, V>> Materialize()
+        public IStoreBuilder<ITimestampedKeyValueStore<K, V>> Materialize()
         {
-            KeyValueBytesStoreSupplier supplier = (KeyValueBytesStoreSupplier)materialized.StoreSupplier;
+            IKeyValueBytesStoreSupplier supplier = (IKeyValueBytesStoreSupplier)materialized.StoreSupplier;
             if (supplier == null)
             {
                 // TODO : RocksDB
@@ -24,7 +24,7 @@ namespace Streamiz.Kafka.Net.State.Internal
                 supplier = new InMemoryKeyValueBytesStoreSupplier(materialized.StoreName);
             }
 
-            StoreBuilder<TimestampedKeyValueStore<K, V>> builder = Stores.TimestampedKeyValueStoreBuilder(
+            IStoreBuilder<ITimestampedKeyValueStore<K, V>> builder = Stores.TimestampedKeyValueStoreBuilder(
                  supplier,
                  materialized.KeySerdes,
                  materialized.ValueSerdes);

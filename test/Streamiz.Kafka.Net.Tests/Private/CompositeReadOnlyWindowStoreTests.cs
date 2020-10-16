@@ -14,7 +14,7 @@ namespace Streamiz.Kafka.Net.Tests.Private
 {
     public class CompositeReadOnlyWindowStoreTests
     {
-        class MockStateProvider<K, V> : IStateStoreProvider<ReadOnlyWindowStore<K, V>, K, V>
+        class MockStateProvider<K, V> : IStateStoreProvider<IReadOnlyWindowStore<K, V>, K, V>
         {
             private readonly List<TimestampedWindowStore<K, V>> stores = new List<TimestampedWindowStore<K, V>>();
 
@@ -26,16 +26,16 @@ namespace Streamiz.Kafka.Net.Tests.Private
                                 .ToList();
             }
 
-            public IEnumerable<ReadOnlyWindowStore<K, V>> Stores(string storeName, IQueryableStoreType<ReadOnlyWindowStore<K, V>, K, V> queryableStoreType)
+            public IEnumerable<IReadOnlyWindowStore<K, V>> Stores(string storeName, IQueryableStoreType<IReadOnlyWindowStore<K, V>, K, V> queryableStoreType)
             {
                 return
                     stores
                         .Where(s => s.Name.Equals(storeName))
-                        .Select<TimestampedWindowStore<K, V>, ReadOnlyWindowStore<K, V>>(s =>
+                        .Select<TimestampedWindowStore<K, V>, IReadOnlyWindowStore<K, V>>(s =>
                         {
-                            if (s is ReadOnlyWindowStore<K, V>)
+                            if (s is IReadOnlyWindowStore<K, V>)
                             {
-                                return s as ReadOnlyWindowStore<K, V>;
+                                return s as IReadOnlyWindowStore<K, V>;
                             }
                             else if (s is TimestampedWindowStore<K, V>)
                             {

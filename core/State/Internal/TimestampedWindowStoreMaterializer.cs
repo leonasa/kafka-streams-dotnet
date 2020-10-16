@@ -11,17 +11,17 @@ namespace Streamiz.Kafka.Net.State.Internal
         where W : Window
     {
         private readonly WindowOptions<W> windowsOptions;
-        private readonly Materialized<K, V, WindowStore<Bytes, byte[]>> materializedInternal;
+        private readonly Materialized<K, V, IWindowStore<Bytes, byte[]>> materializedInternal;
 
-        public TimestampedWindowStoreMaterializer(WindowOptions<W> windowsOptions, Materialized<K, V, WindowStore<Bytes, byte[]>> materializedInternal)
+        public TimestampedWindowStoreMaterializer(WindowOptions<W> windowsOptions, Materialized<K, V, IWindowStore<Bytes, byte[]>> materializedInternal)
         {
             this.windowsOptions = windowsOptions;
             this.materializedInternal = materializedInternal;
         }
 
-        public StoreBuilder<TimestampedWindowStore<K, V>> Materialize()
+        public IStoreBuilder<TimestampedWindowStore<K, V>> Materialize()
         {
-            WindowBytesStoreSupplier supplier = (WindowBytesStoreSupplier)materializedInternal.StoreSupplier;
+            IWindowBytesStoreSupplier supplier = (IWindowBytesStoreSupplier)materializedInternal.StoreSupplier;
             if (supplier == null)
             {
                 if (windowsOptions.Size + windowsOptions.GracePeriodMs > materializedInternal.Retention.TotalMilliseconds)

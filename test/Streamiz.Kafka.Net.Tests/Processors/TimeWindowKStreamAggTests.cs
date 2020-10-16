@@ -38,7 +38,7 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             config.ApplicationId = "test-window-count";
 
             var builder = new StreamBuilder();
-            Materialized<string, int, WindowStore<Bytes, byte[]>> m = null;
+            Materialized<string, int, IWindowStore<Bytes, byte[]>> m = null;
 
             builder
                 .Stream<string, string>("topic")
@@ -81,8 +81,8 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             var builder = new StreamBuilder();
 
-            Materialized<string, int, WindowStore<Bytes, byte[]>> m =
-                Materialized<string, int, WindowStore<Bytes, byte[]>>
+            Materialized<string, int, IWindowStore<Bytes, byte[]>> m =
+                Materialized<string, int, IWindowStore<Bytes, byte[]>>
                     .Create("count-store")
                     .With(null, null);
 

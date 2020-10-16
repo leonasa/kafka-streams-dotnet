@@ -2,8 +2,8 @@
 
 namespace Streamiz.Kafka.Net.Processors
 {
-    internal delegate void ThreadStateListener(IThread thread, ThreadStateTransitionValidator old, ThreadStateTransitionValidator @new);
+    internal delegate void ThreadStateListener(IThread thread, IThreadStateTransitionValidator old, IThreadStateTransitionValidator @new);
 
-    internal delegate void GlobalThreadStateListener(GlobalStreamThread thread, ThreadStateTransitionValidator old, ThreadStateTransitionValidator @new);
+    internal delegate void GlobalThreadStateListener(GlobalStreamThread thread, IThreadStateTransitionValidator old, IThreadStateTransitionValidator @new);
 
 }

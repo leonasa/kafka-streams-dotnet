@@ -8,7 +8,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph.Nodes
         where S : IStateStore
     {
         private readonly string[] storeNames;
-        private readonly StoreBuilder<S> storeBuilder;
+        private readonly IStoreBuilder<S> storeBuilder;
 
         /// <summary>
         /// Create a node representing a stateful processor,
@@ -17,7 +17,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph.Nodes
         /// <param name="nameNode"></param>
         /// <param name="parameters"></param>
         /// <param name="storeBuilder"></param>
-        public StatefulProcessorNode(string nameNode, ProcessorParameters<K, V> parameters, StoreBuilder<S> storeBuilder)
+        public StatefulProcessorNode(string nameNode, ProcessorParameters<K, V> parameters, IStoreBuilder<S> storeBuilder)
             : base(nameNode, parameters)
         {
             storeNames = null;

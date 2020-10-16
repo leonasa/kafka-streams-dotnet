@@ -7,7 +7,7 @@ namespace Streamiz.Kafka.Net.State.InMemory
     /// <summary>
     /// A store supplier that can be used to create one or more <see cref="InMemoryWindowStore"/> instances.
     /// </summary>
-    public class InMemoryWindowStoreSupplier : WindowBytesStoreSupplier
+    public class InMemoryWindowStoreSupplier : IWindowBytesStoreSupplier
     {
         private readonly TimeSpan retention;
 
@@ -40,10 +40,10 @@ namespace Streamiz.Kafka.Net.State.InMemory
         public long Retention => (long)retention.TotalMilliseconds;
 
         /// <summary>
-        /// Return a new <see cref="WindowStore{K, V}"/> instance.
+        /// Return a new <see cref="IWindowStore{K,V}"/> instance.
         /// </summary>
-        /// <returns>Return a new <see cref="WindowStore{K, V}"/> instance.</returns>
-        public WindowStore<Bytes, byte[]> Get()
+        /// <returns>Return a new <see cref="IWindowStore{K,V}"/> instance.</returns>
+        public IWindowStore<Bytes, byte[]> Get()
             => new InMemoryWindowStore(Name, retention, WindowSize.Value);
     }
 }

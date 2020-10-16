@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Streamiz.Kafka.Net.State.Internal.Builder
 {
-    internal abstract class AbstractStoreBuilder<K, V, T> : StoreBuilder<T>
+    internal abstract class AbstractStoreBuilder<K, V, T> : IStoreBuilder<T>
         where T : IStateStore
     {
         private IDictionary<string, string> logConfig = new Dictionary<string, string>();
@@ -26,26 +26,26 @@ namespace Streamiz.Kafka.Net.State.Internal.Builder
             valueSerdes = valueSerde;
         }
 
-        public StoreBuilder<T> WithCachingEnabled()
+        public IStoreBuilder<T> WithCachingEnabled()
         {
             //enableCaching = true;
             return this;
         }
 
-        public StoreBuilder<T> WithCachingDisabled()
+        public IStoreBuilder<T> WithCachingDisabled()
         {
             //enableCaching = false;
             return this;
         }
 
-        public StoreBuilder<T> WithLoggingEnabled(IDictionary<String, String> config)
+        public IStoreBuilder<T> WithLoggingEnabled(IDictionary<String, String> config)
         {
             enableLogging = true;
             logConfig = config;
             return this;
         }
 
-        public StoreBuilder<T> WithLoggingDisabled()
+        public IStoreBuilder<T> WithLoggingDisabled()
         {
             enableLogging = false;
             logConfig.Clear();
@@ -54,6 +54,6 @@ namespace Streamiz.Kafka.Net.State.Internal.Builder
 
         public abstract T Build();
 
-        IStateStore StoreBuilder.Build() => this.Build();
+        IStateStore IStoreBuilder.Build() => this.Build();
     }
 }

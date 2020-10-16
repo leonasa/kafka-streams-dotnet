@@ -21,7 +21,7 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             public Dictionary<char, int> Apply() => new Dictionary<char, int>();
         }
 
-        internal class MyAdderAggregator : Aggregator<string, string, Dictionary<char, int>>
+        internal class MyAdderAggregator : IAggregator<string, string, Dictionary<char, int>>
         {
             public Dictionary<char, int> Apply(string key, string value, Dictionary<char, int> aggregate)
             {
@@ -37,7 +37,7 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             }
         }
 
-        internal class MySubAggregator : Aggregator<string, string, Dictionary<char, int>>
+        internal class MySubAggregator : IAggregator<string, string, Dictionary<char, int>>
         {
             public Dictionary<char, int> Apply(string key, string value, Dictionary<char, int> aggregate)
             {
@@ -137,7 +137,7 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                     .Table<string, string>("topic")
                     .MapValues((v) => v.Length)
                     .GroupBy((k, v) => KeyValuePair.Create(k.ToUpper(), v))
-                    .Aggregate((Initializer<int>)null, (Aggregator<string, int, int>)null, (Aggregator<string,int,int>)null, m);
+                    .Aggregate((Initializer<int>)null, (IAggregator<string, int, int>)null, (IAggregator<string,int,int>)null, m);
             });
         }
 

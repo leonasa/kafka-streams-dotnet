@@ -9,11 +9,11 @@ namespace Streamiz.Kafka.Net.Processors
     internal class KTableAggregateProcessor<K, V, T> : AbstractKTableProcessor<K, V, K, T>
     {
         private readonly Initializer<T> initializer;
-        private readonly Aggregator<K, V, T> add;
-        private readonly Aggregator<K, V, T> remove;
+        private readonly IAggregator<K, V, T> add;
+        private readonly IAggregator<K, V, T> remove;
 
 
-        public KTableAggregateProcessor(string storeName, bool sendOldValues, Initializer<T> initializer, Aggregator<K, V, T> add, Aggregator<K, V, T> remove)
+        public KTableAggregateProcessor(string storeName, bool sendOldValues, Initializer<T> initializer, IAggregator<K, V, T> add, IAggregator<K, V, T> remove)
             : base(storeName, sendOldValues, true)
         {
             this.initializer = initializer;

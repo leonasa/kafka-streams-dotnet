@@ -48,9 +48,9 @@ namespace Streamiz.Kafka.Net.Processors
 
             foreach (var n in Next)
             {
-                if (n is IProcessor<K, V>)
+                if (n is IProcessor<K, V> processor)
                 {
-                    ((IProcessor<K, V>)n).Process(key, value);
+                    processor.Process(key, value);
                 }
             }
         }

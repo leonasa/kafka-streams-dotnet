@@ -5,7 +5,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
     internal class TimestampedKeyValueStoreGetter<K, V> : IKTableValueGetter<K, V>
     {
         private readonly string storeName;
-        private TimestampedKeyValueStore<K, V> store;
+        private ITimestampedKeyValueStore<K, V> store;
 
         public TimestampedKeyValueStoreGetter(string storeName)
         {
@@ -18,6 +18,6 @@ namespace Streamiz.Kafka.Net.Table.Internal
             => store.Get(key);
 
         public void Init(ProcessorContext context) =>
-            store = (TimestampedKeyValueStore<K, V>)context.GetStateStore(storeName);
+            store = (ITimestampedKeyValueStore<K, V>)context.GetStateStore(storeName);
     }
 }

@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace Streamiz.Kafka.Net.Processors
 {
-    internal class StreamThread : IThread, IDisposable
+    internal class StreamThread : IThread
     {
         #region Static 
 
@@ -88,7 +88,7 @@ namespace Streamiz.Kafka.Net.Processors
         private readonly TaskManager manager;
         private readonly InternalTopologyBuilder builder;
         private readonly TimeSpan consumeTimeout;
-        private readonly string logPrefix = "";
+        private readonly string logPrefix;
         private readonly long commitTimeMs;
         private CancellationToken token;
         private DateTime lastCommit = DateTime.Now;
@@ -158,7 +158,7 @@ namespace Streamiz.Kafka.Net.Processors
 
                     try
                     {
-                        IEnumerable<ConsumeResult<byte[], byte[]>> records = null;
+                        List<ConsumeResult<byte[], byte[]>> records = null;
                         long now = DateTime.Now.GetMilliseconds();
 
                         if (State == ThreadState.PARTITIONS_ASSIGNED)
@@ -181,7 +181,7 @@ namespace Streamiz.Kafka.Net.Processors
 
                         DateTime n = DateTime.Now;
 
-                        if (records != null && records.Count() > 0)
+                        if (records != null && records.Any())
                         {
                             foreach (var record in records)
                             {
@@ -356,10 +356,10 @@ namespace Streamiz.Kafka.Net.Processors
             }
         }
 
-        private IEnumerable<ConsumeResult<byte[], byte[]>> PollRequest(TimeSpan ts)
+        private List<ConsumeResult<byte[], byte[]>> PollRequest(TimeSpan ts)
         {
             lastPollMs = DateTime.Now.GetMilliseconds();
-            return consumer.ConsumeRecords(ts);
+            return consumer.ConsumeRecords(ts).ToList();
         }
 
         internal ThreadState SetState(ThreadState newState)

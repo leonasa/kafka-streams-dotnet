@@ -4,7 +4,7 @@ namespace Streamiz.Kafka.Net.Stream
 {
     /// <summary>
     /// The <see cref="Reducer{V}"/> interface for combining two values of the same type into a new value.
-    /// In contrast to <see cref="Aggregator{K, V, VA}" />
+    /// In contrast to <see cref="IAggregator{K,V,VA}" />
     /// the result type must be the same as the input type.
     /// <p>
     /// The provided values can be either original values from input keyvalue

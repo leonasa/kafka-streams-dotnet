@@ -29,9 +29,9 @@ namespace Streamiz.Kafka.Net.State.Internal
             {
                 throw new InvalidStateStoreException($"the state store, {storeName}, is not open.");
             }
-            if (stateStore is TimestampedKeyValueStore<K, V> && queryableStoreType is KeyValueStoreType<K, V>)
+            if (stateStore is ITimestampedKeyValueStore<K, V> && queryableStoreType is KeyValueStoreType<K, V>)
             {
-                return new[] { new ReadOnlyKeyValueStoreFacade<K, V>(stateStore as TimestampedKeyValueStore<K, V>) as T };
+                return new[] { new ReadOnlyKeyValueStoreFacade<K, V>(stateStore as ITimestampedKeyValueStore<K, V>) as T };
             }
             else if (stateStore is TimestampedWindowStore<K, V> && queryableStoreType is WindowStoreType<K, V>)
             {

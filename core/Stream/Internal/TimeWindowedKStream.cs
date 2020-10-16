@@ -33,11 +33,11 @@ namespace Streamiz.Kafka.Net.Stream.Internal
              => Count((string)null);
 
         public IKTable<Windowed<K>, long> Count(string named)
-            => Count(Materialized<K, long, WindowStore<Bytes, byte[]>>.Create(), named);
+            => Count(Materialized<K, long, IWindowStore<Bytes, byte[]>>.Create(), named);
 
-        public IKTable<Windowed<K>, long> Count(Materialized<K, long, WindowStore<Bytes, byte[]>> materialized, string named = null)
+        public IKTable<Windowed<K>, long> Count(Materialized<K, long, IWindowStore<Bytes, byte[]>> materialized, string named = null)
         {
-            materialized = materialized ?? Materialized<K, long, WindowStore<Bytes, byte[]>>.Create();
+            materialized = materialized ?? Materialized<K, long, IWindowStore<Bytes, byte[]>>.Create();
 
             return DoCount(materialized, named);
         }
@@ -49,27 +49,27 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         public IKTable<Windowed<K>, VR> Aggregate<VR>(Func<VR> initializer, Func<K, V, VR, VR> aggregator)
             => Aggregate(new WrappedInitializer<VR>(initializer), new WrappedAggregator<K, V, VR>(aggregator));
 
-        public IKTable<Windowed<K>, VR> Aggregate<VR>(Initializer<VR> initializer, Aggregator<K, V, VR> aggregator)
+        public IKTable<Windowed<K>, VR> Aggregate<VR>(Initializer<VR> initializer, IAggregator<K, V, VR> aggregator)
             => Aggregate(initializer, aggregator, null);
 
         public IKTable<Windowed<K>, VR> Aggregate<VR, VRS>(Func<VR> initializer, Func<K, V, VR, VR> aggregator) where VRS : ISerDes<VR>, new()
             => Aggregate<VR, VRS>(new WrappedInitializer<VR>(initializer), new WrappedAggregator<K, V, VR>(aggregator));
 
-        public IKTable<Windowed<K>, VR> Aggregate<VR, VRS>(Initializer<VR> initializer, Aggregator<K, V, VR> aggregator) where VRS : ISerDes<VR>, new()
+        public IKTable<Windowed<K>, VR> Aggregate<VR, VRS>(Initializer<VR> initializer, IAggregator<K, V, VR> aggregator) where VRS : ISerDes<VR>, new()
         {
-            var materialized = Materialized<K, VR, WindowStore<Bytes, byte[]>>.Create().WithValueSerdes(new VRS()).WithKeySerdes(KeySerdes);
+            var materialized = Materialized<K, VR, IWindowStore<Bytes, byte[]>>.Create().WithValueSerdes(new VRS()).WithKeySerdes(KeySerdes);
             return Aggregate(initializer, aggregator, materialized);
         }
 
-        public IKTable<Windowed<K>, VR> Aggregate<VR>(Func<VR> initializer, Func<K, V, VR, VR> aggregator, Materialized<K, VR, WindowStore<Bytes, byte[]>> materialized, string named = null)
+        public IKTable<Windowed<K>, VR> Aggregate<VR>(Func<VR> initializer, Func<K, V, VR, VR> aggregator, Materialized<K, VR, IWindowStore<Bytes, byte[]>> materialized, string named = null)
             => Aggregate(new WrappedInitializer<VR>(initializer), new WrappedAggregator<K, V, VR>(aggregator), materialized);
 
-        public IKTable<Windowed<K>, VR> Aggregate<VR>(Initializer<VR> initializer, Aggregator<K, V, VR> aggregator, Materialized<K, VR, WindowStore<Bytes, byte[]>> materialized, string named = null)
+        public IKTable<Windowed<K>, VR> Aggregate<VR>(Initializer<VR> initializer, IAggregator<K, V, VR> aggregator, Materialized<K, VR, IWindowStore<Bytes, byte[]>> materialized, string named = null)
         {
             CheckIfParamNull(initializer, "initializer");
             CheckIfParamNull(aggregator, "aggregator");
 
-            materialized = materialized ?? Materialized<K, VR, WindowStore<Bytes, byte[]>>.Create();
+            materialized = materialized ?? Materialized<K, VR, IWindowStore<Bytes, byte[]>>.Create();
 
             if (materialized.KeySerdes == null)
                 materialized.WithKeySerdes(KeySerdes);
@@ -102,11 +102,11 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         public IKTable<Windowed<K>, V> Reduce(Func<V, V, V> reducer)
             => Reduce(new WrappedReducer<V>(reducer));
 
-        public IKTable<Windowed<K>, V> Reduce(Reducer<V> reducer, Materialized<K, V, WindowStore<Bytes, byte[]>> materialized, string named = null)
+        public IKTable<Windowed<K>, V> Reduce(Reducer<V> reducer, Materialized<K, V, IWindowStore<Bytes, byte[]>> materialized, string named = null)
         {
             CheckIfParamNull(reducer, "reducer");
 
-            materialized = materialized ?? Materialized<K, V, WindowStore<Bytes, byte[]>>.Create();
+            materialized = materialized ?? Materialized<K, V, IWindowStore<Bytes, byte[]>>.Create();
 
             if (materialized.KeySerdes == null)
                 materialized.WithKeySerdes(KeySerdes);
@@ -132,7 +132,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
                                     materialized.ValueSerdes);
         }
 
-        public IKTable<Windowed<K>, V> Reduce(Func<V, V, V> reducer, Materialized<K, V, WindowStore<Bytes, byte[]>> materialized, string named = null)
+        public IKTable<Windowed<K>, V> Reduce(Func<V, V, V> reducer, Materialized<K, V, IWindowStore<Bytes, byte[]>> materialized, string named = null)
             => Reduce(new WrappedReducer<V>(reducer), materialized);
 
 
@@ -142,7 +142,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
 
         #region Privates
 
-        private IKTable<Windowed<K>, long> DoCount(Materialized<K, long, WindowStore<Bytes, byte[]>> materialized, string named = null)
+        private IKTable<Windowed<K>, long> DoCount(Materialized<K, long, IWindowStore<Bytes, byte[]>> materialized, string named = null)
         {
             if (materialized.KeySerdes == null)
                 materialized.WithKeySerdes(KeySerdes);

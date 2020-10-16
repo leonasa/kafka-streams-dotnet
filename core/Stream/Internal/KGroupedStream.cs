@@ -64,14 +64,14 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         public IKTable<K, VR> Aggregate<VR>(System.Func<VR> initializer, System.Func<K, V, VR, VR> aggregator, Materialized<K, VR, IKeyValueStore<Bytes, byte[]>> materialized, string named = null)
             => Aggregate(new WrappedInitializer<VR>(initializer), new WrappedAggregator<K, V, VR>(aggregator), materialized, named);
 
-        public IKTable<K, VR> Aggregate<VR, VRS>(Initializer<VR> initializer, Aggregator<K, V, VR> aggregator)
+        public IKTable<K, VR> Aggregate<VR, VRS>(Initializer<VR> initializer, IAggregator<K, V, VR> aggregator)
             where VRS : ISerDes<VR>, new()
             => Aggregate(initializer, aggregator, Materialized<K, VR, IKeyValueStore<Bytes, byte[]>>.Create().WithValueSerdes(new VRS()));
 
-        public IKTable<K, VR> Aggregate<VR>(Initializer<VR> initializer, Aggregator<K, V, VR> aggregator)
+        public IKTable<K, VR> Aggregate<VR>(Initializer<VR> initializer, IAggregator<K, V, VR> aggregator)
             => Aggregate(initializer, aggregator, null);
 
-        public IKTable<K, VR> Aggregate<VR>(Initializer<VR> initializer, Aggregator<K, V, VR> aggregator, Materialized<K, VR, IKeyValueStore<Bytes, byte[]>> materialized, string named = null)
+        public IKTable<K, VR> Aggregate<VR>(Initializer<VR> initializer, IAggregator<K, V, VR> aggregator, Materialized<K, VR, IKeyValueStore<Bytes, byte[]>> materialized, string named = null)
         {
             CheckIfParamNull(initializer, "initializer");
             CheckIfParamNull(aggregator, "aggregator");

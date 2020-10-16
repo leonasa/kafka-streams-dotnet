@@ -8,8 +8,8 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
     {
         private readonly string storeName;
         private readonly Initializer<T> initializer;
-        private readonly Aggregator<K, V, T> add;
-        private readonly Aggregator<K, V, T> remove;
+        private readonly IAggregator<K, V, T> add;
+        private readonly IAggregator<K, V, T> remove;
 
         private bool sendOldValues;
 
@@ -18,7 +18,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
             : this(storeName, new WrappedInitializer<T>(initializer), new WrappedAggregator<K, V, T>(adder), new WrappedAggregator<K, V, T>(remover))
             { }
 
-        public KTableAggregate(string storeName, Initializer<T> initializer, Aggregator<K, V, T> adder, Aggregator<K, V, T> remover)
+        public KTableAggregate(string storeName, Initializer<T> initializer, IAggregator<K, V, T> adder, IAggregator<K, V, T> remover)
         {
             this.storeName = storeName;
             this.initializer = initializer;

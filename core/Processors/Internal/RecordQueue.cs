@@ -9,7 +9,8 @@ namespace Streamiz.Kafka.Net.Processors.Internal
 {
     internal class RecordQueue :
         IRecordQueue<ConsumeResult<byte[], byte[]>>,
-        IComparable<RecordQueue>
+        IComparable<RecordQueue>,
+        IEquatable<RecordQueue>
     {
         // LOGGER + NAME
         private readonly string logPrefix;
@@ -125,5 +126,35 @@ namespace Streamiz.Kafka.Net.Processors.Internal
 
         public int CompareTo(RecordQueue other)
             => HeadRecordTimestamp.CompareTo(other.HeadRecordTimestamp);
+
+        public bool Equals(RecordQueue other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return HeadRecordTimestamp == other.HeadRecordTimestamp;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((RecordQueue) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return partitionTime.GetHashCode();
+        }
+
+        public static bool operator ==(RecordQueue left, RecordQueue right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(RecordQueue left, RecordQueue right)
+        {
+            return !Equals(left, right);
+        }
     }
 }

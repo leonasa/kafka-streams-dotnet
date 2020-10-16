@@ -4,17 +4,17 @@ using Streamiz.Kafka.Net.State.Supplier;
 namespace Streamiz.Kafka.Net.State.Internal.Builder
 {
     internal class WindowStoreBuilder<K, V>
-        : AbstractStoreBuilder<K, V, WindowStore<K, V>>
+        : AbstractStoreBuilder<K, V, IWindowStore<K, V>>
     {
-        private readonly WindowBytesStoreSupplier supplier;
+        private readonly IWindowBytesStoreSupplier supplier;
 
-        public WindowStoreBuilder(WindowBytesStoreSupplier supplier, ISerDes<K> keySerde, ISerDes<V> valueSerde) 
+        public WindowStoreBuilder(IWindowBytesStoreSupplier supplier, ISerDes<K> keySerde, ISerDes<V> valueSerde) 
             : base(supplier.Name, keySerde, valueSerde)
         {
             this.supplier = supplier;
         }
 
-        public override WindowStore<K, V> Build()
+        public override IWindowStore<K, V> Build()
             => new WrappedWindowStore<K, V>(supplier.Get(), keySerdes, valueSerdes);
     }
 }

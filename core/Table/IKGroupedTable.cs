@@ -214,8 +214,8 @@ namespace Streamiz.Kafka.Net.Table
         /// </summary>
         /// <typeparam name="VR">the value type of the aggregated <see cref="IKTable{K, VR}"/></typeparam>
         /// <param name="initializer">an <see cref="Initializer{VR}"/> that provides an initial aggregate result value</param>
-        /// <param name="adder">an <see cref="Aggregator{K, V, VR}"/> that removed an old record from the aggregate result</param>
-        /// <param name="subtractor">an <see cref="Aggregator{K, V, VR}"/> that removed an old record from the aggregate result</param>
+        /// <param name="adder">an <see cref="IAggregator{K,V,VA}"/> that removed an old record from the aggregate result</param>
+        /// <param name="subtractor">an <see cref="IAggregator{K,V,VA}"/> that removed an old record from the aggregate result</param>
         /// <returns> a <see cref="IKTable{K, VR}"/> that contains "update" records with unmodified keys, and values that represent the latest (rolling) aggregate for each key</returns>
         IKTable<K, VR> Aggregate<VR>(Func<VR> initializer, Func<K, V, VR, VR> adder, Func<K, V, VR, VR> subtractor);
 
@@ -232,10 +232,10 @@ namespace Streamiz.Kafka.Net.Table
         /// The specified <see cref="Initializer{VR}"/> is applied once directly before the first input record is processed to
         /// provide an initial intermediate aggregation result that is used to process the first record.
         /// Each update to the original <see cref="IKTable{K, V}"/> results in a two step update of the result <see cref="IKTable{K, V}"/> .
-        /// The specified <see cref="Aggregator{K, V, VR}"/> adder is applied for each update record and computes a new aggregate using the
+        /// The specified <see cref="IAggregator{K,V,VA}"/> adder is applied for each update record and computes a new aggregate using the
         /// current aggregate (or for the very first record using the intermediate aggregation result provided via the
         /// <see cref="Initializer{VR}"/>) and the record's value by adding the new record to the aggregate.
-        /// The specified <see cref="Aggregator{K, V, VR}"/> subtractor is applied for each "replaced" record of the original <see cref="IKTable{K, V}"/>
+        /// The specified <see cref="IAggregator{K,V,VA}"/> subtractor is applied for each "replaced" record of the original <see cref="IKTable{K, V}"/>
         /// and computes a new aggregate using the current aggregate and the record's value by "removing" the "replaced"
         /// record from the aggregate.
         /// Thus, <see cref="Aggregate{VR}(Func{VR}, Func{K, V, VR, VR}, Func{K, V, VR, VR}, Materialized{K, VR, IKeyValueStore{Bytes, byte[]}}, string)"/> can be used to compute aggregate functions
@@ -264,10 +264,10 @@ namespace Streamiz.Kafka.Net.Table
         /// </summary>
         /// <typeparam name="VR">the value type of the aggregated <see cref="IKTable{K, VR}"/></typeparam>
         /// <param name="initializer">an <see cref="Initializer{VR}"/> that provides an initial aggregate result value</param>
-        /// <param name="adder">an <see cref="Aggregator{K, V, VR}"/> that removed an old record from the aggregate result</param>
-        /// <param name="subtractor">an <see cref="Aggregator{K, V, VR}"/> that removed an old record from the aggregate result</param>
+        /// <param name="adder">an <see cref="IAggregator{K,V,VA}"/> that removed an old record from the aggregate result</param>
+        /// <param name="subtractor">an <see cref="IAggregator{K,V,VA}"/> that removed an old record from the aggregate result</param>
         /// <returns> a <see cref="IKTable{K, VR}"/> that contains "update" records with unmodified keys, and values that represent the latest (rolling) aggregate for each key</returns>
-        IKTable<K, VR> Aggregate<VR>(Initializer<VR> initializer, Aggregator<K, V, VR> adder, Aggregator<K, V, VR> subtractor);
+        IKTable<K, VR> Aggregate<VR>(Initializer<VR> initializer, IAggregator<K, V, VR> adder, IAggregator<K, V, VR> subtractor);
 
         /// <summary>
         /// Aggregate the value of records of the original <see cref="IKTable{K, V}"/> that got <see cref="IKTable{K, V}.GroupBy{KR, VR}(Func{K, V, System.Collections.Generic.KeyValuePair{KR, VR}}, string)"/>
@@ -296,8 +296,8 @@ namespace Streamiz.Kafka.Net.Table
         /// <typeparam name="VR">the value type of the aggregated <see cref="IKTable{K, VR}"/></typeparam>
         /// <typeparam name="VRS">the value serdes type of the aggregated <see cref="IKTable{K, VR}"/></typeparam>
         /// <param name="initializer">an <see cref="Initializer{VR}"/> that provides an initial aggregate result value</param>
-        /// <param name="adder">an <see cref="Aggregator{K, V, VR}"/> that removed an old record from the aggregate result</param>
-        /// <param name="subtractor">an <see cref="Aggregator{K, V, VR}"/> that removed an old record from the aggregate result</param>
+        /// <param name="adder">an <see cref="IAggregator{K,V,VA}"/> that removed an old record from the aggregate result</param>
+        /// <param name="subtractor">an <see cref="IAggregator{K,V,VA}"/> that removed an old record from the aggregate result</param>
         /// <returns> a <see cref="IKTable{K, VR}"/> that contains "update" records with unmodified keys, and values that represent the latest (rolling) aggregate for each key</returns>
         IKTable<K, VR> Aggregate<VR, VRS>(Func<VR> initializer, Func<K, V, VR, VR> adder, Func<K, V, VR, VR> subtractor) where VRS : ISerDes<VR>, new();
 
@@ -314,10 +314,10 @@ namespace Streamiz.Kafka.Net.Table
         /// The specified <see cref="Initializer{VR}"/> is applied once directly before the first input record is processed to
         /// provide an initial intermediate aggregation result that is used to process the first record.
         /// Each update to the original <see cref="IKTable{K, V}"/> results in a two step update of the result <see cref="IKTable{K, V}"/> .
-        /// The specified <see cref="Aggregator{K, V, VR}"/> adder is applied for each update record and computes a new aggregate using the
+        /// The specified <see cref="IAggregator{K,V,VA}"/> adder is applied for each update record and computes a new aggregate using the
         /// current aggregate (or for the very first record using the intermediate aggregation result provided via the
         /// <see cref="Initializer{VR}"/>) and the record's value by adding the new record to the aggregate.
-        /// The specified <see cref="Aggregator{K, V, VR}"/> subtractor is applied for each "replaced" record of the original <see cref="IKTable{K, V}"/>
+        /// The specified <see cref="IAggregator{K,V,VA}"/> subtractor is applied for each "replaced" record of the original <see cref="IKTable{K, V}"/>
         /// and computes a new aggregate using the current aggregate and the record's value by "removing" the "replaced"
         /// record from the aggregate.
         /// Thus, <see cref="Aggregate{VR}(Func{VR}, Func{K, V, VR, VR}, Func{K, V, VR, VR}, Materialized{K, VR, IKeyValueStore{Bytes, byte[]}}, string)"/> can be used to compute aggregate functions
@@ -347,10 +347,10 @@ namespace Streamiz.Kafka.Net.Table
         /// <typeparam name="VR">the value type of the aggregated <see cref="IKTable{K, VR}"/></typeparam>
         /// <typeparam name="VRS">the value serdes type of the aggregated <see cref="IKTable{K, VR}"/></typeparam>
         /// <param name="initializer">an <see cref="Initializer{VR}"/> that provides an initial aggregate result value</param>
-        /// <param name="adder">an <see cref="Aggregator{K, V, VR}"/> that removed an old record from the aggregate result</param>
-        /// <param name="subtractor">an <see cref="Aggregator{K, V, VR}"/> that removed an old record from the aggregate result</param>
+        /// <param name="adder">an <see cref="IAggregator{K,V,VA}"/> that removed an old record from the aggregate result</param>
+        /// <param name="subtractor">an <see cref="IAggregator{K,V,VA}"/> that removed an old record from the aggregate result</param>
         /// <returns> a <see cref="IKTable{K, VR}"/> that contains "update" records with unmodified keys, and values that represent the latest (rolling) aggregate for each key</returns>
-        IKTable<K, VR> Aggregate<VR, VRS>(Initializer<VR> initializer, Aggregator<K, V, VR> adder, Aggregator<K, V, VR> subtractor) where VRS : ISerDes<VR>, new();
+        IKTable<K, VR> Aggregate<VR, VRS>(Initializer<VR> initializer, IAggregator<K, V, VR> adder, IAggregator<K, V, VR> subtractor) where VRS : ISerDes<VR>, new();
 
         /// <summary>
         /// Aggregate the value of records of the original <see cref="IKTable{K, V}"/> that got <see cref="IKTable{K, V}.GroupBy{KR, VR}(Func{K, V, System.Collections.Generic.KeyValuePair{KR, VR}}, string)"/>
@@ -378,8 +378,8 @@ namespace Streamiz.Kafka.Net.Table
         /// </summary>
         /// <typeparam name="VR">the value type of the aggregated <see cref="IKTable{K, VR}"/></typeparam>
         /// <param name="initializer">an <see cref="Initializer{VR}"/> that provides an initial aggregate result value</param>
-        /// <param name="adder">an <see cref="Aggregator{K, V, VR}"/> that removed an old record from the aggregate result</param>
-        /// <param name="subtractor">an <see cref="Aggregator{K, V, VR}"/> that removed an old record from the aggregate result</param>
+        /// <param name="adder">an <see cref="IAggregator{K,V,VA}"/> that removed an old record from the aggregate result</param>
+        /// <param name="subtractor">an <see cref="IAggregator{K,V,VA}"/> that removed an old record from the aggregate result</param>
         /// <param name="materialized">the instance of materialized used to materialize the state store.</param>
         /// <param name="named">a named config used to name the processor in the topology></param>
         /// <returns> a <see cref="IKTable{K, VR}"/> that contains "update" records with unmodified keys, and values that represent the latest (rolling) aggregate for each key</returns>
@@ -398,10 +398,10 @@ namespace Streamiz.Kafka.Net.Table
         /// The specified <see cref="Initializer{VR}"/> is applied once directly before the first input record is processed to
         /// provide an initial intermediate aggregation result that is used to process the first record.
         /// Each update to the original <see cref="IKTable{K, V}"/> results in a two step update of the result <see cref="IKTable{K, V}"/> .
-        /// The specified <see cref="Aggregator{K, V, VR}"/> adder is applied for each update record and computes a new aggregate using the
+        /// The specified <see cref="IAggregator{K,V,VA}"/> adder is applied for each update record and computes a new aggregate using the
         /// current aggregate (or for the very first record using the intermediate aggregation result provided via the
         /// <see cref="Initializer{VR}"/>) and the record's value by adding the new record to the aggregate.
-        /// The specified <see cref="Aggregator{K, V, VR}"/> subtractor is applied for each "replaced" record of the original <see cref="IKTable{K, V}"/>
+        /// The specified <see cref="IAggregator{K,V,VA}"/> subtractor is applied for each "replaced" record of the original <see cref="IKTable{K, V}"/>
         /// and computes a new aggregate using the current aggregate and the record's value by "removing" the "replaced"
         /// record from the aggregate.
         /// Thus, <see cref="Aggregate{VR}(Func{VR}, Func{K, V, VR, VR}, Func{K, V, VR, VR}, Materialized{K, VR, IKeyValueStore{Bytes, byte[]}}, string)"/> can be used to compute aggregate functions
@@ -430,11 +430,11 @@ namespace Streamiz.Kafka.Net.Table
         /// </summary>
         /// <typeparam name="VR">the value type of the aggregated <see cref="IKTable{K, VR}"/></typeparam>
         /// <param name="initializer">an <see cref="Initializer{VR}"/> that provides an initial aggregate result value</param>
-        /// <param name="adder">an <see cref="Aggregator{K, V, VR}"/> that removed an old record from the aggregate result</param>
-        /// <param name="subtractor">an <see cref="Aggregator{K, V, VR}"/> that removed an old record from the aggregate result</param>
+        /// <param name="adder">an <see cref="IAggregator{K,V,VA}"/> that removed an old record from the aggregate result</param>
+        /// <param name="subtractor">an <see cref="IAggregator{K,V,VA}"/> that removed an old record from the aggregate result</param>
         /// <param name="materialized">the instance of materialized used to materialize the state store.</param>
         /// <param name="named">a named config used to name the processor in the topology></param>
         /// <returns> a <see cref="IKTable{K, VR}"/> that contains "update" records with unmodified keys, and values that represent the latest (rolling) aggregate for each key</returns>
-        IKTable<K, VR> Aggregate<VR>(Initializer<VR> initializer, Aggregator<K, V, VR> adder, Aggregator<K, V, VR> subtractor, Materialized<K, VR, IKeyValueStore<Bytes, byte[]>> materialized, string named = null);
+        IKTable<K, VR> Aggregate<VR>(Initializer<VR> initializer, IAggregator<K, V, VR> adder, IAggregator<K, V, VR> subtractor, Materialized<K, VR, IKeyValueStore<Bytes, byte[]>> materialized, string named = null);
     }
 }
