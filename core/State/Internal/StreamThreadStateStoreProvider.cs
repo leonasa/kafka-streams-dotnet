@@ -1,5 +1,4 @@
 ﻿using Streamiz.Kafka.Net.Processors;
-using System.Linq;
 using System.Collections.Generic;
 using Streamiz.Kafka.Net.Errors;
 
@@ -23,7 +22,7 @@ namespace Streamiz.Kafka.Net.State.Internal
             {
                 yield break;
             }
-            if (!(streamThread.State == ThreadState.RUNNING))
+            if (streamThread.State != ThreadState.RUNNING)
             {
                 throw new InvalidStateStoreException($"Cannot get state store {storeQueryParameters.StoreName} because the stream thread is {streamThread.State}, not RUNNING");
             }

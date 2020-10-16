@@ -153,7 +153,7 @@ namespace Streamiz.Kafka.Net.Processors
 
         public void AddNextProcessor(IProcessor next)
         {
-            if (next != null && !Next.Contains(next as IProcessor))
+            if (next != null && !Next.Contains(next))
                 Next.Add(next);
         }
 
@@ -173,7 +173,7 @@ namespace Streamiz.Kafka.Net.Processors
 
         private object DeserializeValue(object value)
         {
-            if (value != null && value is byte[] valueBytes)
+            if (value is byte[] valueBytes)
             {
                 if (ValueSerDes != null)
                     value = Value.DeserializeObject(valueBytes, GetSerializationContext(false));
@@ -189,7 +189,7 @@ namespace Streamiz.Kafka.Net.Processors
 
         private object DeserializeKey(object key)
         {
-            if (key != null && key is byte[] keyBytes)
+            if (key is byte[] keyBytes)
             {
                 if (KeySerDes != null)
                     key = Key.DeserializeObject(keyBytes, GetSerializationContext(true));

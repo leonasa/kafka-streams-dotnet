@@ -82,8 +82,8 @@ namespace Streamiz.Kafka.Net.State.Internal
         {
             if (!initStoreSerdes)
             {
-                keySerdes = keySerdes == null ? context.Configuration.DefaultKeySerDes as ISerDes<K> : keySerdes;
-                valueSerdes = valueSerdes == null ? new ValueAndTimestampSerDes<V>(context.Configuration.DefaultValueSerDes as ISerDes<V>) : valueSerdes;
+                keySerdes ??= context.Configuration.DefaultKeySerDes as ISerDes<K>;
+                valueSerdes ??= new ValueAndTimestampSerDes<V>(context.Configuration.DefaultValueSerDes as ISerDes<V>);
                 initStoreSerdes = true;
             }
         }

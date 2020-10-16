@@ -52,7 +52,6 @@ namespace Streamiz.Kafka.Net.Stream.Internal
             string functionName,
             StoreBuilder<TimestampedWindowStore<K, VR>> storeBuilder,
             IKStreamAggProcessorSupplier<K, KR, V, VR> aggregateSupplier,
-            string queryableStoreName,
             ISerDes<KR> keySerdes,
             ISerDes<VR> valueSerdes)
         {
@@ -70,7 +69,6 @@ namespace Streamiz.Kafka.Net.Stream.Internal
                                     keySerdes,
                                     valueSerdes,
                                     sourceNodes,
-                                    queryableStoreName,
                                     aggregateSupplier,
                                     statefulProcessorNode,
                                     builder);

@@ -54,22 +54,21 @@ namespace Streamiz.Kafka.Net.Table.Internal
         {
             get
             {
-                if (processorSupplier != null && processorSupplier is KTableSource<K, V>)
+                if (processorSupplier != null && processorSupplier is KTableSource<K, V> source)
                 {
-                    var source = (KTableSource<K, V>)processorSupplier;
                     // whenever a source ktable is required for getter, it should be materialized
                     source.Materialize();
                     return new KTableSourceValueGetterSupplier<K, V>(source.QueryableName);
                 }
 
-                if (processorSupplier is IKStreamAggProcessorSupplier<K, V>)
+                if (processorSupplier is IKStreamAggProcessorSupplier<K, V> aggProcessorSupplier)
                 {
-                    return ((IKStreamAggProcessorSupplier<K, V>)processorSupplier).View();
+                    return aggProcessorSupplier.View();
                 }
 
-                if (tableProcessorSupplier != null && tableProcessorSupplier is IKTableProcessorSupplier<K, S, V>)
+                if (tableProcessorSupplier != null && tableProcessorSupplier is IKTableProcessorSupplier<K, S, V> supplier)
                 {
-                    return ((IKTableProcessorSupplier<K, S, V>)tableProcessorSupplier).View;
+                    return supplier.View;
                 }
 
                 return null;

@@ -218,6 +218,22 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
                 consumer.Assigned = true;
             }
         }
+        private void Rebalance(List<TopicPartition> partitions, List<MockConsumerInformation> customerToRebalance)
+        {
+            foreach (var mockConsumerInformation in customerToRebalance)
+            {
+                var parts = mockConsumerInformation.Partitions.Join(partitions, t => t, t => t, (t1, t2) => t1);
+                var topicPartitionOffsets = mockConsumerInformation.TopicPartitionsOffset.Select(f => new TopicPartitionOffset(f.Topic, f.Partition, f.OffsetCommitted)).ToList();
+                mockConsumerInformation.RebalanceListener?.PartitionsRevoked(mockConsumerInformation.Consumer, topicPartitionOffsets);
+                foreach (var j in parts)
+                {
+                    mockConsumerInformation.Partitions.Remove(j);
+                }
+
+                mockConsumerInformation.RebalanceListener?.PartitionsAssigned(mockConsumerInformation.Consumer, mockConsumerInformation.Partitions);
+                mockConsumerInformation.Assigned = true;
+            }
+        }
 
         private void EvokeRebalance(MockConsumerInformation consumer)
         {
@@ -354,23 +370,6 @@ namespace Streamiz.Kafka.Net.Mock.Kafka
                         Topic = partition.Topic
                     };
                 }
-            }
-        }
-
-        private void Rebalance(List<TopicPartition> partitions, List<MockConsumerInformation> customerToRebalance)
-        {
-            foreach (var mockConsumerInformation in customerToRebalance)
-            {
-                var parts = mockConsumerInformation.Partitions.Join(partitions, t => t, t => t, (t1, t2) => t1);
-                var topicPartitionOffsets = mockConsumerInformation.TopicPartitionsOffset.Select(f => new TopicPartitionOffset(f.Topic, f.Partition, f.OffsetCommitted)).ToList();
-                mockConsumerInformation.RebalanceListener?.PartitionsRevoked(mockConsumerInformation.Consumer, topicPartitionOffsets);
-                foreach (var j in parts)
-                {
-                    mockConsumerInformation.Partitions.Remove(j);
-                }
-
-                mockConsumerInformation.RebalanceListener?.PartitionsAssigned(mockConsumerInformation.Consumer, mockConsumerInformation.Partitions);
-                mockConsumerInformation.Assigned = true;
             }
         }
 

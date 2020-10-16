@@ -10,7 +10,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
     {
         private readonly IProcessorSupplier<K, V> processorSupplier;
 
-        internal KTableGrouped(string name, ISerDes<KR> keySerde, ISerDes<VR> valSerde, List<string> sourceNodes, string queryableStoreName, IProcessorSupplier<K, V> processorSupplier, StreamGraphNode streamsGraphNode, InternalStreamBuilder builder)
+        internal KTableGrouped(string name, ISerDes<KR> keySerde, ISerDes<VR> valSerde, List<string> sourceNodes, IProcessorSupplier<K, V> processorSupplier, StreamGraphNode streamsGraphNode, InternalStreamBuilder builder)
             : base(name, keySerde, valSerde, sourceNodes, (IProcessorSupplier<KR, V>)null, streamsGraphNode, builder)
         {
             this.processorSupplier = processorSupplier;
@@ -20,12 +20,12 @@ namespace Streamiz.Kafka.Net.Table.Internal
         {
             get
             {
-                if (processorSupplier == null)
-                    return base.ValueGetterSupplier;
-                else if (processorSupplier is IKStreamAggProcessorSupplier<K, KR, V, VR>)
-                    return ((IKStreamAggProcessorSupplier<K, KR, V, VR>)processorSupplier).View();
-                else
-                    return null;
+                return processorSupplier switch
+                {
+                    null => base.ValueGetterSupplier, 
+                    IKStreamAggProcessorSupplier<K, KR, V, VR> supplier => supplier.View(),
+                    _ => null
+                };
             }
         }
 
@@ -37,9 +37,9 @@ namespace Streamiz.Kafka.Net.Table.Internal
                     base.EnableSendingOldValues();
                 else
                 {
-                    if (processorSupplier is IKStreamAggProcessorSupplier<KR, VR>)
+                    if (processorSupplier is IKStreamAggProcessorSupplier<KR, VR> supplier)
                     {
-                        ((IKStreamAggProcessorSupplier<KR, VR>)processorSupplier).EnableSendingOldValues();
+                        supplier.EnableSendingOldValues();
                     }
                     SendOldValues = true;
                 }

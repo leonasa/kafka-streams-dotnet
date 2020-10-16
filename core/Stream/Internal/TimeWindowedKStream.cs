@@ -88,7 +88,6 @@ namespace Streamiz.Kafka.Net.Stream.Internal
             return aggBuilder.BuildWindow(name,
                                     new TimestampedWindowStoreMaterializer<K, VR, W>(windowOptions, materialized).Materialize(),
                                     aggSupplier,
-                                    materialized.QueryableStoreName,
                                     windowSerdes,
                                     materialized.ValueSerdes);
         }
@@ -129,7 +128,6 @@ namespace Streamiz.Kafka.Net.Stream.Internal
             return aggBuilder.BuildWindow(name,
                                     new TimestampedWindowStoreMaterializer<K, V, W>(windowOptions, materialized).Materialize(),
                                     aggSupplier,
-                                    materialized.QueryableStoreName,
                                     windowSerdes,
                                     materialized.ValueSerdes);
         }
@@ -166,7 +164,6 @@ namespace Streamiz.Kafka.Net.Stream.Internal
             return aggBuilder.BuildWindow(name,
                                     new TimestampedWindowStoreMaterializer<K, long, W>(windowOptions, materialized).Materialize(),
                                     aggSupplier,
-                                    materialized.QueryableStoreName,
                                     windowSerdes,
                                     materialized.ValueSerdes);
         }
