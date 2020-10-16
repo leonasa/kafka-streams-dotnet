@@ -66,7 +66,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
                     return aggProcessorSupplier.View();
                 }
 
-                if (tableProcessorSupplier != null && tableProcessorSupplier is IKTableProcessorSupplier<K, S, V> supplier)
+                if (tableProcessorSupplier is IKTableProcessorSupplier<K, S, V> supplier)
                 {
                     return supplier.View;
                 }
@@ -257,7 +257,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
             StoreBuilder<TimestampedKeyValueStore<K, V>> storeBuilder;
 
             if (predicate == null)
-                throw new ArgumentNullException("Filter() doesn't allow null predicate function");
+                throw new ArgumentNullException(nameof(predicate), "Filter() doesn't allow null predicate function");
 
             if (materializedInternal != null)
             {

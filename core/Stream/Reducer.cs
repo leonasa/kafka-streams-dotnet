@@ -30,7 +30,7 @@ namespace Streamiz.Kafka.Net.Stream
         private readonly Func<V, V, V> function;
         public WrappedReducer(Func<V, V, V> function)
         {
-            this.function = function ?? throw new ArgumentNullException($"Reducer function can't be null");
+            this.function = function ?? throw new ArgumentNullException(nameof(function), $"Reducer function can't be null");
         }
         public V Apply(V value1, V value2) => function.Invoke(value1, value2);
     }

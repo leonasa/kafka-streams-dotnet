@@ -125,7 +125,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         {
             if (mapper == null)
             {
-                throw new ArgumentNullException($"FlatMap() doesn't allow null mapper function");
+                throw new ArgumentNullException(nameof(mapper), $"FlatMap() doesn't allow null mapper function");
             }
 
             var name = new Named(named).OrElseGenerateWithPrefix(builder, KStream.FLATMAP_NAME);
@@ -156,7 +156,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         {
             if (mapper == null)
             {
-                throw new ArgumentNullException($"Mapper function can't be null");
+                throw new ArgumentNullException(nameof(mapper), $"Mapper function can't be null");
             }
 
             var name = new Named(named).OrElseGenerateWithPrefix(builder, KStream.FLATMAPVALUES_NAME);
@@ -185,7 +185,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         {
             if (action == null)
             {
-                throw new ArgumentNullException("Foreach() doesn't allow null action function ");
+                throw new ArgumentNullException(nameof(action),"Foreach() doesn't allow null action function ");
             }
 
             String name = new Named(named).OrElseGenerateWithPrefix(builder, KStream.FOREACH_NAME);
@@ -232,7 +232,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         {
             if (mapper == null)
             {
-                throw new ArgumentNullException($"Map() doesn't allow null mapper function");
+                throw new ArgumentNullException(nameof(mapper), $"Map() doesn't allow null mapper function");
             }
 
             string name = new Named(named).OrElseGenerateWithPrefix(builder, KStream.MAP_NAME);
@@ -269,7 +269,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         {
             if (mapper == null)
             {
-                throw new ArgumentNullException($"Mapper function can't be null");
+                throw new ArgumentNullException(nameof(mapper), $"Mapper function can't be null");
             }
 
             String name = new Named(named).OrElseGenerateWithPrefix(builder, KStream.MAPVALUES_NAME);
@@ -298,7 +298,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         {
             if (printed == null)
             {
-                throw new ArgumentNullException("Print() doesn't allow null printed instance");
+                throw new ArgumentNullException(nameof(printed), "Print() doesn't allow null printed instance");
             }
 
             var name = new Named(printed.Name).OrElseGenerateWithPrefix(builder, KStream.PRINTING_NAME);
@@ -319,7 +319,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         {
             if (mapper == null)
             {
-                throw new ArgumentNullException("SelectKey() doesn't allow null mapper function");
+                throw new ArgumentNullException(nameof(mapper), "SelectKey() doesn't allow null mapper function");
             }
 
             ProcessorGraphNode<K, V> selectKeyProcessorNode = InternalSelectKey(mapper, named);
@@ -612,7 +612,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         {
             if (predicate == null)
             {
-                throw new ArgumentNullException($"Filter() doesn't allow null predicate function");
+                throw new ArgumentNullException(nameof(predicate), $"Filter() doesn't allow null predicate function");
             }
 
             string name = new Named(named).OrElseGenerateWithPrefix(builder, KStream.FILTER_NAME);
@@ -641,7 +641,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
 
             if (predicates == null || predicates.Any(p => p == null))
             {
-                throw new ArgumentNullException("Branch() doesn't allow null predicate function");
+                throw new ArgumentNullException(nameof(predicates), "Branch() doesn't allow null predicate function");
             }
 
             String branchName = namedInternal.OrElseGenerateWithPrefix(builder, KStream.BRANCH_NAME);
@@ -673,7 +673,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         {
             if (keySelector == null)
             {
-                throw new ArgumentNullException("GroupBy() doesn't allow null selector function");
+                throw new ArgumentNullException(nameof(keySelector), "GroupBy() doesn't allow null selector function");
             }
 
             ProcessorGraphNode<K, V> selectKeyMapNode = InternalSelectKey(keySelector, grouped.Named);

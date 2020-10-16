@@ -32,7 +32,7 @@ namespace Streamiz.Kafka.Net.Stream
 
         public WrappedAggregator(Func<K, V, VA, VA> function)
         {
-            this.function = function ?? throw new ArgumentNullException($"Aggregator function can't be null");
+            this.function = function ?? throw new ArgumentNullException(nameof(function), $"Aggregator function can't be null");
         }
 
         public VA Apply(K key, V value, VA aggregate) => function.Invoke(key, value, aggregate);

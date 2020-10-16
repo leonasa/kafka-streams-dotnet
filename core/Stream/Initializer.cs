@@ -22,7 +22,7 @@ namespace Streamiz.Kafka.Net.Stream
 
         public WrappedInitializer(Func<T> function)
         {
-            this.function = function ?? throw new ArgumentNullException($"Initializer function can't be null");
+            this.function = function ?? throw new ArgumentNullException(nameof(function), $"Initializer function can't be null");
         }
 
         public T Apply() => function.Invoke();
