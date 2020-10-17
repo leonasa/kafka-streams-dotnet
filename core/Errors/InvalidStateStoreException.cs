@@ -1,5 +1,6 @@
 ﻿using Streamiz.Kafka.Net.Processors;
 using System;
+using System.Runtime.Serialization;
 
 namespace Streamiz.Kafka.Net.Errors
 {
@@ -12,6 +13,7 @@ namespace Streamiz.Kafka.Net.Errors
     /// to backoff and retry when handling this exception.
     /// 
     /// </summary>
+    [Serializable]
     public class InvalidStateStoreException : Exception
     {
         /// <summary>
@@ -39,6 +41,16 @@ namespace Streamiz.Kafka.Net.Errors
         /// <param name="innerException">Inner exception</param>
         public InvalidStateStoreException(string message, Exception innerException) 
             : base(message, innerException)
+        {
+        }
+
+        /// <summary>
+        /// Constructor for Serialization
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        protected InvalidStateStoreException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
     }

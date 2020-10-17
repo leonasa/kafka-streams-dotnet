@@ -1,6 +1,7 @@
 ﻿using Streamiz.Kafka.Net.Stream;
 using Streamiz.Kafka.Net.Stream.Internal;
 using System;
+using System.Runtime.Serialization;
 
 namespace Streamiz.Kafka.Net.Errors
 {
@@ -8,6 +9,7 @@ namespace Streamiz.Kafka.Net.Errors
     /// Indicates a pre run time error occurred while parsing the <see cref="Topology"/> logical topology
     /// to construct the <see cref="ProcessorTopology"/> physical processor topology.
     /// </summary>
+    [Serializable]
     public class TopologyException : Exception
     {
         /// <summary>
@@ -16,6 +18,17 @@ namespace Streamiz.Kafka.Net.Errors
         /// <param name="message">Exception message</param>
         public TopologyException(string message) 
             : base(message)
+        {
+        }
+
+
+        /// <summary>
+        /// Constructor for Serialization
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        protected TopologyException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
     }
