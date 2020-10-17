@@ -436,6 +436,16 @@ namespace Streamiz.Kafka.Net.Stream.Internal
 
         #endregion
 
+        #region LeftJoin GlobalTable
+
+        public IKStream<K, VR> LeftJoin<K0, V0, VR>(IGlobalKTable<K0, V0> globalTable, Func<K, V, K0> keyMapper, Func<V, V0, VR> valueJoiner, string named = null)
+            => LeftJoin(globalTable, new WrappedKeyValueMapper<K, V, K0>(keyMapper), new WrappedValueJoiner<V, V0, VR>(valueJoiner), named);
+
+        public IKStream<K, VR> LeftJoin<K0, V0, VR>(IGlobalKTable<K0, V0> globalTable, IKeyValueMapper<K, V, K0> keyMapper, IValueJoiner<V, V0, VR> valueJoiner, string named = null)
+            => GlobalTableJoin(globalTable, keyMapper, valueJoiner, true, named);
+
+        #endregion
+
         #region Join GlobalTable
 
         public IKStream<K, VR> Join<K0, V0, VR>(IGlobalKTable<K0, V0> globalTable, Func<K, V, K0> keyMapper, Func<V, V0, VR> valueJoiner, string named = null)
@@ -446,15 +456,6 @@ namespace Streamiz.Kafka.Net.Stream.Internal
 
         #endregion
 
-        #region LeftJoin GlobalTable
-
-        public IKStream<K, VR> LeftJoin<K0, V0, VR>(IGlobalKTable<K0, V0> globalTable, Func<K, V, K0> keyMapper, Func<V, V0, VR> valueJoiner, string named = null)
-            => LeftJoin(globalTable, new WrappedKeyValueMapper<K, V, K0>(keyMapper), new WrappedValueJoiner<V, V0, VR>(valueJoiner), named);
-
-        public IKStream<K, VR> LeftJoin<K0, V0, VR>(IGlobalKTable<K0, V0> globalTable, IKeyValueMapper<K, V, K0> keyMapper, IValueJoiner<V, V0, VR> valueJoiner, string named = null)
-            => GlobalTableJoin(globalTable, keyMapper, valueJoiner, true, named);
-
-        #endregion
 
         #region Join Stream
 

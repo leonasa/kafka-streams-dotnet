@@ -155,5 +155,25 @@ namespace Streamiz.Kafka.Net.Processors.Internal
         {
             return !Equals(left, right);
         }
+
+        public static bool operator >(RecordQueue left, RecordQueue right)
+        {
+            return left.CompareTo(right) > 0 ;
+        }
+
+        public static bool operator <(RecordQueue left, RecordQueue right)
+        {
+            return left.CompareTo(right) < 0;
+        }
+
+        public static bool operator >=(RecordQueue left, RecordQueue right)
+        {
+            return left.CompareTo(right) >= 0;
+        }
+
+        public static bool operator <=(RecordQueue left, RecordQueue right)
+        {
+            return left.CompareTo(right) >= 0;
+        }
     }
 }
