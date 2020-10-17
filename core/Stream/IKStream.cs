@@ -595,40 +595,6 @@ namespace Streamiz.Kafka.Net.Stream
             where V0S : ISerDes<V0>, new();
 
         /// <summary>
-        /// Join records of this stream with <see cref="IKTable{K, VT}"/>'s records using non-windowed left equi join with default
-        /// serializers and deserializers.
-        /// In contrast to <see cref="IKStream{K, V}.Join{V0, VR, V0S}(IKTable{K, V0}, Func{V, V0, VR}, string)"/> (inner-join), all records from this stream will produce an
-        /// output record (cf. below).
-        /// The join is a primary key table lookup join with join attribute <code> stream.key == table.key</code>.
-        /// "Table lookup join" means, that results are only computed if KStream records are processed.
-        /// This is done by performing a lookup for matching records in the <em>current</em> (i.e., processing time) internal
-        /// <see cref="IKTable{K, VT}"/> state.
-        /// In contrast, processing <see cref="IKTable{K, VT}"/> input records will only update the internal <see cref="IKTable{K, VT}"/>  state and
-        /// will not produce any result records.
-        /// <para>
-        /// For each <see cref="IKStream{K, V}"/> record whether or not it finds a corresponding record in <see cref="IKTable{K, VT}"/>  the provided
-        /// function joiner <see cref="Func{V, V0, VR}"/> will be called to compute a value (with arbitrary type) for the result record.
-        /// If no <see cref="IKTable{K, VT}"/> record was found during lookup, a null value will be provided to joiner function.
-        /// The key of the result record is the same as for both joining input records.
-        /// If an <see cref="IKStream{K, V}"/> input record key or value is null the record will not be included in the join
-        /// operation and thus no output record will be added to the resulting <see cref="IKStream{K, V}"/>.
-        /// </para>
-        /// <para>
-        /// Both input streams (or to be more precise, their underlying source topics) need to have the same number of
-        /// partitions.
-        /// </para>
-        /// </summary>
-        /// <typeparam name="VT">the value type of the table</typeparam>
-        /// <typeparam name="VR">the value type of the result stream</typeparam>
-        /// <typeparam name="VTS">serdes's value of table</typeparam>
-        /// <param name="table">the <see cref="IKTable{K, VT}"/> to be joined with this stream</param>
-        /// <param name="valueJoiner">a function joiner that computes the join result for a pair of matching records</param>
-        /// <param name="named">a name config used to name the processor in the topology</param>
-        /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input <see cref= "IKStream{K, V}" /> record </returns>
-        IKStream<K, VR> LeftJoin<VT, VR, VTS>(IKTable<K, VT> table, Func<V, VT, VR> valueJoiner, string named = null)
-            where VTS : ISerDes<VT>, new();
-
-        /// <summary>
         /// Join records of this stream with <see cref="IKTable{K, V0}"/>'s records using non-windowed inner equi join with default
         /// serializers and deserializers.
         /// The join is a primary key table lookup join with join attribute <code> stream.key == table.key</code>.
@@ -657,40 +623,6 @@ namespace Streamiz.Kafka.Net.Stream
             where V0S : ISerDes<V0>, new();
 
         /// <summary>
-        /// Join records of this stream with <see cref="IKTable{K, VT}"/>'s records using non-windowed left equi join with default
-        /// serializers and deserializers.
-        /// In contrast to <see cref="IKStream{K, V}.Join{V0, VR, V0S}(IKTable{K, V0}, Func{V, V0, VR}, string)"/> (inner-join), all records from this stream will produce an
-        /// output record (cf. below).
-        /// The join is a primary key table lookup join with join attribute <code> stream.key == table.key</code>.
-        /// "Table lookup join" means, that results are only computed if KStream records are processed.
-        /// This is done by performing a lookup for matching records in the <em>current</em> (i.e., processing time) internal
-        /// <see cref="IKTable{K, VT}"/> state.
-        /// In contrast, processing <see cref="IKTable{K, VT}"/> input records will only update the internal <see cref="IKTable{K, VT}"/>  state and
-        /// will not produce any result records.
-        /// <para>
-        /// For each <see cref="IKStream{K, V}"/> record whether or not it finds a corresponding record in <see cref="IKTable{K, VT}"/>  the provided
-        /// <see cref="IValueJoiner{V, VT, VR}"/> joiner <see cref="Func{V, V0, VR}"/> will be called to compute a value (with arbitrary type) for the result record.
-        /// If no <see cref="IKTable{K, VT}"/> record was found during lookup, a null value will be provided to joiner function.
-        /// The key of the result record is the same as for both joining input records.
-        /// If an <see cref="IKStream{K, V}"/> input record key or value is null the record will not be included in the join
-        /// operation and thus no output record will be added to the resulting <see cref="IKStream{K, V}"/>.
-        /// </para>
-        /// <para>
-        /// Both input streams (or to be more precise, their underlying source topics) need to have the same number of
-        /// partitions.
-        /// </para>
-        /// </summary>
-        /// <typeparam name="VT">the value type of the table</typeparam>
-        /// <typeparam name="VR">the value type of the result stream</typeparam>
-        /// <typeparam name="VTS">serdes's value of table</typeparam>
-        /// <param name="table">the <see cref="IKTable{K, VT}"/> to be joined with this stream</param>
-        /// <param name="valueJoiner">a <see cref="IValueJoiner{V, VT, VR}"/> joiner that computes the join result for a pair of matching records</param>
-        /// <param name="named">a name config used to name the processor in the topology</param>
-        /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input <see cref= "IKStream{K, V}" /> record </returns>
-        IKStream<K, VR> LeftJoin<VT, VR, VTS>(IKTable<K, VT> table, IValueJoiner<V, VT, VR> valueJoiner, string named = null)
-            where VTS : ISerDes<VT>, new();
-
-        /// <summary>
         /// Join records of this stream with <see cref="IKTable{K, V0}"/>'s records using non-windowed inner equi join with default
         /// serializers and deserializers.
         /// The join is a primary key table lookup join with join attribute <code> stream.key == table.key</code>.
@@ -715,38 +647,6 @@ namespace Streamiz.Kafka.Net.Stream
         /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given
         /// joiner, one for each matched record-pair with the same key</returns>
         IKStream<K, VR> Join<V0, VR>(IKTable<K, V0> table, Func<V, V0, VR> valueJoiner, string named = null);
-
-        /// <summary>
-        /// Join records of this stream with <see cref="IKTable{K, VT}"/>'s records using non-windowed left equi join with default
-        /// serializers and deserializers.
-        /// In contrast to <see cref="IKStream{K, V}.Join{V0, VR, V0S}(IKTable{K, V0}, Func{V, V0, VR}, string)"/> (inner-join), all records from this stream will produce an
-        /// output record (cf. below).
-        /// The join is a primary key table lookup join with join attribute <code> stream.key == table.key</code>.
-        /// "Table lookup join" means, that results are only computed if KStream records are processed.
-        /// This is done by performing a lookup for matching records in the <em>current</em> (i.e., processing time) internal
-        /// <see cref="IKTable{K, VT}"/> state.
-        /// In contrast, processing <see cref="IKTable{K, VT}"/> input records will only update the internal <see cref="IKTable{K, VT}"/>  state and
-        /// will not produce any result records.
-        /// <para>
-        /// For each <see cref="IKStream{K, V}"/> record whether or not it finds a corresponding record in <see cref="IKTable{K, VT}"/>  the provided
-        /// function joiner <see cref="Func{V, V0, VR}"/> will be called to compute a value (with arbitrary type) for the result record.
-        /// If no <see cref="IKTable{K, VT}"/> record was found during lookup, a null value will be provided to joiner function.
-        /// The key of the result record is the same as for both joining input records.
-        /// If an <see cref="IKStream{K, V}"/> input record key or value is null the record will not be included in the join
-        /// operation and thus no output record will be added to the resulting <see cref="IKStream{K, V}"/>.
-        /// </para>
-        /// <para>
-        /// Both input streams (or to be more precise, their underlying source topics) need to have the same number of
-        /// partitions.
-        /// </para>
-        /// </summary>
-        /// <typeparam name="VT">the value type of the table</typeparam>
-        /// <typeparam name="VR">the value type of the result stream</typeparam>
-        /// <param name="table">the <see cref="IKTable{K, VT}"/> to be joined with this stream</param>
-        /// <param name="valueJoiner">a function joiner that computes the join result for a pair of matching records</param>
-        /// <param name="named">a name config used to name the processor in the topology</param>
-        /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input <see cref= "IKStream{K, V}" /> record </returns>
-        IKStream<K, VR> LeftJoin<VT, VR>(IKTable<K, VT> table, Func<V, VT, VR> valueJoiner, string named = null);
 
         /// <summary>
         /// Join records of this stream with <see cref="IKTable{K, V0}"/>'s records using non-windowed inner equi join with default
@@ -774,37 +674,6 @@ namespace Streamiz.Kafka.Net.Stream
         /// joiner, one for each matched record-pair with the same key</returns>
         IKStream<K, VR> Join<V0, VR>(IKTable<K, V0> table, IValueJoiner<V, V0, VR> valueJoiner, string named = null);
 
-        /// <summary>
-        /// Join records of this stream with <see cref="IKTable{K, VT}"/>'s records using non-windowed left equi join with default
-        /// serializers and deserializers.
-        /// In contrast to <see cref="IKStream{K, V}.Join{V0, VR, V0S}(IKTable{K, V0}, Func{V, V0, VR}, string)"/> (inner-join), all records from this stream will produce an
-        /// output record (cf. below).
-        /// The join is a primary key table lookup join with join attribute <code> stream.key == table.key</code>.
-        /// "Table lookup join" means, that results are only computed if KStream records are processed.
-        /// This is done by performing a lookup for matching records in the <em>current</em> (i.e., processing time) internal
-        /// <see cref="IKTable{K, VT}"/> state.
-        /// In contrast, processing <see cref="IKTable{K, VT}"/> input records will only update the internal <see cref="IKTable{K, VT}"/>  state and
-        /// will not produce any result records.
-        /// <para>
-        /// For each <see cref="IKStream{K, V}"/> record whether or not it finds a corresponding record in <see cref="IKTable{K, VT}"/>  the provided
-        /// <see cref="IValueJoiner{V, VT, VR}"/> joiner <see cref="Func{V, V0, VR}"/> will be called to compute a value (with arbitrary type) for the result record.
-        /// If no <see cref="IKTable{K, VT}"/> record was found during lookup, a null value will be provided to joiner function.
-        /// The key of the result record is the same as for both joining input records.
-        /// If an <see cref="IKStream{K, V}"/> input record key or value is null the record will not be included in the join
-        /// operation and thus no output record will be added to the resulting <see cref="IKStream{K, V}"/>.
-        /// </para>
-        /// <para>
-        /// Both input streams (or to be more precise, their underlying source topics) need to have the same number of
-        /// partitions.
-        /// </para>
-        /// </summary>
-        /// <typeparam name="VT">the value type of the table</typeparam>
-        /// <typeparam name="VR">the value type of the result stream</typeparam>
-        /// <param name="table">the <see cref="IKTable{K, VT}"/> to be joined with this stream</param>
-        /// <param name="valueJoiner">a <see cref="IValueJoiner{V, VT, VR}"/> joiner that computes the join result for a pair of matching records</param>
-        /// <param name="named">a name config used to name the processor in the topology</param>
-        /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input <see cref= "IKStream{K, V}" /> record </returns>
-        IKStream<K, VR> LeftJoin<VT, VR>(IKTable<K, VT> table, IValueJoiner<V, VT, VR> valueJoiner, string named = null);
 
         /// <summary>
         /// Join records of this stream with <see cref="IGlobalKTable{K0, V0}"/>'s records using non-windowed inner equi join.
@@ -836,39 +705,6 @@ namespace Streamiz.Kafka.Net.Stream
         IKStream<K, VR> Join<K0, V0, VR>(IGlobalKTable<K0, V0> globalTable, Func<K, V, K0> keyMapper, Func<V, V0, VR> valueJoiner, string named = null);
 
         /// <summary>
-        /// Join records of this stream with <see cref="IGlobalKTable{K0, V0}"/>'s records using non-windowed left equi join.
-        /// In contrast to <see cref="IKStream{K, V}.Join{K0, V0, VR}(IGlobalKTable{K0, V0}, Func{K, V, K0}, Func{V, V0, VR}, string)"/> (inner-join), all records from this stream
-        /// will produce an output record (cf. below).
-        /// The join is a primary key table lookup join with join attribute
-        /// <code>keyValueMapper.map(stream.keyValue) == table.key</code>.
-        /// "Table lookup join" means, that results are only computed if <see cref="IKStream{K, V}"/> records are processed.
-        /// This is done by performing a lookup for matching records in the <em>current</em> internal <see cref="IGlobalKTable{K0, V0}"/>
-        /// state.
-        /// In contrast, processing <see cref="IGlobalKTable{K0, V0}"/> input records will only update the internal <see cref="IGlobalKTable{K0, V0}"/>
-        /// state and will not produce any result records.
-        /// <para>
-        /// For each <see cref="IKStream{K, V}"/> record whether or not it finds a corresponding record in <see cref="IGlobalKTable{K0, V0}"/> the
-        /// provided <see cref="Func{V, V0, VR}"/> joiner will be called to compute a value (with arbitrary type) for the result record.
-        /// The key of the result record is the same as this <see cref="IKStream{K, V}"/>.
-        /// If a <see cref="IKStream{K, V}"/> input record key or value is null, the record will not be included in the join
-        /// operation and thus no output record will be added to the resulting <see cref="IKStream{K, V}"/>.
-        /// If mapper returns null implying no match exists, a null value will be
-        /// provided to <see cref="Func{V, V0, VR}"/> joiner.
-        /// If no <see cref="IGlobalKTable{K0, V0}"/> record was found during lookup, a null value will be provided to
-        /// <see cref="Func{V, V0, VR}"/> joiner.
-        /// </para>
-        /// </summary>
-        /// <typeparam name="K0">the key type of <see cref="IGlobalKTable{K0, V0}"/></typeparam>
-        /// <typeparam name="V0">the value type of <see cref="IGlobalKTable{K0, V0}"/></typeparam>
-        /// <typeparam name="VR">the value type of the resulting</typeparam>
-        /// <param name="globalTable">the global table to be joined with this stream</param>
-        /// <param name="keyMapper">instance of mapper used to map from the (key, value) of this stream to the key of the global table</param>
-        /// <param name="valueJoiner">a function joiner that computes the join result for a pair of matching records</param>
-        /// <param name="named">a name config used to name the processor in the topology</param>
-        /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input stream's record</returns>
-        IKStream<K, VR> LeftJoin<K0, V0, VR>(IGlobalKTable<K0, V0> globalTable, Func<K, V, K0> keyMapper, Func<V, V0, VR> valueJoiner, string named = null);
-
-        /// <summary>
         /// Join records of this stream with <see cref="IGlobalKTable{K0, V0}"/>'s records using non-windowed inner equi join.
         /// The join is a primary key table lookup join with join attribute
         /// <code>mapper(stream.keyValue) == table.key</code>.
@@ -896,39 +732,6 @@ namespace Streamiz.Kafka.Net.Stream
         /// <param name="named">a name config used to name the processor in the topology</param>
         /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input stream's record</returns>
         IKStream<K, VR> Join<K0, V0, VR>(IGlobalKTable<K0, V0> globalTable, IKeyValueMapper<K, V, K0> keyMapper, IValueJoiner<V, V0, VR> valueJoiner, string named = null);
-
-        /// <summary>
-        /// Join records of this stream with <see cref="IGlobalKTable{K0, V0}"/>'s records using non-windowed left equi join.
-        /// In contrast to <see cref="IKStream{K, V}.Join{K0, V0, VR}(IGlobalKTable{K0, V0}, Func{K, V, K0}, Func{V, V0, VR}, string)"/> (inner-join), all records from this stream
-        /// will produce an output record (cf. below).
-        /// The join is a primary key table lookup join with join attribute
-        /// <code>keyValueMapper.map(stream.keyValue) == table.key</code>.
-        /// "Table lookup join" means, that results are only computed if <see cref="IKStream{K, V}"/> records are processed.
-        /// This is done by performing a lookup for matching records in the <em>current</em> internal <see cref="IGlobalKTable{K0, V0}"/>
-        /// state.
-        /// In contrast, processing <see cref="IGlobalKTable{K0, V0}"/> input records will only update the internal <see cref="IGlobalKTable{K0, V0}"/>
-        /// state and will not produce any result records.
-        /// <para>
-        /// For each <see cref="IKStream{K, V}"/> record whether or not it finds a corresponding record in <see cref="IGlobalKTable{K0, V0}"/> the
-        /// provided <see cref="IValueJoiner{V, V0, VR}"/> joiner will be called to compute a value (with arbitrary type) for the result record.
-        /// The key of the result record is the same as this <see cref="IKStream{K, V}"/>.
-        /// If a <see cref="IKStream{K, V}"/> input record key or value is null, the record will not be included in the join
-        /// operation and thus no output record will be added to the resulting <see cref="IKStream{K, V}"/>.
-        /// If mapper returns null implying no match exists, a null value will be
-        /// provided to <see cref="IValueJoiner{V, V0, VR}"/> joiner.
-        /// If no <see cref="IGlobalKTable{K0, V0}"/> record was found during lookup, a null value will be provided to
-        /// <see cref="IValueJoiner{V, V0, VR}"/> joiner.
-        /// </para>
-        /// </summary>
-        /// <typeparam name="K0">the key type of <see cref="IGlobalKTable{K0, V0}"/></typeparam>
-        /// <typeparam name="V0">the value type of <see cref="IGlobalKTable{K0, V0}"/></typeparam>
-        /// <typeparam name="VR">the value type of the resulting</typeparam>
-        /// <param name="globalTable">the global table to be joined with this stream</param>
-        /// <param name="keyMapper">instance of mapper used to map from the (key, value) of this stream to the key of the global table</param>
-        /// <param name="valueJoiner">a function joiner that computes the join result for a pair of matching records</param>
-        /// <param name="named">a name config used to name the processor in the topology</param>
-        /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input stream's record</returns>
-        IKStream<K, VR> LeftJoin<K0, V0, VR>(IGlobalKTable<K0, V0> globalTable, IKeyValueMapper<K, V, K0> keyMapper, IValueJoiner<V, V0, VR> valueJoiner, string named = null);
 
         /// <summary>
         /// Join records of this stream with another <code>IKStream</code>'s records using windowed inner equi join using the
@@ -983,6 +786,9 @@ namespace Streamiz.Kafka.Net.Stream
         IKStream<K, VR> Join<V0, VR, V0S>(IKStream<K, V0> stream, Func<V, V0, VR> valueJoiner, JoinWindowOptions windows, StreamJoinProps props = null)
             where V0S : ISerDes<V0>, new();
 
+
+
+
         /// <summary>
         /// Join records of this stream with another <code>IKStream</code>'s records using windowed inner equi join using the
         /// <see cref="StreamJoinProps"/> instance for configuration of the <see cref="ISerDes{K}"/> key serde, <see cref="ISerDes{V}"/> stream's value
@@ -1033,6 +839,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// <param name="props">a <see cref="StreamJoinProps"/> used to configure join stores</param>
         /// <returns>a <see cref="IKStream{K, VR}"/> that contains join-records for each key and values computed by the given <see cref="IValueJoiner{V, V0, VR}"/> , one for each matched record-pair with the same key and within the joining window intervals</returns>
         IKStream<K, VR> Join<V0, VR>(IKStream<K, V0> stream, Func<V, V0, VR> valueJoiner, JoinWindowOptions windows, StreamJoinProps<K, V, V0> props = null);
+
 
         /// <summary>
         /// Join records of this stream with another <code>IKStream</code>'s records using windowed inner equi join using the
@@ -1087,6 +894,7 @@ namespace Streamiz.Kafka.Net.Stream
         IKStream<K, VR> Join<V0, VR, V0S>(IKStream<K, V0> stream, IValueJoiner<V, V0, VR> valueJoiner, JoinWindowOptions windows, StreamJoinProps props = null)
             where V0S : ISerDes<V0>, new();
 
+
         /// <summary>
         /// Join records of this stream with another <code>IKStream</code>'s records using windowed inner equi join using the
         /// <see cref="StreamJoinProps"/> instance for configuration of the <see cref="ISerDes{K}"/> key serde, <see cref="ISerDes{V}"/> stream's value
@@ -1137,6 +945,207 @@ namespace Streamiz.Kafka.Net.Stream
         /// <param name="props">a <see cref="StreamJoinProps"/> used to configure join stores</param>
         /// <returns>a <see cref="IKStream{K, VR}"/> that contains join-records for each key and values computed by the given <see cref="IValueJoiner{V, V0, VR}"/> , one for each matched record-pair with the same key and within the joining window intervals</returns>
         IKStream<K, VR> Join<V0, VR>(IKStream<K, V0> stream, IValueJoiner<V, V0, VR> valueJoiner, JoinWindowOptions windows, StreamJoinProps<K, V, V0> props = null);
+
+        /// <summary>
+        /// Join records of this stream with <see cref="IKTable{K, VT}"/>'s records using non-windowed left equi join with default
+        /// serializers and deserializers.
+        /// In contrast to <see cref="IKStream{K, V}.Join{V0, VR, V0S}(IKTable{K, V0}, Func{V, V0, VR}, string)"/> (inner-join), all records from this stream will produce an
+        /// output record (cf. below).
+        /// The join is a primary key table lookup join with join attribute <code> stream.key == table.key</code>.
+        /// "Table lookup join" means, that results are only computed if KStream records are processed.
+        /// This is done by performing a lookup for matching records in the <em>current</em> (i.e., processing time) internal
+        /// <see cref="IKTable{K, VT}"/> state.
+        /// In contrast, processing <see cref="IKTable{K, VT}"/> input records will only update the internal <see cref="IKTable{K, VT}"/>  state and
+        /// will not produce any result records.
+        /// <para>
+        /// For each <see cref="IKStream{K, V}"/> record whether or not it finds a corresponding record in <see cref="IKTable{K, VT}"/>  the provided
+        /// function joiner <see cref="Func{V, V0, VR}"/> will be called to compute a value (with arbitrary type) for the result record.
+        /// If no <see cref="IKTable{K, VT}"/> record was found during lookup, a null value will be provided to joiner function.
+        /// The key of the result record is the same as for both joining input records.
+        /// If an <see cref="IKStream{K, V}"/> input record key or value is null the record will not be included in the join
+        /// operation and thus no output record will be added to the resulting <see cref="IKStream{K, V}"/>.
+        /// </para>
+        /// <para>
+        /// Both input streams (or to be more precise, their underlying source topics) need to have the same number of
+        /// partitions.
+        /// </para>
+        /// </summary>
+        /// <typeparam name="VT">the value type of the table</typeparam>
+        /// <typeparam name="VR">the value type of the result stream</typeparam>
+        /// <typeparam name="VTS">serdes's value of table</typeparam>
+        /// <param name="table">the <see cref="IKTable{K, VT}"/> to be joined with this stream</param>
+        /// <param name="valueJoiner">a function joiner that computes the join result for a pair of matching records</param>
+        /// <param name="named">a name config used to name the processor in the topology</param>
+        /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input <see cref= "IKStream{K, V}" /> record </returns>
+        IKStream<K, VR> LeftJoin<VT, VR, VTS>(IKTable<K, VT> table, Func<V, VT, VR> valueJoiner, string named = null)
+            where VTS : ISerDes<VT>, new();
+
+        /// <summary>
+        /// Join records of this stream with <see cref="IKTable{K, VT}"/>'s records using non-windowed left equi join with default
+        /// serializers and deserializers.
+        /// In contrast to <see cref="IKStream{K, V}.Join{V0, VR, V0S}(IKTable{K, V0}, Func{V, V0, VR}, string)"/> (inner-join), all records from this stream will produce an
+        /// output record (cf. below).
+        /// The join is a primary key table lookup join with join attribute <code> stream.key == table.key</code>.
+        /// "Table lookup join" means, that results are only computed if KStream records are processed.
+        /// This is done by performing a lookup for matching records in the <em>current</em> (i.e., processing time) internal
+        /// <see cref="IKTable{K, VT}"/> state.
+        /// In contrast, processing <see cref="IKTable{K, VT}"/> input records will only update the internal <see cref="IKTable{K, VT}"/>  state and
+        /// will not produce any result records.
+        /// <para>
+        /// For each <see cref="IKStream{K, V}"/> record whether or not it finds a corresponding record in <see cref="IKTable{K, VT}"/>  the provided
+        /// <see cref="IValueJoiner{V, VT, VR}"/> joiner <see cref="Func{V, V0, VR}"/> will be called to compute a value (with arbitrary type) for the result record.
+        /// If no <see cref="IKTable{K, VT}"/> record was found during lookup, a null value will be provided to joiner function.
+        /// The key of the result record is the same as for both joining input records.
+        /// If an <see cref="IKStream{K, V}"/> input record key or value is null the record will not be included in the join
+        /// operation and thus no output record will be added to the resulting <see cref="IKStream{K, V}"/>.
+        /// </para>
+        /// <para>
+        /// Both input streams (or to be more precise, their underlying source topics) need to have the same number of
+        /// partitions.
+        /// </para>
+        /// </summary>
+        /// <typeparam name="VT">the value type of the table</typeparam>
+        /// <typeparam name="VR">the value type of the result stream</typeparam>
+        /// <typeparam name="VTS">serdes's value of table</typeparam>
+        /// <param name="table">the <see cref="IKTable{K, VT}"/> to be joined with this stream</param>
+        /// <param name="valueJoiner">a <see cref="IValueJoiner{V, VT, VR}"/> joiner that computes the join result for a pair of matching records</param>
+        /// <param name="named">a name config used to name the processor in the topology</param>
+        /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input <see cref= "IKStream{K, V}" /> record </returns>
+        IKStream<K, VR> LeftJoin<VT, VR, VTS>(IKTable<K, VT> table, IValueJoiner<V, VT, VR> valueJoiner, string named = null)
+            where VTS : ISerDes<VT>, new();
+
+        
+        /// <summary>
+        /// Join records of this stream with <see cref="IKTable{K, VT}"/>'s records using non-windowed left equi join with default
+        /// serializers and deserializers.
+        /// In contrast to <see cref="IKStream{K, V}.Join{V0, VR, V0S}(IKTable{K, V0}, Func{V, V0, VR}, string)"/> (inner-join), all records from this stream will produce an
+        /// output record (cf. below).
+        /// The join is a primary key table lookup join with join attribute <code> stream.key == table.key</code>.
+        /// "Table lookup join" means, that results are only computed if KStream records are processed.
+        /// This is done by performing a lookup for matching records in the <em>current</em> (i.e., processing time) internal
+        /// <see cref="IKTable{K, VT}"/> state.
+        /// In contrast, processing <see cref="IKTable{K, VT}"/> input records will only update the internal <see cref="IKTable{K, VT}"/>  state and
+        /// will not produce any result records.
+        /// <para>
+        /// For each <see cref="IKStream{K, V}"/> record whether or not it finds a corresponding record in <see cref="IKTable{K, VT}"/>  the provided
+        /// function joiner <see cref="Func{V, V0, VR}"/> will be called to compute a value (with arbitrary type) for the result record.
+        /// If no <see cref="IKTable{K, VT}"/> record was found during lookup, a null value will be provided to joiner function.
+        /// The key of the result record is the same as for both joining input records.
+        /// If an <see cref="IKStream{K, V}"/> input record key or value is null the record will not be included in the join
+        /// operation and thus no output record will be added to the resulting <see cref="IKStream{K, V}"/>.
+        /// </para>
+        /// <para>
+        /// Both input streams (or to be more precise, their underlying source topics) need to have the same number of
+        /// partitions.
+        /// </para>
+        /// </summary>
+        /// <typeparam name="VT">the value type of the table</typeparam>
+        /// <typeparam name="VR">the value type of the result stream</typeparam>
+        /// <param name="table">the <see cref="IKTable{K, VT}"/> to be joined with this stream</param>
+        /// <param name="valueJoiner">a function joiner that computes the join result for a pair of matching records</param>
+        /// <param name="named">a name config used to name the processor in the topology</param>
+        /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input <see cref= "IKStream{K, V}" /> record </returns>
+        IKStream<K, VR> LeftJoin<VT, VR>(IKTable<K, VT> table, Func<V, VT, VR> valueJoiner, string named = null);
+
+        
+        /// <summary>
+        /// Join records of this stream with <see cref="IKTable{K, VT}"/>'s records using non-windowed left equi join with default
+        /// serializers and deserializers.
+        /// In contrast to <see cref="IKStream{K, V}.Join{V0, VR, V0S}(IKTable{K, V0}, Func{V, V0, VR}, string)"/> (inner-join), all records from this stream will produce an
+        /// output record (cf. below).
+        /// The join is a primary key table lookup join with join attribute <code> stream.key == table.key</code>.
+        /// "Table lookup join" means, that results are only computed if KStream records are processed.
+        /// This is done by performing a lookup for matching records in the <em>current</em> (i.e., processing time) internal
+        /// <see cref="IKTable{K, VT}"/> state.
+        /// In contrast, processing <see cref="IKTable{K, VT}"/> input records will only update the internal <see cref="IKTable{K, VT}"/>  state and
+        /// will not produce any result records.
+        /// <para>
+        /// For each <see cref="IKStream{K, V}"/> record whether or not it finds a corresponding record in <see cref="IKTable{K, VT}"/>  the provided
+        /// <see cref="IValueJoiner{V, VT, VR}"/> joiner <see cref="Func{V, V0, VR}"/> will be called to compute a value (with arbitrary type) for the result record.
+        /// If no <see cref="IKTable{K, VT}"/> record was found during lookup, a null value will be provided to joiner function.
+        /// The key of the result record is the same as for both joining input records.
+        /// If an <see cref="IKStream{K, V}"/> input record key or value is null the record will not be included in the join
+        /// operation and thus no output record will be added to the resulting <see cref="IKStream{K, V}"/>.
+        /// </para>
+        /// <para>
+        /// Both input streams (or to be more precise, their underlying source topics) need to have the same number of
+        /// partitions.
+        /// </para>
+        /// </summary>
+        /// <typeparam name="VT">the value type of the table</typeparam>
+        /// <typeparam name="VR">the value type of the result stream</typeparam>
+        /// <param name="table">the <see cref="IKTable{K, VT}"/> to be joined with this stream</param>
+        /// <param name="valueJoiner">a <see cref="IValueJoiner{V, VT, VR}"/> joiner that computes the join result for a pair of matching records</param>
+        /// <param name="named">a name config used to name the processor in the topology</param>
+        /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input <see cref= "IKStream{K, V}" /> record </returns>
+        IKStream<K, VR> LeftJoin<VT, VR>(IKTable<K, VT> table, IValueJoiner<V, VT, VR> valueJoiner, string named = null);
+
+        /// <summary>
+        /// Join records of this stream with <see cref="IGlobalKTable{K0, V0}"/>'s records using non-windowed left equi join.
+        /// In contrast to <see cref="IKStream{K, V}.Join{K0, V0, VR}(IGlobalKTable{K0, V0}, Func{K, V, K0}, Func{V, V0, VR}, string)"/> (inner-join), all records from this stream
+        /// will produce an output record (cf. below).
+        /// The join is a primary key table lookup join with join attribute
+        /// <code>keyValueMapper.map(stream.keyValue) == table.key</code>.
+        /// "Table lookup join" means, that results are only computed if <see cref="IKStream{K, V}"/> records are processed.
+        /// This is done by performing a lookup for matching records in the <em>current</em> internal <see cref="IGlobalKTable{K0, V0}"/>
+        /// state.
+        /// In contrast, processing <see cref="IGlobalKTable{K0, V0}"/> input records will only update the internal <see cref="IGlobalKTable{K0, V0}"/>
+        /// state and will not produce any result records.
+        /// <para>
+        /// For each <see cref="IKStream{K, V}"/> record whether or not it finds a corresponding record in <see cref="IGlobalKTable{K0, V0}"/> the
+        /// provided <see cref="Func{V, V0, VR}"/> joiner will be called to compute a value (with arbitrary type) for the result record.
+        /// The key of the result record is the same as this <see cref="IKStream{K, V}"/>.
+        /// If a <see cref="IKStream{K, V}"/> input record key or value is null, the record will not be included in the join
+        /// operation and thus no output record will be added to the resulting <see cref="IKStream{K, V}"/>.
+        /// If mapper returns null implying no match exists, a null value will be
+        /// provided to <see cref="Func{V, V0, VR}"/> joiner.
+        /// If no <see cref="IGlobalKTable{K0, V0}"/> record was found during lookup, a null value will be provided to
+        /// <see cref="Func{V, V0, VR}"/> joiner.
+        /// </para>
+        /// </summary>
+        /// <typeparam name="K0">the key type of <see cref="IGlobalKTable{K0, V0}"/></typeparam>
+        /// <typeparam name="V0">the value type of <see cref="IGlobalKTable{K0, V0}"/></typeparam>
+        /// <typeparam name="VR">the value type of the resulting</typeparam>
+        /// <param name="globalTable">the global table to be joined with this stream</param>
+        /// <param name="keyMapper">instance of mapper used to map from the (key, value) of this stream to the key of the global table</param>
+        /// <param name="valueJoiner">a function joiner that computes the join result for a pair of matching records</param>
+        /// <param name="named">a name config used to name the processor in the topology</param>
+        /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input stream's record</returns>
+        IKStream<K, VR> LeftJoin<K0, V0, VR>(IGlobalKTable<K0, V0> globalTable, Func<K, V, K0> keyMapper, Func<V, V0, VR> valueJoiner, string named = null);
+
+      
+        /// <summary>
+        /// Join records of this stream with <see cref="IGlobalKTable{K0, V0}"/>'s records using non-windowed left equi join.
+        /// In contrast to <see cref="IKStream{K, V}.Join{K0, V0, VR}(IGlobalKTable{K0, V0}, Func{K, V, K0}, Func{V, V0, VR}, string)"/> (inner-join), all records from this stream
+        /// will produce an output record (cf. below).
+        /// The join is a primary key table lookup join with join attribute
+        /// <code>keyValueMapper.map(stream.keyValue) == table.key</code>.
+        /// "Table lookup join" means, that results are only computed if <see cref="IKStream{K, V}"/> records are processed.
+        /// This is done by performing a lookup for matching records in the <em>current</em> internal <see cref="IGlobalKTable{K0, V0}"/>
+        /// state.
+        /// In contrast, processing <see cref="IGlobalKTable{K0, V0}"/> input records will only update the internal <see cref="IGlobalKTable{K0, V0}"/>
+        /// state and will not produce any result records.
+        /// <para>
+        /// For each <see cref="IKStream{K, V}"/> record whether or not it finds a corresponding record in <see cref="IGlobalKTable{K0, V0}"/> the
+        /// provided <see cref="IValueJoiner{V, V0, VR}"/> joiner will be called to compute a value (with arbitrary type) for the result record.
+        /// The key of the result record is the same as this <see cref="IKStream{K, V}"/>.
+        /// If a <see cref="IKStream{K, V}"/> input record key or value is null, the record will not be included in the join
+        /// operation and thus no output record will be added to the resulting <see cref="IKStream{K, V}"/>.
+        /// If mapper returns null implying no match exists, a null value will be
+        /// provided to <see cref="IValueJoiner{V, V0, VR}"/> joiner.
+        /// If no <see cref="IGlobalKTable{K0, V0}"/> record was found during lookup, a null value will be provided to
+        /// <see cref="IValueJoiner{V, V0, VR}"/> joiner.
+        /// </para>
+        /// </summary>
+        /// <typeparam name="K0">the key type of <see cref="IGlobalKTable{K0, V0}"/></typeparam>
+        /// <typeparam name="V0">the value type of <see cref="IGlobalKTable{K0, V0}"/></typeparam>
+        /// <typeparam name="VR">the value type of the resulting</typeparam>
+        /// <param name="globalTable">the global table to be joined with this stream</param>
+        /// <param name="keyMapper">instance of mapper used to map from the (key, value) of this stream to the key of the global table</param>
+        /// <param name="valueJoiner">a function joiner that computes the join result for a pair of matching records</param>
+        /// <param name="named">a name config used to name the processor in the topology</param>
+        /// <returns>a <see cref="IKStream{K, V}"/> that contains join-records for each key and values computed by the given joiner, one output for each input stream's record</returns>
+        IKStream<K, VR> LeftJoin<K0, V0, VR>(IGlobalKTable<K0, V0> globalTable, IKeyValueMapper<K, V, K0> keyMapper, IValueJoiner<V, V0, VR> valueJoiner, string named = null);
 
         /// <summary>
         /// Join records of this stream with another <see cref="IKStream{K, V0}"/> 's records using windowed left equi join with default

@@ -47,7 +47,7 @@ namespace Streamiz.Kafka.Net.State.Internal
 
                 switch (stateStore)
                 {
-                    case TimestampedWindowStore<K, V> windowStore when storeQueryParameters.QueryableStoreType is WindowStoreType<K, V>:
+                    case ITimestampedWindowStore<K, V> windowStore when storeQueryParameters.QueryableStoreType is WindowStoreType<K, V>:
                         return new ReadOnlyWindowStoreFacade<K, V>(windowStore) as T;
                     case ITimestampedKeyValueStore<K, V> valueStore when storeQueryParameters.QueryableStoreType is KeyValueStoreType<K, V>:
                         return new ReadOnlyKeyValueStoreFacade<K, V>(valueStore) as T;

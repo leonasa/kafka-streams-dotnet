@@ -68,7 +68,7 @@ namespace Streamiz.Kafka.Net.State
     internal class WindowStoreType<K, V> : QueryableStoreTypeMatcher<IReadOnlyWindowStore<K, V>, K, V>
     {
         public WindowStoreType()
-        : base(new[] { typeof(IReadOnlyWindowStore<K, V>), typeof(TimestampedWindowStore<K, V>) })
+        : base(new[] { typeof(IReadOnlyWindowStore<K, V>), typeof(ITimestampedWindowStore<K, V>) })
         {
         }
 

@@ -36,7 +36,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
             this.sourceProcessor = sourceProcessor;
         }
 
-        public long HeadRecordTimestamp => currentRecord?.Message.Timestamp.UnixTimestampMs ?? -1;
+        private long HeadRecordTimestamp => currentRecord?.Message.Timestamp.UnixTimestampMs ?? -1;
 
         public ISourceProcessor Processor => sourceProcessor;
 
@@ -124,8 +124,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
             };
         }
 
-        public int CompareTo(RecordQueue other)
-            => HeadRecordTimestamp.CompareTo(other.HeadRecordTimestamp);
+        public int CompareTo(RecordQueue other) => HeadRecordTimestamp.CompareTo(other.HeadRecordTimestamp);
 
         public bool Equals(RecordQueue other)
         {
@@ -144,7 +143,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
 
         public override int GetHashCode()
         {
-            return partitionTime.GetHashCode();
+            return HeadRecordTimestamp.GetHashCode();
         }
 
         public static bool operator ==(RecordQueue left, RecordQueue right)

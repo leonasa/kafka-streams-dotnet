@@ -138,12 +138,12 @@ namespace Streamiz.Kafka.Net.Tests.TestDriver
             var input = driver.CreateInputTopic("test", new StringSerDes(), new StringSerDes());
             var store = driver.GetStateStore<string, string>("store");
             Assert.IsNotNull(store);
-            Assert.IsInstanceOf<TimestampedWindowStore<string, long>>(store);
+            Assert.IsInstanceOf<ITimestampedWindowStore<string, long>>(store);
             DateTime dt = DateTime.Now;
             input.PipeInput("coucou", "1");
 
-            Assert.AreEqual(1, ((TimestampedWindowStore<string, long>)store).All().ToList().Count);
-            var it = ((TimestampedWindowStore<string, long>)store).Fetch("coucou", dt.AddSeconds(-5), dt.AddSeconds(5));
+            Assert.AreEqual(1, ((ITimestampedWindowStore<string, long>)store).All().ToList().Count);
+            var it = ((ITimestampedWindowStore<string, long>)store).Fetch("coucou", dt.AddSeconds(-5), dt.AddSeconds(5));
             Assert.IsTrue(it.MoveNext());
             Assert.AreEqual(1, it.Current.Value.Value.Value);
             driver.Dispose();

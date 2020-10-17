@@ -50,15 +50,15 @@ namespace Streamiz.Kafka.Net.Stream.Internal
 
         internal IKTable<KR, VR> BuildWindow<KR, VR>(
             string functionName,
-            IStoreBuilder<TimestampedWindowStore<K, VR>> storeBuilder,
+            IStoreBuilder<ITimestampedWindowStore<K, VR>> storeBuilder,
             IKStreamAggProcessorSupplier<K, KR, V, VR> aggregateSupplier,
             ISerDes<KR> keySerdes,
             ISerDes<VR> valueSerdes)
         {
             // if repartition required TODO
             // ELSE
-            StatefulProcessorNode<K, V, TimestampedWindowStore<K, VR>> statefulProcessorNode =
-               new StatefulProcessorNode<K, V, TimestampedWindowStore<K, VR>>(
+            StatefulProcessorNode<K, V, ITimestampedWindowStore<K, VR>> statefulProcessorNode =
+               new StatefulProcessorNode<K, V, ITimestampedWindowStore<K, VR>>(
                    functionName,
                    new ProcessorParameters<K, V>(aggregateSupplier, functionName),
                    storeBuilder);

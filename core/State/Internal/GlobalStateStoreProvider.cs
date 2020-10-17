@@ -33,9 +33,9 @@ namespace Streamiz.Kafka.Net.State.Internal
             {
                 return new[] { new ReadOnlyKeyValueStoreFacade<K, V>(stateStore as ITimestampedKeyValueStore<K, V>) as T };
             }
-            else if (stateStore is TimestampedWindowStore<K, V> && queryableStoreType is WindowStoreType<K, V>)
+            else if (stateStore is ITimestampedWindowStore<K, V> && queryableStoreType is WindowStoreType<K, V>)
             {
-                return new[] { new ReadOnlyWindowStoreFacade<K, V>(stateStore as TimestampedWindowStore<K, V>) as T };
+                return new[] { new ReadOnlyWindowStoreFacade<K, V>(stateStore as ITimestampedWindowStore<K, V>) as T };
             }
             else
                 return new[] { stateStore as T };

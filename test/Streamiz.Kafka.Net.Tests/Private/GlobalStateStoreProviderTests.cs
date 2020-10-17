@@ -12,7 +12,7 @@ namespace Streamiz.Kafka.Net.Tests.Private
     public class GlobalStateStoreProviderTests
     {
         IWindowStore<object, object> wStore;
-        TimestampedWindowStore<object, object> timestampWStore;
+        ITimestampedWindowStore<object, object> timestampWStore;
         IKeyValueStore<object, object> kvStore;
         ITimestampedKeyValueStore<object, object> timestampedKVStore;
         IDictionary<string, IStateStore> stores;
@@ -23,7 +23,7 @@ namespace Streamiz.Kafka.Net.Tests.Private
             wStore = this.CreateMockStore<IWindowStore<object, object>>();
             kvStore = this.CreateMockStore<IKeyValueStore<object, object>>();
             timestampedKVStore = this.CreateMockStore<ITimestampedKeyValueStore<object, object>>();
-            timestampWStore = this.CreateMockStore<TimestampedWindowStore<object, object>>();
+            timestampWStore = this.CreateMockStore<ITimestampedWindowStore<object, object>>();
             stores = new Dictionary<string, IStateStore> {
                 { "kv-store", kvStore },
                 { "ts-kv-store", timestampedKVStore },

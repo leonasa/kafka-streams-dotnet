@@ -11,7 +11,7 @@ namespace Streamiz.Kafka.Net.Tests.Private
     public class ReadOnlyWindowStoreFacadeTests
     {
         private ReadOnlyWindowStoreFacade<string, int> facade;
-        private TimestampedWindowStore<string, int> store;
+        private ITimestampedWindowStore<string, int> store;
         private InMemoryWindowStore inmemorystore;
 
         [SetUp]

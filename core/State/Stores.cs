@@ -30,7 +30,7 @@ namespace Streamiz.Kafka.Net.State
             return new TimestampedKeyValueStoreBuilder<K, V>(supplier, keySerde, valueSerde);
         } 
         
-        public static IStoreBuilder<TimestampedWindowStore<K, V>> TimestampedWindowStoreBuilder<K, V>(IWindowBytesStoreSupplier supplier, ISerDes<K> keySerde, ISerDes<V> valueSerde)
+        public static IStoreBuilder<ITimestampedWindowStore<K, V>> TimestampedWindowStoreBuilder<K, V>(IWindowBytesStoreSupplier supplier, ISerDes<K> keySerde, ISerDes<V> valueSerde)
         {
             return new TimestampedWindowStoreBuilder<K, V>(supplier, keySerde, valueSerde);
         }
