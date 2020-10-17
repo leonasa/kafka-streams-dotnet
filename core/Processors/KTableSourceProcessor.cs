@@ -22,7 +22,7 @@ namespace Streamiz.Kafka.Net.Processors
         {
             base.Init(context);
 
-            if (this.queryableName != null)
+            if (queryableName != null)
             {
                 store = (ITimestampedKeyValueStore<K, V>)context.GetStateStore(queryableName);
                 tupleForwarder = new TimestampedTupleForwarder<K, V>(this, sendOldValues);
@@ -59,7 +59,7 @@ namespace Streamiz.Kafka.Net.Processors
             }
             else
             {
-                this.Forward<K, Change<V>>(key, new Change<V>(default(V), value));
+                Forward<K, Change<V>>(key, new Change<V>(default(V), value));
             }
         }
     }

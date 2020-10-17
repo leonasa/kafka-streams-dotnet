@@ -43,21 +43,19 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("topic-flatmapvalues");
+
+            inputTopic.PipeInputs(data);
+            var result = outputTopic.ReadKeyValueList().ToList();
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Count == 6);
+            for (int i = 1; i <= 6; ++i)
             {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("topic-flatmapvalues");
-
-                inputTopic.PipeInputs(data);
-                var result = outputTopic.ReadKeyValueList().ToList();
-
-                Assert.IsNotNull(result);
-                Assert.IsTrue(result.Count == 6);
-                for (int i = 1; i <= 6; ++i)
-                {
-                    Assert.AreEqual(result[i - 1].Message.Key, "key1");
-                    Assert.AreEqual(result[i - 1].Message.Value, i.ToString());
-                }
+                Assert.AreEqual(result[i - 1].Message.Key, "key1");
+                Assert.AreEqual(result[i - 1].Message.Value, i.ToString());
             }
         }
 
@@ -77,21 +75,19 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<string, char, StringSerDes, CharSerDes>("topic-flatmap");
+
+            inputTopic.PipeInputs(data);
+            var result = outputTopic.ReadKeyValueList().ToList();
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Count == 6);
+            for (int i = 1; i <= 6; ++i)
             {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<string, char, StringSerDes, CharSerDes>("topic-flatmap");
-
-                inputTopic.PipeInputs(data);
-                var result = outputTopic.ReadKeyValueList().ToList();
-
-                Assert.IsNotNull(result);
-                Assert.IsTrue(result.Count == 6);
-                for (int i = 1; i <= 6; ++i)
-                {
-                    Assert.AreEqual(result[i - 1].Message.Key, "key1");
-                    Assert.AreEqual(result[i - 1].Message.Value, Convert.ToChar(i.ToString()));
-                }
+                Assert.AreEqual(result[i - 1].Message.Key, "key1");
+                Assert.AreEqual(result[i - 1].Message.Value, Convert.ToChar(i.ToString()));
             }
         }
     }

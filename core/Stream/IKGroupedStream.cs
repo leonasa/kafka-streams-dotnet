@@ -57,7 +57,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// <summary>
         /// Aggregate the values of records in this stream by the grouped key.
         /// Records with null key or value are ignored.
-        /// Aggregating is a generalization of Reducer combining via reduce(...)} as it, for example,
+        /// Aggregating is a generalization of IReducer combining via reduce(...)} as it, for example,
         /// allows the result to have a different type than the input values.
         /// The result is written into a local <see cref="IKeyValueStore{K, VR}"/> (which is basically an ever-updating materialized view)
         /// that can be queried by the given store name in {@code materialized}.
@@ -84,7 +84,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// <summary>
         /// Aggregate the values of records in this stream by the grouped key.
         /// Records with null key or value are ignored.
-        /// Aggregating is a generalization of Reducer combining via reduce(...)} as it, for example,
+        /// Aggregating is a generalization of IReducer combining via reduce(...)} as it, for example,
         /// allows the result to have a different type than the input values.
         /// The result is written into a local <see cref="IKeyValueStore{K, VR}"/> (which is basically an ever-updating materialized view)
         /// that can be queried by the given store name in {@code materialized}.
@@ -111,7 +111,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// <summary>
         /// Aggregate the values of records in this stream by the grouped key.
         /// Records with null key or value are ignored.
-        /// Aggregating is a generalization of Reducer combining via reduce(...)} as it, for example,
+        /// Aggregating is a generalization of IReducer combining via reduce(...)} as it, for example,
         /// allows the result to have a different type than the input values.
         /// The result is written into a local <see cref="IKeyValueStore{K, VR}"/> (which is basically an ever-updating materialized view)
         /// that can be queried by the given store name in {@code materialized}.
@@ -139,7 +139,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// <summary>
         /// Aggregate the values of records in this stream by the grouped key.
         /// Records with null key or value are ignored.
-        /// Aggregating is a generalization of Reducer combining via reduce(...)} as it, for example,
+        /// Aggregating is a generalization of IReducer combining via reduce(...)} as it, for example,
         /// allows the result to have a different type than the input values.
         /// The result is written into a local <see cref="IKeyValueStore{K, VR}"/> (which is basically an ever-updating materialized view)
         /// that can be queried by the given store name in {@code materialized}.
@@ -167,7 +167,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// <summary>
         /// Aggregate the values of records in this stream by the grouped key.
         /// Records with null key or value are ignored.
-        /// Aggregating is a generalization of Reducer combining via reduce(...)} as it, for example,
+        /// Aggregating is a generalization of IReducer combining via reduce(...)} as it, for example,
         /// allows the result to have a different type than the input values.
         /// The result is written into a local <see cref="IKeyValueStore{K, VR}"/> (which is basically an ever-updating materialized view)
         /// that can be queried by the given store name in {@code materialized}.
@@ -196,7 +196,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// <summary>
         /// Aggregate the values of records in this stream by the grouped key.
         /// Records with null key or value are ignored.
-        /// Aggregating is a generalization of Reducer combining via reduce(...)} as it, for example,
+        /// Aggregating is a generalization of IReducer combining via reduce(...)} as it, for example,
         /// allows the result to have a different type than the input values.
         /// The result is written into a local <see cref="IKeyValueStore{K, VR}"/> (which is basically an ever-updating materialized view)
         /// that can be queried by the given store name in {@code materialized}.
@@ -230,7 +230,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// provided by the given store name in materialized.
         /// Furthermore, updates to the store are sent downstream into a <see cref="IKTable{K, V}" /> changelog stream.
         /// <p>
-        /// The specified <see cref="Reducer{V}"/> is applied for each input record and computes a new aggregate using the current
+        /// The specified <see cref="IIReducer{V}"/> is applied for each input record and computes a new aggregate using the current
         /// aggregate (first argument) and the record's value (second argument):
         /// <example>
         /// <code>
@@ -238,17 +238,17 @@ namespace Streamiz.Kafka.Net.Stream
         /// </code>
         /// </example>
         /// </p>
-        /// If there is no current aggregate the <see cref="Reducer{V}"/> is not applied and the new aggregate will be the record's
+        /// If there is no current aggregate the <see cref="IIReducer{V}"/> is not applied and the new aggregate will be the record's
         /// value as-is.
-        /// Thus, <see cref="Reduce(Reducer{V})" /> can be used to compute aggregate functions like sum, min, or
+        /// Thus, <see cref="Reduce(IReducer{V})" /> can be used to compute aggregate functions like sum, min, or
         /// max.
         /// </summary>
-        /// <param name="reducer">a <see cref="Reducer{V}"/> that computes a new aggregate result. Cannot be null.</param>
+        /// <param name="reducer">a <see cref="IIReducer{V}"/> that computes a new aggregate result. Cannot be null.</param>
         /// <returns> @return a <see cref="IKTable{K, V}"/> that contains "update" records with unmodified keys, and values that represent the
         /// latest (rolling) aggregate for each key. If the reduce function returns null, it is then interpreted as
         /// deletion for the key, and future messages of the same key coming from upstream operators
         /// will be handled as newly initialized value.</returns>
-        IKTable<K, V> Reduce(Reducer<V> reducer);
+        IKTable<K, V> Reduce(IReducer<V> reducer);
 
         /// <summary>
         /// Combine the value of records in this stream by the grouped key.
@@ -266,7 +266,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// </code>
         /// </example>
         /// </p>
-        /// If there is no current aggregate the <see cref="Reducer{V}"/> is not applied and the new aggregate will be the record's
+        /// If there is no current aggregate the <see cref="IIReducer{V}"/> is not applied and the new aggregate will be the record's
         /// value as-is.
         /// Thus, <see cref="Reduce(Func{V, V, V})" /> can be used to compute aggregate functions like sum, min, or
         /// max.
@@ -286,7 +286,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// provided by the given store name in materialized.
         /// Furthermore, updates to the store are sent downstream into a <see cref="IKTable{K, V}" /> changelog stream.
         /// <p>
-        /// The specified <see cref="Reducer{V}"/> is applied for each input record and computes a new aggregate using the current
+        /// The specified <see cref="IIReducer{V}"/> is applied for each input record and computes a new aggregate using the current
         /// aggregate (first argument) and the record's value (second argument):
         /// <example>
         /// <code>
@@ -294,19 +294,19 @@ namespace Streamiz.Kafka.Net.Stream
         /// </code>
         /// </example>
         /// </p>
-        /// If there is no current aggregate the <see cref="Reducer{V}"/> is not applied and the new aggregate will be the record's
+        /// If there is no current aggregate the <see cref="IIReducer{V}"/> is not applied and the new aggregate will be the record's
         /// value as-is.
-        /// Thus, <see cref="Reduce(Reducer{V}, Materialized{K, V, IKeyValueStore{Bytes, byte[]}}, string)" /> can be used to compute aggregate functions like sum, min, or
+        /// Thus, <see cref="Reduce(IReducer{V}, Materialized{K, V, IKeyValueStore{Bytes, byte[]}}, string)" /> can be used to compute aggregate functions like sum, min, or
         /// max.
         /// </summary>
-        /// <param name="reducer">a <see cref="Reducer{V}"/> that computes a new aggregate result. Cannot be null.</param>
+        /// <param name="reducer">a <see cref="IIReducer{V}"/> that computes a new aggregate result. Cannot be null.</param>
         /// <param name="materialized">an instance of <see cref="Materialized{K, V, S}"/> used to materialize a state store.</param>
         /// <param name="named">a name config used to name the processor in the topology.</param>
         /// <returns> @return a <see cref="IKTable{K, V}"/> that contains "update" records with unmodified keys, and values that represent the
         /// latest (rolling) aggregate for each key. If the reduce function returns null, it is then interpreted as
         /// deletion for the key, and future messages of the same key coming from upstream operators
         /// will be handled as newly initialized value.</returns>
-        IKTable<K, V> Reduce(Reducer<V> reducer, Materialized<K, V, IKeyValueStore<Bytes, byte[]>> materialized, string named = null);
+        IKTable<K, V> Reduce(IReducer<V> reducer, Materialized<K, V, IKeyValueStore<Bytes, byte[]>> materialized, string named = null);
 
         /// <summary>
         /// Combine the value of records in this stream by the grouped key.
@@ -324,7 +324,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// </code>
         /// </example>
         /// </p>
-        /// If there is no current aggregate the <see cref="Reducer{V}"/> is not applied and the new aggregate will be the record's
+        /// If there is no current aggregate the <see cref="IIReducer{V}"/> is not applied and the new aggregate will be the record's
         /// value as-is.
         /// Thus, <see cref="Reduce(Func{V, V, V}, Materialized{K, V, IKeyValueStore{Bytes, byte[]}}, string)" /> can be used to compute aggregate functions like sum, min, or
         /// max.

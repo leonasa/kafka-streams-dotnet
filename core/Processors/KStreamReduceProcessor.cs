@@ -6,9 +6,9 @@ namespace Streamiz.Kafka.Net.Processors
 {
     internal class KStreamReduceProcessor<K, V> : StatefullProcessor<K, V, K, V>
     {
-        private readonly Reducer<V> reducer;
+        private readonly IReducer<V> reducer;
 
-        public KStreamReduceProcessor(Reducer<V> reducer, string storeName, bool sendOldValues)
+        public KStreamReduceProcessor(IReducer<V> reducer, string storeName, bool sendOldValues)
             : base(storeName, sendOldValues)
         {
             this.reducer = reducer;

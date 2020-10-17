@@ -17,10 +17,10 @@ namespace Streamiz.Kafka.Net.Stream.Internal
                         ISerDes<VO> otherValueSerDes,
                         String name)
         {
-            this.KeySerdes = keySerdes;
-            this.ValueSerdes = valueSerdes;
-            this.OtherValueSerDes = otherValueSerDes;
-            this.Name = name;
+            KeySerdes = keySerdes;
+            ValueSerdes = valueSerdes;
+            OtherValueSerDes = otherValueSerDes;
+            Name = name;
         }
     }
 }

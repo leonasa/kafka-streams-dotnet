@@ -150,24 +150,22 @@ namespace Streamiz.Kafka.Net.Tests.Public
         {
             var topo = SimpleJoinTopology(new FailOnInvalidTimestamp());
 
-            using (var driver = new TopologyTestDriver(topo, BuildStreamConfig()))
-            {
-                var clickTopic = driver.CreateInputTopic<string, string>(userClicksTopic);
-                var regionTopic = driver.CreateInputTopic<string, string>(userRegionsTopic);
-                var output = driver.CreateOuputTopic<string, string>(outputTopic);
+            using var driver = new TopologyTestDriver(topo, BuildStreamConfig());
+            var clickTopic = driver.CreateInputTopic<string, string>(userClicksTopic);
+            var regionTopic = driver.CreateInputTopic<string, string>(userRegionsTopic);
+            var output = driver.CreateOuputTopic<string, string>(outputTopic);
 
-                // publish event in ktable
-                regionTopic.PipeInput("alice", "100|france");
-                //publish event in kstream
-                clickTopic.PipeInput("alice", "200|user 1 click");
-                //publish event in ktable
-                regionTopic.PipeInput("alice", "300|asia");
+            // publish event in ktable
+            regionTopic.PipeInput("alice", "100|france");
+            //publish event in kstream
+            clickTopic.PipeInput("alice", "200|user 1 click");
+            //publish event in ktable
+            regionTopic.PipeInput("alice", "300|asia");
 
-                // we should have a result as timestamp from Ktable is <= from the timestamp from the event on KStream side
-                var items = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(1, items.Count);
-                AssertExtensions.MessageEqual(("alice", "200|user 1 click --- 100|france"), items[0]);
-            }
+            // we should have a result as timestamp from Ktable is <= from the timestamp from the event on KStream side
+            var items = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(1, items.Count);
+            AssertExtensions.MessageEqual(("alice", "200|user 1 click --- 100|france"), items[0]);
         }
 
         [Test]
@@ -175,149 +173,137 @@ namespace Streamiz.Kafka.Net.Tests.Public
         {
             var topo = SimpleJoinTopology(new FailOnInvalidTimestamp());
 
-            using (var driver = new TopologyTestDriver(topo, BuildStreamConfig()))
-            {
-                var clickTopic = driver.CreateInputTopic<string, string>(userClicksTopic);
-                var regionTopic = driver.CreateInputTopic<string, string>(userRegionsTopic);
-                var output = driver.CreateOuputTopic<string, string>(outputTopic);
+            using var driver = new TopologyTestDriver(topo, BuildStreamConfig());
+            var clickTopic = driver.CreateInputTopic<string, string>(userClicksTopic);
+            var regionTopic = driver.CreateInputTopic<string, string>(userRegionsTopic);
+            var output = driver.CreateOuputTopic<string, string>(outputTopic);
 
-                //publish event in kstream
-                clickTopic.PipeInput("alice", "200|user 1 click");
-                // publish event in ktable
-                regionTopic.PipeInput("alice", "100|france");
+            //publish event in kstream
+            clickTopic.PipeInput("alice", "200|user 1 click");
+            // publish event in ktable
+            regionTopic.PipeInput("alice", "100|france");
 
-                // we should have no result as the timestamp from KTable is > to KStream side
-                var items = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(0, items.Count);
-            }
+            // we should have no result as the timestamp from KTable is > to KStream side
+            var items = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(0, items.Count);
         }
 
         [Test]
         public void ShouldMatchIfEventArriveDoesNotInRightOrderWithTimestampExtractor()
         {
             var topo = SimpleJoinTopology(new MyTimestampExtractor());
-            using (var driver = new TopologyTestDriver(topo, BuildStreamConfig()))
-            {
-                var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
-                var output = driver.CreateOuputTopic<string, string>(outputTopic);
+            using var driver = new TopologyTestDriver(topo, BuildStreamConfig());
+            var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
+            var output = driver.CreateOuputTopic<string, string>(outputTopic);
 
-                //publish event in kstream
-                topic.PipeInput(userClicksTopic, "alice", "200|user 1 click");
-                // publish event in ktable
-                topic.PipeInput(userRegionsTopic, "alice", "100|asia");
-                topic.Flush();
+            //publish event in kstream
+            topic.PipeInput(userClicksTopic, "alice", "200|user 1 click");
+            // publish event in ktable
+            topic.PipeInput(userRegionsTopic, "alice", "100|asia");
+            topic.Flush();
 
-                var items = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(1, items.Count);
-                AssertExtensions.MessageEqual(("alice", "200|user 1 click --- 100|asia"), items[0]);
-            }
+            var items = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(1, items.Count);
+            AssertExtensions.MessageEqual(("alice", "200|user 1 click --- 100|asia"), items[0]);
         }
 
         [Test]
         public void MultiEvent()
         {
             var topo = SimpleJoinTopology(new MyTimestampExtractor());
-            using (var driver = new TopologyTestDriver(topo, BuildStreamConfig()))
-            {
-                var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
-                var output = driver.CreateOuputTopic<string, string>(outputTopic);
+            using var driver = new TopologyTestDriver(topo, BuildStreamConfig());
+            var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
+            var output = driver.CreateOuputTopic<string, string>(outputTopic);
 
-                //publish event in kstream
-                topic.PipeInputs(userClicksTopic,
-                    ("alice", "200|user 1 click"),
-                    ("bob", "201|click1"),
-                    ("joe", "202|user 1 click"));
+            //publish event in kstream
+            topic.PipeInputs(userClicksTopic,
+                ("alice", "200|user 1 click"),
+                ("bob", "201|click1"),
+                ("joe", "202|user 1 click"));
 
-                // publish event in ktable
-                topic.PipeInputs(userRegionsTopic,
-                    ("alice", "100|asia"),
-                    ("bob", "101|france"),
-                    ("joe", "300|usa"));
+            // publish event in ktable
+            topic.PipeInputs(userRegionsTopic,
+                ("alice", "100|asia"),
+                ("bob", "101|france"),
+                ("joe", "300|usa"));
 
-                topic.Flush();
+            topic.Flush();
 
-                var items = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(2, items.Count);
-                AssertExtensions.MessageEqual(("alice", "200|user 1 click --- 100|asia"), items[0]);
-                AssertExtensions.MessageEqual(("bob", "201|click1 --- 101|france"), items[1]);
-            }
+            var items = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(2, items.Count);
+            AssertExtensions.MessageEqual(("alice", "200|user 1 click --- 100|asia"), items[0]);
+            AssertExtensions.MessageEqual(("bob", "201|click1 --- 101|france"), items[1]);
         }
 
         [Test]
         public void SameTimestampWhenKTableEventIsReceivedAfterKStreamEvent()
         {
             var topo = SimpleJoinTopology(new MyTimestampExtractor());
-            using (var driver = new TopologyTestDriver(topo, BuildStreamConfig()))
-            {
-                var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
-                var output = driver.CreateOuputTopic<string, string>(outputTopic);
+            using var driver = new TopologyTestDriver(topo, BuildStreamConfig());
+            var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
+            var output = driver.CreateOuputTopic<string, string>(outputTopic);
 
-                // publish event in ktable
-                topic.PipeInputs(userRegionsTopic,
-                    ("alice", "100|asia"));
-                topic.Flush();
+            // publish event in ktable
+            topic.PipeInputs(userRegionsTopic,
+                ("alice", "100|asia"));
+            topic.Flush();
 
-                //publish event in kstream
-                topic.PipeInputs(userClicksTopic,
-                    ("alice", "100|user 1 click"));
-                topic.Flush();
+            //publish event in kstream
+            topic.PipeInputs(userClicksTopic,
+                ("alice", "100|user 1 click"));
+            topic.Flush();
 
-                var items = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(1, items.Count);
-                AssertExtensions.MessageEqual(("alice", "100|user 1 click --- 100|asia"), items[0]);
-            }
+            var items = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(1, items.Count);
+            AssertExtensions.MessageEqual(("alice", "100|user 1 click --- 100|asia"), items[0]);
         }
 
         [Test]
         public void ShouldNotMatchIfEventIsATombstone()
         {
             var topo = SimpleJoinTopology(new FailOnInvalidTimestamp());
-            using (var driver = new TopologyTestDriver(topo, BuildStreamConfig()))
-            {
-                var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
-                var output = driver.CreateOuputTopic<string, string>(outputTopic);
+            using var driver = new TopologyTestDriver(topo, BuildStreamConfig());
+            var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
+            var output = driver.CreateOuputTopic<string, string>(outputTopic);
 
-                // publish event in ktable
-                topic.PipeInputs(userRegionsTopic,
-                    ("alice", "100|asia"),
-                    ("alice", null));
+            // publish event in ktable
+            topic.PipeInputs(userRegionsTopic,
+                ("alice", "100|asia"),
+                ("alice", null));
 
-                //publish event in kstream
-                topic.PipeInputs(userClicksTopic,
-                    ("alice", "200|click"));
-                topic.Flush();
+            //publish event in kstream
+            topic.PipeInputs(userClicksTopic,
+                ("alice", "200|click"));
+            topic.Flush();
 
-                var items = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(0, items.Count);
-            }
+            var items = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(0, items.Count);
         }
 
         [Test]
         public void ShouldMatchIfTombstoneIsAfterKStreamEvent()
         {
             var topo = SimpleJoinTopology(new FailOnInvalidTimestamp());
-            using (var driver = new TopologyTestDriver(topo, BuildStreamConfig()))
-            {
-                var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
-                var output = driver.CreateOuputTopic<string, string>(outputTopic);
+            using var driver = new TopologyTestDriver(topo, BuildStreamConfig());
+            var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
+            var output = driver.CreateOuputTopic<string, string>(outputTopic);
 
-                // publish event in ktable
-                topic.PipeInputs(userRegionsTopic,
-                    ("alice", "100|asia"));
+            // publish event in ktable
+            topic.PipeInputs(userRegionsTopic,
+                ("alice", "100|asia"));
 
-                //publish event in kstream
-                topic.PipeInputs(userClicksTopic,
-                    ("alice", "200|click"));
+            //publish event in kstream
+            topic.PipeInputs(userClicksTopic,
+                ("alice", "200|click"));
 
-                topic.PipeInputs(userRegionsTopic,
-                   ("alice", null));
+            topic.PipeInputs(userRegionsTopic,
+                ("alice", null));
 
-                topic.Flush();
+            topic.Flush();
 
-                var items = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(1, items.Count);
-                AssertExtensions.MessageEqual(("alice", "200|click --- 100|asia"), items[0]);
-            }
+            var items = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(1, items.Count);
+            AssertExtensions.MessageEqual(("alice", "200|click --- 100|asia"), items[0]);
         }
 
 
@@ -331,68 +317,60 @@ namespace Streamiz.Kafka.Net.Tests.Public
         public void WorksAsExpected()
         {
             var topo = SimpleJoinTopology(new FailOnInvalidTimestamp());
-            using (var driver = new TopologyTestDriver(topo, BuildStreamConfig()))
-            {
-                var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
-                var output = driver.CreateOuputTopic<string, string>(outputTopic);
+            using var driver = new TopologyTestDriver(topo, BuildStreamConfig());
+            var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
+            var output = driver.CreateOuputTopic<string, string>(outputTopic);
 
-                AliceChangesRegionsAfterClickingOnWebsite(topic);
+            AliceChangesRegionsAfterClickingOnWebsite(topic);
 
-                var items = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(1, items.Count);
-                AssertExtensions.MessageEqual(("alice", "200|click 1 --- 100|asia"), items[0]);
-            }
+            var items = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(1, items.Count);
+            AssertExtensions.MessageEqual(("alice", "200|click 1 --- 100|asia"), items[0]);
         }
 
         [Test]
         public void ReturnsWrongKTableEventWithRepartitionTopic()
         {
             var topo = KStreamWithImplicitReKeyJoinTopology(new FailOnInvalidTimestamp());
-            using (var driver = new TopologyTestDriver(topo, BuildStreamConfig()))
-            {
-                var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
-                var output = driver.CreateOuputTopic<string, string>(outputTopic);
+            using var driver = new TopologyTestDriver(topo, BuildStreamConfig());
+            var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
+            var output = driver.CreateOuputTopic<string, string>(outputTopic);
 
-                AliceChangesRegionsAfterClickingOnWebsite(topic);
+            AliceChangesRegionsAfterClickingOnWebsite(topic);
 
-                var items = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(1, items.Count);
-                AssertExtensions.MessageEqual(("alice", "200|click 1 --- 100|asia"), items[0]);
-            }
+            var items = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(1, items.Count);
+            AssertExtensions.MessageEqual(("alice", "200|click 1 --- 100|asia"), items[0]);
         }
 
         [Test]
         public void ReturnsWrongKTableEventWithIntermediateTopic()
         {
             var topo = KStreamWithIntermediateTopicReKeyJoinTopology(new FailOnInvalidTimestamp());
-            using (var driver = new TopologyTestDriver(topo, BuildStreamConfig()))
-            {
-                var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
-                var output = driver.CreateOuputTopic<string, string>(outputTopic);
+            using var driver = new TopologyTestDriver(topo, BuildStreamConfig());
+            var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
+            var output = driver.CreateOuputTopic<string, string>(outputTopic);
 
-                AliceChangesRegionsAfterClickingOnWebsite(topic);
+            AliceChangesRegionsAfterClickingOnWebsite(topic);
 
-                var items = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(1, items.Count);
-                AssertExtensions.MessageEqual(("alice", "200|click 1 --- 100|asia"), items[0]);
-            }
+            var items = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(1, items.Count);
+            AssertExtensions.MessageEqual(("alice", "200|click 1 --- 100|asia"), items[0]);
         }
 
         [Test]
         public void ReturnsWrongKTableEventWithIntermediateTopicAndTimestampExtractor()
         {
             var topo = KStreamWithIntermediateTopicReKeyJoinTopology(new MyTimestampExtractor());
-            using (var driver = new TopologyTestDriver(topo, BuildStreamConfig()))
-            {
-                var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
-                var output = driver.CreateOuputTopic<string, string>(outputTopic);
+            using var driver = new TopologyTestDriver(topo, BuildStreamConfig());
+            var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
+            var output = driver.CreateOuputTopic<string, string>(outputTopic);
 
-                AliceChangesRegionsAfterClickingOnWebsite(topic);
+            AliceChangesRegionsAfterClickingOnWebsite(topic);
 
-                var items = IntegrationTestUtils.WaitUntilMinKeyValueRecordsReceived(output, 1);
-                Assert.AreEqual(1, items.Count);
-                AssertExtensions.MessageEqual(("alice", "200|click 1 --- 100|asia"), items[0]);
-            }
+            var items = IntegrationTestUtils.WaitUntilMinKeyValueRecordsReceived(output, 1);
+            Assert.AreEqual(1, items.Count);
+            AssertExtensions.MessageEqual(("alice", "200|click 1 --- 100|asia"), items[0]);
         }
 
         [Test]
@@ -401,16 +379,14 @@ namespace Streamiz.Kafka.Net.Tests.Public
             var topo = KStreamWithExplicitReKeyJoinWithExplicitSubTopology(new MyTimestampExtractor());
             var config = BuildStreamConfig();
             config.MaxTaskIdleMs = 1000;
-            using (var driver = new TopologyTestDriver(topo, config, TopologyTestDriver.Mode.ASYNC_CLUSTER_IN_MEMORY))
-            {
-                var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
-                var output = driver.CreateOuputTopic<string, string>(outputTopic);
-                AliceChangesRegionsAfterClickingOnWebsite(topic);
+            using var driver = new TopologyTestDriver(topo, config, TopologyTestDriver.Mode.ASYNC_CLUSTER_IN_MEMORY);
+            var topic = driver.CreateMultiInputTopic<string, string>(userClicksTopic, userRegionsTopic);
+            var output = driver.CreateOuputTopic<string, string>(outputTopic);
+            AliceChangesRegionsAfterClickingOnWebsite(topic);
 
-                var items = IntegrationTestUtils.WaitUntilMinKeyValueRecordsReceived(output, 1);
-                Assert.AreEqual(1, items.Count);
-                AssertExtensions.MessageEqual(("alice", "200|click 1 --- 100|asia"), items[0]);
-            }
+            var items = IntegrationTestUtils.WaitUntilMinKeyValueRecordsReceived(output, 1);
+            Assert.AreEqual(1, items.Count);
+            AssertExtensions.MessageEqual(("alice", "200|click 1 --- 100|asia"), items[0]);
         }
 
     }

@@ -10,10 +10,10 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph
 
         public KStreamPeek(Action<K, V> action, bool forwardDownStream)
         {
-            this.Action = action;
-            this.ForwardDownStream = forwardDownStream;
+            Action = action;
+            ForwardDownStream = forwardDownStream;
         }
 
-        public IProcessor<K, V> Get() => new KStreamPeekProcessor<K, V>(this.Action, this.ForwardDownStream);
+        public IProcessor<K, V> Get() => new KStreamPeekProcessor<K, V>(Action, ForwardDownStream);
     }
 }

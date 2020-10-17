@@ -20,10 +20,10 @@ namespace Streamiz.Kafka.Net.Tests.Private
         [SetUp]
         public void Setup()
         {
-            wStore = this.CreateMockStore<IWindowStore<object, object>>();
-            kvStore = this.CreateMockStore<IKeyValueStore<object, object>>();
-            timestampedKVStore = this.CreateMockStore<ITimestampedKeyValueStore<object, object>>();
-            timestampWStore = this.CreateMockStore<ITimestampedWindowStore<object, object>>();
+            wStore = CreateMockStore<IWindowStore<object, object>>();
+            kvStore = CreateMockStore<IKeyValueStore<object, object>>();
+            timestampedKVStore = CreateMockStore<ITimestampedKeyValueStore<object, object>>();
+            timestampWStore = CreateMockStore<ITimestampedWindowStore<object, object>>();
             stores = new Dictionary<string, IStateStore> {
                 { "kv-store", kvStore },
                 { "ts-kv-store", timestampedKVStore },

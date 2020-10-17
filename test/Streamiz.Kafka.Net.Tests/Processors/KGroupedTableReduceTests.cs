@@ -13,14 +13,14 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 {
     public class KGroupedTableReduceTests
     {
-        public class MyAddReducer : Reducer<string>
+        public class MyAddReducer : IReducer<string>
         {
             public string Apply(string value1, string value2)
                 =>
                 (!string.IsNullOrEmpty(value2) && !string.IsNullOrEmpty(value1)) ? (value2.Length > value1.Length ? value2 : value1) : "";
         }
 
-        public class MySubReducer : Reducer<string>
+        public class MySubReducer : IReducer<string>
         {
             public string Apply(string value1, string value2) => value2;
         }
@@ -46,11 +46,9 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             var topology = builder.Build();
             Assert.Throws<StreamsException>(() =>
             {
-                using (var driver = new TopologyTestDriver(topology, config))
-                {
-                    var input = driver.CreateInputTopic<string, string>("topic");
-                    input.PipeInput("test", "1");
-                }
+                using var driver = new TopologyTestDriver(topology, config);
+                var input = driver.CreateInputTopic<string, string>("topic");
+                input.PipeInput("test", "1");
             });
         }
 
@@ -78,11 +76,9 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             var topology = builder.Build();
             Assert.Throws<StreamsException>(() =>
             {
-                using (var driver = new TopologyTestDriver(topology, config))
-                {
-                    var input = driver.CreateInputTopic<string, string>("topic");
-                    input.PipeInput("test", "1");
-                }
+                using var driver = new TopologyTestDriver(topology, config);
+                var input = driver.CreateInputTopic<string, string>("topic");
+                input.PipeInput("test", "1");
             });
         }
 
@@ -105,7 +101,7 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                     .Table<string, string>("topic")
                     .MapValues((v) => v.Length)
                     .GroupBy((k, v) => KeyValuePair.Create(k.ToUpper(), v))
-                    .Reduce((Reducer<int>)null, (Reducer<int>)null, m);
+                    .Reduce((IReducer<int>)null, (IReducer<int>)null, m);
             });
         }
 
@@ -129,28 +125,26 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                     InMemory<string, int>.As("reduce-store").WithValueSerdes<Int32SerDes>());
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                var input = driver.CreateInputTopic<string, string>("topic");
-                input.PipeInput("test", "1");
-                input.PipeInput("test", "120");
-                input.PipeInput("test", "30");
-                input.PipeInput("coucou", "120");
+            using var driver = new TopologyTestDriver(topology, config);
+            var input = driver.CreateInputTopic<string, string>("topic");
+            input.PipeInput("test", "1");
+            input.PipeInput("test", "120");
+            input.PipeInput("test", "30");
+            input.PipeInput("coucou", "120");
 
-                var store = driver.GetKeyValueStore<string, int>("reduce-store");
-                Assert.IsNotNull(store);
-                Assert.AreEqual(2, store.ApproximateNumEntries());
-                var el = store.Get("TEST");
-                Assert.IsNotNull(el);
-                Assert.AreEqual(3, el);
+            var store = driver.GetKeyValueStore<string, int>("reduce-store");
+            Assert.IsNotNull(store);
+            Assert.AreEqual(2, store.ApproximateNumEntries());
+            var el = store.Get("TEST");
+            Assert.IsNotNull(el);
+            Assert.AreEqual(3, el);
 
-                var storeCount = driver.GetKeyValueStore<string, long>("count-store");
-                Assert.IsNotNull(storeCount);
-                Assert.AreEqual(2, store.ApproximateNumEntries());
-                var e = storeCount.Get("TEST");
-                Assert.IsNotNull(e);
-                Assert.AreEqual(1, e);
-            }
+            var storeCount = driver.GetKeyValueStore<string, long>("count-store");
+            Assert.IsNotNull(storeCount);
+            Assert.AreEqual(2, store.ApproximateNumEntries());
+            var e = storeCount.Get("TEST");
+            Assert.IsNotNull(e);
+            Assert.AreEqual(1, e);
         }
 
         [Test]
@@ -170,19 +164,17 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                         InMemory<string, string>.As("reduce-store"));
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                var input = driver.CreateInputTopic<string, string>("topic");
-                input.PipeInput("test", "1");
-                input.PipeInput("test", "12");
+            using var driver = new TopologyTestDriver(topology, config);
+            var input = driver.CreateInputTopic<string, string>("topic");
+            input.PipeInput("test", "1");
+            input.PipeInput("test", "12");
 
-                var store = driver.GetKeyValueStore<string, string>("reduce-store");
-                Assert.IsNotNull(store);
-                Assert.AreEqual(1, store.ApproximateNumEntries());
-                var el = store.Get("TEST");
-                Assert.IsNotNull(el);
-                Assert.AreEqual("12", el);
-            }
+            var store = driver.GetKeyValueStore<string, string>("reduce-store");
+            Assert.IsNotNull(store);
+            Assert.AreEqual(1, store.ApproximateNumEntries());
+            var el = store.Get("TEST");
+            Assert.IsNotNull(el);
+            Assert.AreEqual("12", el);
         }
 
         [Test]
@@ -199,19 +191,17 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                .Reduce(new MyAddReducer(), new MySubReducer(), InMemory<string, string>.As("reduce-store"));
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                var input = driver.CreateInputTopic<string, string>("topic");
-                input.PipeInput("test", "15151500");
-                input.PipeInput("test", "1200");
+            using var driver = new TopologyTestDriver(topology, config);
+            var input = driver.CreateInputTopic<string, string>("topic");
+            input.PipeInput("test", "15151500");
+            input.PipeInput("test", "1200");
 
-                var store = driver.GetKeyValueStore<string, string>("reduce-store");
-                Assert.IsNotNull(store);
-                Assert.AreEqual(1, store.ApproximateNumEntries());
-                var el = store.Get("TEST");
-                Assert.IsNotNull(el);
-                Assert.AreEqual("15151500", el);
-            }
+            var store = driver.GetKeyValueStore<string, string>("reduce-store");
+            Assert.IsNotNull(store);
+            Assert.AreEqual(1, store.ApproximateNumEntries());
+            var el = store.Get("TEST");
+            Assert.IsNotNull(el);
+            Assert.AreEqual("15151500", el);
         }
 
         [Test]
@@ -231,21 +221,19 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                     "reduce-processor");
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                var input = driver.CreateInputTopic<string, string>("topic");
-                input.PipeInput("test", "1");
-                input.PipeInput("test", null);
-                input.PipeInput("test", "12");
+            using var driver = new TopologyTestDriver(topology, config);
+            var input = driver.CreateInputTopic<string, string>("topic");
+            input.PipeInput("test", "1");
+            input.PipeInput("test", null);
+            input.PipeInput("test", "12");
 
-                var store = driver.GetKeyValueStore<string, string>("reduce-store");
-                Assert.IsNotNull(store);
-                // null doesn't matter
-                Assert.AreEqual(1, store.ApproximateNumEntries());
-                var el = store.Get("TEST");
-                Assert.IsNotNull(el);
-                Assert.AreEqual("12", el);
-            }
+            var store = driver.GetKeyValueStore<string, string>("reduce-store");
+            Assert.IsNotNull(store);
+            // null doesn't matter
+            Assert.AreEqual(1, store.ApproximateNumEntries());
+            var el = store.Get("TEST");
+            Assert.IsNotNull(el);
+            Assert.AreEqual("12", el);
         }
 
         [Test]
@@ -265,23 +253,21 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                     "reduce-processor");
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                var input = driver.CreateInputTopic<string, string>("topic");
-                input.PipeInput("test", "1");
-                input.PipeInput("test", null);
-                input.PipeInput(null, "34");
-                input.PipeInput(null, null);
-                input.PipeInput("test", "12");
+            using var driver = new TopologyTestDriver(topology, config);
+            var input = driver.CreateInputTopic<string, string>("topic");
+            input.PipeInput("test", "1");
+            input.PipeInput("test", null);
+            input.PipeInput(null, "34");
+            input.PipeInput(null, null);
+            input.PipeInput("test", "12");
 
-                var store = driver.GetKeyValueStore<string, string>("reduce-store");
-                Assert.IsNotNull(store);
-                // null doesn't matter
-                Assert.AreEqual(1, store.ApproximateNumEntries());
-                var el = store.Get("TEST");
-                Assert.IsNotNull(el);
-                Assert.AreEqual("12", el);
-            }
+            var store = driver.GetKeyValueStore<string, string>("reduce-store");
+            Assert.IsNotNull(store);
+            // null doesn't matter
+            Assert.AreEqual(1, store.ApproximateNumEntries());
+            var el = store.Get("TEST");
+            Assert.IsNotNull(el);
+            Assert.AreEqual("12", el);
         }
 
 
@@ -301,11 +287,9 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             var topology = builder.Build();
             Assert.Throws<StreamsException>(() =>
             {
-                using (var driver = new TopologyTestDriver(topology, config))
-                {
-                    var input = driver.CreateInputTopic<string, string>("topic");
-                    input.PipeInput("test", "1");
-                }
+                using var driver = new TopologyTestDriver(topology, config);
+                var input = driver.CreateInputTopic<string, string>("topic");
+                input.PipeInput("test", "1");
             });
         }
     }

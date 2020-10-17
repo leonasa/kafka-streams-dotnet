@@ -10,8 +10,8 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph.Nodes
 
         public ProcessorParameters(IProcessorSupplier<K, V> processorSupplier, String processorName)
         {
-            this.Processor = processorSupplier;
-            this.ProcessorName = processorName;
+            Processor = processorSupplier;
+            ProcessorName = processorName;
         }
 
 

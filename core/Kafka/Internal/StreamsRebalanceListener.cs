@@ -25,25 +25,25 @@ namespace Streamiz.Kafka.Net.Kafka.Internal
         public void PartitionsAssigned(IConsumer<byte[], byte[]> consumer, List<TopicPartition> partitions)
         {
             DateTime start = DateTime.Now;
-            this.manager.RebalanceInProgress = true;
+            manager.RebalanceInProgress = true;
             manager.CreateTasks(partitions);
             Thread.SetState(ThreadState.PARTITIONS_ASSIGNED);
-            this.manager.RebalanceInProgress = false;
+            manager.RebalanceInProgress = false;
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Partition assignment took {DateTime.Now - start} ms.");
-            sb.AppendLine($"\tCurrently assigned active tasks: {string.Join(",", this.manager.ActiveTaskIds)}");
-            sb.AppendLine($"\tRevoked assigned active tasks: {string.Join(",", this.manager.RevokeTaskIds)}");
+            sb.AppendLine($"\tCurrently assigned active tasks: {string.Join(",", manager.ActiveTaskIds)}");
+            sb.AppendLine($"\tRevoked assigned active tasks: {string.Join(",", manager.RevokeTaskIds)}");
             log.Info(sb.ToString());
         }
 
         public void PartitionsRevoked(IConsumer<byte[], byte[]> consumer, List<TopicPartitionOffset> partitions)
         {
             DateTime start = DateTime.Now;
-            this.manager.RebalanceInProgress = true;
+            manager.RebalanceInProgress = true;
             manager.RevokeTasks(new List<TopicPartition>(partitions.Select(p => p.TopicPartition)));
             Thread.SetState(ThreadState.PARTITIONS_REVOKED);
-            this.manager.RebalanceInProgress = false;
+            manager.RebalanceInProgress = false;
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Partition revocation took {DateTime.Now - start} ms");

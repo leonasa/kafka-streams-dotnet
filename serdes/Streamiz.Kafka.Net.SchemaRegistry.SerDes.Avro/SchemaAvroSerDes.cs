@@ -14,13 +14,12 @@ namespace Streamiz.Kafka.Net.SchemaRegistry.SerDes.Avro
     /// </typeparam>
     public class SchemaAvroSerDes<T> : AbstractSerDes<T>
     {
-        private ISchemaRegistryClient registryClient;
         private AvroSerializer<T> avroSerializer;
         private AvroDeserializer<T> avroDeserializer;
 
-        private Confluent.SchemaRegistry.SchemaRegistryConfig GetConfig(ISchemaRegistryConfig config)
+        private SchemaRegistryConfig GetConfig(ISchemaRegistryConfig config)
         {
-            Confluent.SchemaRegistry.SchemaRegistryConfig c = new Confluent.SchemaRegistry.SchemaRegistryConfig();
+            SchemaRegistryConfig c = new SchemaRegistryConfig();
             c.Url = config.SchemaRegistryUrl;
             if (config.SchemaRegistryMaxCachedSchemas.HasValue)
             {
@@ -35,9 +34,9 @@ namespace Streamiz.Kafka.Net.SchemaRegistry.SerDes.Avro
             return c;
         }
 
-        private Confluent.SchemaRegistry.Serdes.AvroSerializerConfig GetSerializerConfig(ISchemaRegistryConfig config)
+        private AvroSerializerConfig GetSerializerConfig(ISchemaRegistryConfig config)
         {
-            Confluent.SchemaRegistry.Serdes.AvroSerializerConfig c = new Confluent.SchemaRegistry.Serdes.AvroSerializerConfig();
+            AvroSerializerConfig c = new AvroSerializerConfig();
             if (config.AutoRegisterSchemas.HasValue)
             {
                 c.AutoRegisterSchemas = config.AutoRegisterSchemas;
@@ -55,11 +54,9 @@ namespace Streamiz.Kafka.Net.SchemaRegistry.SerDes.Avro
         {
             if (!isInitialized)
             {
-                if (context.Config is ISchemaRegistryConfig)
+                if (context.Config is ISchemaRegistryConfig schemaConfig)
                 {
-                    var schemaConfig = context.Config as ISchemaRegistryConfig;
-
-                    registryClient = GetSchemaRegistryClient(GetConfig(schemaConfig));
+                    var registryClient = GetSchemaRegistryClient(GetConfig(schemaConfig));
                     avroDeserializer = new AvroDeserializer<T>(registryClient);
                     avroSerializer = new AvroSerializer<T>(registryClient, GetSerializerConfig(schemaConfig));
 
@@ -104,9 +101,7 @@ namespace Streamiz.Kafka.Net.SchemaRegistry.SerDes.Avro
                 throw new StreamsException($"SchemaAvroSerDes<{typeof(T).Name} is not initialized !");
             }
 
-            return avroSerializer
-                            .AsSyncOverAsync()
-                            .Serialize(data, context);
+            return avroSerializer.AsSyncOverAsync().Serialize(data, context);
         }
 
         /// <summary>
@@ -114,7 +109,7 @@ namespace Streamiz.Kafka.Net.SchemaRegistry.SerDes.Avro
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        protected virtual ISchemaRegistryClient GetSchemaRegistryClient(Confluent.SchemaRegistry.SchemaRegistryConfig config)
+        protected virtual ISchemaRegistryClient GetSchemaRegistryClient(SchemaRegistryConfig config)
         {
             return new CachedSchemaRegistryClient(config);
         }

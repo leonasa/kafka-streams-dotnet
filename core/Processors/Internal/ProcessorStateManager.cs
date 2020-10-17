@@ -20,8 +20,8 @@ namespace Streamiz.Kafka.Net.Processors.Internal
 
         public ProcessorStateManager(TaskId taskId, IEnumerable<TopicPartition> partition)
         {
-            this.log = Logger.GetLogger(typeof(ProcessorStateManager));
-            this.logPrefix = $"stream-task[{taskId.Id}|{taskId.Partition}] ";
+            log = Logger.GetLogger(typeof(ProcessorStateManager));
+            logPrefix = $"stream-task[{taskId.Id}|{taskId.Partition}] ";
             Partition = partition;
         }
 
@@ -50,7 +50,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
 
             if (registeredStores.ContainsKey(storeName))
             {
-                throw new ArgumentException($"{this.logPrefix} Store {storeName} has already been registered.");
+                throw new ArgumentException($"{logPrefix} Store {storeName} has already been registered.");
             }
 
             // check that the underlying change log topic exist or not

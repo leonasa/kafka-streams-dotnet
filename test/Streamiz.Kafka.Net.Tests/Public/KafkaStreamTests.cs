@@ -282,7 +282,7 @@ namespace Streamiz.Kafka.Net.Tests.Public
             {
                 var serdes = new StringSerDes();
                 producer.Produce("topic",
-                    new Confluent.Kafka.Message<byte[], byte[]>
+                    new Message<byte[], byte[]>
                     {
                         Key = serdes.Serialize("key1", new SerializationContext()),
                         Value = serdes.Serialize("coucou", new SerializationContext())
@@ -418,11 +418,11 @@ namespace Streamiz.Kafka.Net.Tests.Public
                 var serdes = new StringSerDes();
                 dt = DateTime.Now;
                 producer.Produce("test",
-                    new Confluent.Kafka.Message<byte[], byte[]>
+                    new Message<byte[], byte[]>
                     {
                         Key = serdes.Serialize("key1", new SerializationContext()),
                         Value = serdes.Serialize("coucou", new SerializationContext()),
-                        Timestamp = new Confluent.Kafka.Timestamp(dt)
+                        Timestamp = new Timestamp(dt)
                     });
                 Thread.Sleep(50);
                 var store = stream.Store(StoreQueryParameters.FromNameAndType("store", QueryableStoreTypes.WindowStore<string, long>()));

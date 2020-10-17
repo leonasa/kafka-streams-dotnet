@@ -18,16 +18,16 @@ namespace Streamiz.Kafka.Net.Processors
         {
             LogProcessingKeyValue(key, value);
             VR newValue = ComputeValue(key, value.NewValue);
-            VR oldValue = this.sendOldValues ? ComputeValue(key, value.OldValue) : default(VR);
+            VR oldValue = sendOldValues ? ComputeValue(key, value.OldValue) : default(VR);
 
-            if (this.queryableStoreName != null)
+            if (queryableStoreName != null)
             {
                 store.Put(key, ValueAndTimestamp<VR>.Make(newValue, Context.Timestamp));
                 tupleForwarder.MaybeForward(key, newValue, oldValue);
             }
             else
             {
-                this.Forward(key, new Change<VR>(oldValue, newValue));
+                Forward(key, new Change<VR>(oldValue, newValue));
             }
         }
 

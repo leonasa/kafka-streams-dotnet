@@ -30,31 +30,29 @@ namespace Producer
                 .SetValueSerializer(new AvroSerializer<Person>(schemaRegistryClient, new AvroSerializerConfig { AutoRegisterSchemas = true }).AsSyncOverAsync());
             Console.WriteLine($"Writting in {topic} topic");
             Console.WriteLine("Enter exit for stopping producer, or enter KEY:VALUE");
-            using (var producer = builder.Build())
+            using var producer = builder.Build();
+            string s = Console.ReadLine();
+            while (!s.Contains("exit", StringComparison.InvariantCultureIgnoreCase))
             {
-                string s = Console.ReadLine();
-                while (!s.Contains("exit", StringComparison.InvariantCultureIgnoreCase))
+                string[] r = s.Split(":");
+                string[] p = r[1].Split("|");
+                producer.Produce(topic, new Message<string, Person>
                 {
-                    string[] r = s.Split(":");
-                    string[] p = r[1].Split("|");
-                    producer.Produce(topic, new Message<string, Person>
+                    Key = r[0],
+                    Value = new Person
                     {
-                        Key = r[0],
-                        Value = new Person
-                        {
-                            age = Convert.ToInt32(p[2]),
-                            lastName = p[0],
-                            firstName = p[1]
-                        }
-                    }, (d) =>
+                        age = Convert.ToInt32(p[2]),
+                        lastName = p[0],
+                        firstName = p[1]
+                    }
+                }, (d) =>
+                {
+                    if (d.Status == PersistenceStatus.Persisted)
                     {
-                        if (d.Status == PersistenceStatus.Persisted)
-                        {
-                            Console.WriteLine("Message sent !");
-                        }
-                    });
-                    s = Console.ReadLine();
-                }
+                        Console.WriteLine("Message sent !");
+                    }
+                });
+                s = Console.ReadLine();
             }
         }
     }

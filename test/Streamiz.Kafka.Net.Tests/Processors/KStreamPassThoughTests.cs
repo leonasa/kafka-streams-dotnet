@@ -38,11 +38,9 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             var topology = builder.Build();
             Assert.Throws<StreamsException>(() =>
             {
-                using (var driver = new TopologyTestDriver(topology, config))
-                {
-                    var input = driver.CreateInputTopic<string, string>("topic");
-                    input.PipeInput("test", "1");
-                }
+                using var driver = new TopologyTestDriver(topology, config);
+                var input = driver.CreateInputTopic<string, string>("topic");
+                input.PipeInput("test", "1");
             });
         }
 
@@ -84,23 +82,21 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("topic2");
+            var expected = new List<KeyValuePair<string, string>>();
+            for (int i = 0; i < 42; i++)
             {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("topic2");
-                var expected = new List<KeyValuePair<string, string>>();
-                for (int i = 0; i < 42; i++)
-                {
-                    string key = i.ToString();
-                    string value = $"V{i}";
-                    inputTopic.PipeInput(key, value);
-                    expected.Add(KeyValuePair.Create(key, value));
-                }
-
-                var list = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
-
-                Assert.AreEqual(expected, list);
+                string key = i.ToString();
+                string value = $"V{i}";
+                inputTopic.PipeInput(key, value);
+                expected.Add(KeyValuePair.Create(key, value));
             }
+
+            var list = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
+
+            Assert.AreEqual(expected, list);
         }
 
         [Test]
@@ -117,23 +113,21 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("topic2");
+            var expected = new List<KeyValuePair<string, string>>();
+            for (int i = 0; i < 42; i++)
             {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("topic2");
-                var expected = new List<KeyValuePair<string, string>>();
-                for (int i = 0; i < 42; i++)
-                {
-                    string key = i.ToString();
-                    string value = $"V{i}";
-                    inputTopic.PipeInput(key, value);
-                    expected.Add(KeyValuePair.Create(key, value));
-                }
-
-                var list = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
-
-                Assert.AreEqual(expected, list);
+                string key = i.ToString();
+                string value = $"V{i}";
+                inputTopic.PipeInput(key, value);
+                expected.Add(KeyValuePair.Create(key, value));
             }
+
+            var list = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
+
+            Assert.AreEqual(expected, list);
         }
 
         [Test]
@@ -150,23 +144,21 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("topic2");
+            var expected = new List<KeyValuePair<string, string>>();
+            for (int i = 0; i < 42; i++)
             {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("topic2");
-                var expected = new List<KeyValuePair<string, string>>();
-                for (int i = 0; i < 42; i++)
-                {
-                    string key = i.ToString();
-                    string value = $"V{i}";
-                    inputTopic.PipeInput(key, value);
-                    expected.Add(KeyValuePair.Create(key, value));
-                }
-
-                var list = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
-
-                Assert.AreEqual(expected, list);
+                string key = i.ToString();
+                string value = $"V{i}";
+                inputTopic.PipeInput(key, value);
+                expected.Add(KeyValuePair.Create(key, value));
             }
+
+            var list = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
+
+            Assert.AreEqual(expected, list);
         }
 
         [Test]
@@ -183,23 +175,21 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("topic2");
+            var expected = new List<KeyValuePair<string, string>>();
+            for (int i = 0; i < 42; i++)
             {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("topic2");
-                var expected = new List<KeyValuePair<string, string>>();
-                for (int i = 0; i < 42; i++)
-                {
-                    string key = i.ToString();
-                    string value = $"V{i}";
-                    inputTopic.PipeInput(key, value);
-                    expected.Add(KeyValuePair.Create(key, value));
-                }
-
-                var list = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
-
-                Assert.AreEqual(expected, list);
+                string key = i.ToString();
+                string value = $"V{i}";
+                inputTopic.PipeInput(key, value);
+                expected.Add(KeyValuePair.Create(key, value));
             }
+
+            var list = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
+
+            Assert.AreEqual(expected, list);
         }
 
         [Test]
@@ -216,23 +206,21 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("topic2");
+            var expected = new List<KeyValuePair<string, string>>();
+            for (int i = 0; i < 42; i++)
             {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("topic2");
-                var expected = new List<KeyValuePair<string, string>>();
-                for (int i = 0; i < 42; i++)
-                {
-                    string key = i.ToString();
-                    string value = $"V{i}";
-                    inputTopic.PipeInput(key, value);
-                    expected.Add(KeyValuePair.Create(key, value));
-                }
-
-                var list = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
-
-                Assert.AreEqual(expected, list);
+                string key = i.ToString();
+                string value = $"V{i}";
+                inputTopic.PipeInput(key, value);
+                expected.Add(KeyValuePair.Create(key, value));
             }
+
+            var list = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
+
+            Assert.AreEqual(expected, list);
         }
 
         [Test]
@@ -249,23 +237,21 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("topic2");
+            var expected = new List<KeyValuePair<string, string>>();
+            for (int i = 0; i < 42; i++)
             {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("topic2");
-                var expected = new List<KeyValuePair<string, string>>();
-                for (int i = 0; i < 42; i++)
-                {
-                    string key = i.ToString();
-                    string value = $"V{i}";
-                    inputTopic.PipeInput(key, value);
-                    expected.Add(KeyValuePair.Create(key, value));
-                }
-
-                var list = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
-
-                Assert.AreEqual(expected, list);
+                string key = i.ToString();
+                string value = $"V{i}";
+                inputTopic.PipeInput(key, value);
+                expected.Add(KeyValuePair.Create(key, value));
             }
+
+            var list = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
+
+            Assert.AreEqual(expected, list);
         }
     }
 }

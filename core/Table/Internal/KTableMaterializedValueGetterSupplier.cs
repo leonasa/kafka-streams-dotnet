@@ -33,6 +33,6 @@ namespace Streamiz.Kafka.Net.Table.Internal
 
         public string[] StoreNames => new string[1] { queryableStoreName };
 
-        public IKTableValueGetter<K, V> Get() => new KTableMaterializedValueGetter(this.queryableStoreName);
+        public IKTableValueGetter<K, V> Get() => new KTableMaterializedValueGetter(queryableStoreName);
     }
 }

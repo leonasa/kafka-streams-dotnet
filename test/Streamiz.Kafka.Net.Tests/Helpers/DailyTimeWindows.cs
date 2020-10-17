@@ -19,7 +19,7 @@ namespace Streamiz.Kafka.Net.Tests.Helpers
         {
             this.zone = zone;
             this.startHour = startHour;
-            this.GracePeriodMs = (long)grace.TotalMilliseconds;
+            GracePeriodMs = (long)grace.TotalMilliseconds;
         }
 
         public override IDictionary<long, TimeWindow> WindowsFor(long timestamp)

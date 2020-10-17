@@ -4,7 +4,7 @@ namespace Streamiz.Kafka.Net.Stream
 {
     /// <summary>
     /// The <see cref="IAggregator{K,V,VA}" /> interface for aggregating values of the given key.
-    /// This is a generalization of {@link Reducer}
+    /// This is a generalization of {@link IReducer}
     /// and allows to have different types for input value and aggregation
     /// result.
     /// <see cref="IAggregator{K,V,VA}" /> is used in combination with <see cref="Initializer{VA}" />

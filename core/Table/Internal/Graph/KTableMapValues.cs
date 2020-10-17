@@ -13,7 +13,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
 
             public KTableMapValuesValueGetter(IValueMapperWithKey<K, V, VR> mapper, IKTableValueGetter<K, V> getter)
             {
-                this.ktablegetter = getter;
+                ktablegetter = getter;
                 this.mapper = mapper;
             }
 
@@ -45,7 +45,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
 
         public KTableMapValues(IKTableGetter<K, V> parent, IValueMapperWithKey<K, V, VR> mapper, string queryableName)
         {
-            this.parentTable = parent;
+            parentTable = parent;
             this.mapper = mapper;
             this.queryableName = queryableName;
         }
@@ -56,7 +56,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
             {
                 // if the KTable is materialized, use the materialized store to return getter value;
                 // otherwise rely on the parent getter and apply filter on-the-fly
-                if (this.queryableName != null)
+                if (queryableName != null)
                 {
                     return new KTableMaterializedValueGetterSupplier<K, VR>(queryableName);
                 }
@@ -65,7 +65,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
                     var supplier = parentTable.ValueGetterSupplier;
                     return new GenericKTableValueGetterSupplier<K, VR>(
                         supplier.StoreNames,
-                        new KTableMapValuesValueGetter(this.mapper, supplier.Get()));
+                        new KTableMapValuesValueGetter(mapper, supplier.Get()));
                 }
             }
         }

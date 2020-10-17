@@ -51,17 +51,17 @@ namespace Streamiz.Kafka.Net.Stream.Internal
 
         #region Aggregate
 
-        public IKTable<K, VR> Aggregate<VR>(System.Func<VR> initializer, System.Func<K, V, VR, VR> aggregator)
+        public IKTable<K, VR> Aggregate<VR>(Func<VR> initializer, Func<K, V, VR, VR> aggregator)
             => Aggregate(new WrappedInitializer<VR>(initializer), new WrappedAggregator<K, V, VR>(aggregator));
 
-        public IKTable<K, VR> Aggregate<VR, VRS>(System.Func<VR> initializer, System.Func<K, V, VR, VR> aggregator)
+        public IKTable<K, VR> Aggregate<VR, VRS>(Func<VR> initializer, Func<K, V, VR, VR> aggregator)
             where VRS : ISerDes<VR>, new()
             => Aggregate(
                 new WrappedInitializer<VR>(initializer),
                 new WrappedAggregator<K, V, VR>(aggregator),
                 Materialized<K, VR, IKeyValueStore<Bytes, byte[]>>.Create().WithValueSerdes(new VRS()));
 
-        public IKTable<K, VR> Aggregate<VR>(System.Func<VR> initializer, System.Func<K, V, VR, VR> aggregator, Materialized<K, VR, IKeyValueStore<Bytes, byte[]>> materialized, string named = null)
+        public IKTable<K, VR> Aggregate<VR>(Func<VR> initializer, Func<K, V, VR, VR> aggregator, Materialized<K, VR, IKeyValueStore<Bytes, byte[]>> materialized, string named = null)
             => Aggregate(new WrappedInitializer<VR>(initializer), new WrappedAggregator<K, V, VR>(aggregator), materialized, named);
 
         public IKTable<K, VR> Aggregate<VR, VRS>(Initializer<VR> initializer, IAggregator<K, V, VR> aggregator)
@@ -93,7 +93,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
 
         #region Reduce
 
-        public IKTable<K, V> Reduce(Reducer<V> reducer)
+        public IKTable<K, V> Reduce(IReducer<V> reducer)
             => Reduce(reducer, null);
 
         public IKTable<K, V> Reduce(Func<V, V, V> reducer)
@@ -103,7 +103,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         public IKTable<K, V> Reduce(Func<V, V, V> reducer, Materialized<K, V, IKeyValueStore<Bytes, byte[]>> materialized, string named = null)
             => Reduce(new WrappedReducer<V>(reducer), materialized, named);
 
-        public IKTable<K, V> Reduce(Reducer<V> reducer, Materialized<K, V, IKeyValueStore<Bytes, byte[]>> materialized, string named = null)
+        public IKTable<K, V> Reduce(IReducer<V> reducer, Materialized<K, V, IKeyValueStore<Bytes, byte[]>> materialized, string named = null)
         {
             CheckIfParamNull(reducer, "reducer");
             materialized = materialized ?? Materialized<K, V, IKeyValueStore<Bytes, byte[]>>.Create();

@@ -166,14 +166,12 @@ namespace Streamiz.Kafka.Net.Tests.Public
             streamConfiguration.ApplicationId = "custom-window-test";
 
             var topo = GetTopo(zone);
-            using (var driver = new TopologyTestDriver(topo, streamConfiguration))
-            {
-                var input = driver.CreateInputTopic<string, int>(inputTopic);
-                var output = driver.CreateOuputTopic<Windowed<int>, int, MySerDes, Int32SerDes>(outputTopic);
-                input.PipeInputs(inputRecords);
-                var items = output.ReadKeyValueList().Select(c => (c.Message.Key, c.Message.Value)).ToList();
-                Assert.AreEqual(expectedValues, items);
-            }
+            using var driver = new TopologyTestDriver(topo, streamConfiguration);
+            var input = driver.CreateInputTopic<string, int>(inputTopic);
+            var output = driver.CreateOuputTopic<Windowed<int>, int, MySerDes, Int32SerDes>(outputTopic);
+            input.PipeInputs(inputRecords);
+            var items = output.ReadKeyValueList().Select(c => (c.Message.Key, c.Message.Value)).ToList();
+            Assert.AreEqual(expectedValues, items);
         }
 
         private Topology GetTopo(TimeZoneInfo zone)

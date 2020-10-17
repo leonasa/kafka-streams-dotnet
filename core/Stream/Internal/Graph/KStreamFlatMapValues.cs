@@ -9,9 +9,9 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph
 
         public KStreamFlatMapValues(IValueMapperWithKey<K, V, IEnumerable<VR>> mapper)
         {
-            this.Mapper = mapper;
+            Mapper = mapper;
         }
 
-        public IProcessor<K, V> Get() => new KStreamFlatMapValuesProcessor<K, V, VR>(this.Mapper);
+        public IProcessor<K, V> Get() => new KStreamFlatMapValuesProcessor<K, V, VR>(Mapper);
     }
 }

@@ -45,17 +45,15 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<int, string, Int32SerDes, StringSerDes>("topic-select-key");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<int, string, Int32SerDes, StringSerDes>("topic-select-key");
 
-                inputTopic.PipeInputs(data);
-                var result = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
+            inputTopic.PipeInputs(data);
+            var result = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
 
-                Assert.IsNotNull(result);
-                Assert.AreEqual(expected, result);
-            }
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expected, result);
         }
 
         [Test]
@@ -81,17 +79,15 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("topic-select-key");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("topic-select-key");
 
-                inputTopic.PipeInputs(data);
-                var result = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
+            inputTopic.PipeInputs(data);
+            var result = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
 
-                Assert.IsNotNull(result);
-                Assert.AreEqual(expected, result);
-            }
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expected, result);
         }
     }
 }

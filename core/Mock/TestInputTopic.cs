@@ -173,7 +173,7 @@ namespace Streamiz.Kafka.Net.Mock
                 ts += advance;
             }
 
-            this.PipeInputs(records);
+            PipeInputs(records);
         }
 
         #endregion

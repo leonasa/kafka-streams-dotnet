@@ -26,8 +26,8 @@
 
         private ValueAndTimestamp(long timestamp, V value)
         {
-            this.Timestamp = timestamp;
-            this.Value = value;
+            Timestamp = timestamp;
+            Value = value;
         }
 
         /// <summary>

@@ -36,17 +36,14 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("test");
-                var outputTopic = driver.CreateOuputTopic<string, string>("output");
-                inputTopic.PipeInput("test", "test");
-                inputTopic.PipeInput("test", "tes");
-                inputTopic.PipeInput("test", "1234");
-                var elements = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
-                Assert.AreEqual(expected, elements);
-            }
-
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("test");
+            var outputTopic = driver.CreateOuputTopic<string, string>("output");
+            inputTopic.PipeInput("test", "test");
+            inputTopic.PipeInput("test", "tes");
+            inputTopic.PipeInput("test", "1234");
+            var elements = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
+            Assert.AreEqual(expected, elements);
         }
         
         [Test]
@@ -66,18 +63,15 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("test");
-                inputTopic.PipeInput("test", "test");
-                inputTopic.PipeInput("test", "tes");
-                var store = driver.GetKeyValueStore<string, string>("table-store");
-                Assert.IsNotNull(store);
-                Assert.AreEqual("test", store.Get("test"));
-                inputTopic.PipeInput("test", "test12");
-                Assert.AreEqual("test12", store.Get("test"));
-
-            }
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("test");
+            inputTopic.PipeInput("test", "test");
+            inputTopic.PipeInput("test", "tes");
+            var store = driver.GetKeyValueStore<string, string>("table-store");
+            Assert.IsNotNull(store);
+            Assert.AreEqual("test", store.Get("test"));
+            inputTopic.PipeInput("test", "test12");
+            Assert.AreEqual("test12", store.Get("test"));
         }
     }
 }

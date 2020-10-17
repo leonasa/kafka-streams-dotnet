@@ -54,7 +54,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
         {
             get
             {
-                if (processorSupplier != null && processorSupplier is KTableSource<K, V> source)
+                if (processorSupplier is KTableSource<K, V> source)
                 {
                     // whenever a source ktable is required for getter, it should be materialized
                     source.Materialize();
@@ -441,18 +441,17 @@ namespace Streamiz.Kafka.Net.Table.Internal
         {
             if (!SendOldValues)
             {
-                if (processorSupplier != null && processorSupplier is KTableSource<K, V>)
+                if (processorSupplier is KTableSource<K, V> source)
                 {
-                    KTableSource<K, V> source = (KTableSource<K, V>)processorSupplier;
                     source.EnableSendingOldValues();
                 }
-                else if (processorSupplier is IKStreamAggProcessorSupplier<K, V>)
+                else if (processorSupplier is IKStreamAggProcessorSupplier<K, V> supplier)
                 {
-                    ((IKStreamAggProcessorSupplier<K, V>)processorSupplier).EnableSendingOldValues();
+                    supplier.EnableSendingOldValues();
                 }
-                else if (tableProcessorSupplier != null && tableProcessorSupplier is IKTableProcessorSupplier)
+                else if (tableProcessorSupplier is IKTableProcessorSupplier kTableProcessorSupplier)
                 {
-                    (tableProcessorSupplier as IKTableProcessorSupplier).EnableSendingOldValues();
+                    kTableProcessorSupplier.EnableSendingOldValues();
                 }
                 SendOldValues = true;
             }

@@ -71,7 +71,7 @@ namespace Streamiz.Kafka.Net.Processors
 
         private GlobalThreadState Named(string name)
         {
-            this.Name = name;
+            Name = name;
             return this;
         }
 

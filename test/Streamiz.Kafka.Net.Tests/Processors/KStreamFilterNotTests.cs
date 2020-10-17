@@ -36,17 +36,15 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                inputTopic.PipeInputs(data);
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            inputTopic.PipeInputs(data);
 
-                var expected = new List<KeyValuePair<string, string>>();
-                expected.Add(KeyValuePair.Create("key2", "car"));
-                expected.Add(KeyValuePair.Create("key3", "paper"));
+            var expected = new List<KeyValuePair<string, string>>();
+            expected.Add(KeyValuePair.Create("key2", "car"));
+            expected.Add(KeyValuePair.Create("key3", "paper"));
 
-                Assert.AreEqual(expected, filterNotObserved);
-            }
+            Assert.AreEqual(expected, filterNotObserved);
         }
 
         [Test]
@@ -67,12 +65,10 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                inputTopic.PipeInputs(data);
-                Assert.AreEqual(new List<KeyValuePair<string, string>>(), filterNotObserved);
-            }
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            inputTopic.PipeInputs(data);
+            Assert.AreEqual(new List<KeyValuePair<string, string>>(), filterNotObserved);
         }
 
         [Test]
@@ -94,18 +90,16 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("topic-not-filter");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("topic-not-filter");
 
-                inputTopic.PipeInputs(data);
-                var result = outputTopic.ReadKeyValue();
+            inputTopic.PipeInputs(data);
+            var result = outputTopic.ReadKeyValue();
 
-                Assert.IsNotNull(result);
-                Assert.AreEqual(result.Message.Key, "key3");
-                Assert.AreEqual(result.Message.Value, "paper");
-            }
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.Message.Key, "key3");
+            Assert.AreEqual(result.Message.Value, "paper");
         }
 
     }

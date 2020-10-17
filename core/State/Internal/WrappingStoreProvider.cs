@@ -31,7 +31,7 @@ namespace Streamiz.Kafka.Net.State.Internal
         /// <returns>a List of all the stores with the storeName and accepted by<see cref="IQueryableStoreType{T, K, V}.Accepts(IStateStore)"/></returns>
         public IEnumerable<T> Stores(string storeName, IQueryableStoreType<T, K, V> queryableStoreType)
         {
-            var allStores = this.storeProviders
+            var allStores = storeProviders
                 .SelectMany(store => store.Stores(storeQueryParameters));
 
             if (!allStores.Any())

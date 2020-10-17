@@ -18,16 +18,14 @@ namespace Streamiz.Kafka.Net.SerDes
         {
             if (data != null)
             {
-                using (var stream = new MemoryStream(data))
-                using (var reader = new BinaryReader(stream))
-                {
-                    long t = reader.ReadInt64();
-                    int length = reader.ReadInt32();
-                    byte[] d = reader.ReadBytes(length);
-                    V v = InnerSerdes.Deserialize(d, context);
-                    ValueAndTimestamp<V> obj = ValueAndTimestamp<V>.Make(v, t);
-                    return obj;
-                }
+                using var stream = new MemoryStream(data);
+                using var reader = new BinaryReader(stream);
+                long t = reader.ReadInt64();
+                int length = reader.ReadInt32();
+                byte[] d = reader.ReadBytes(length);
+                V v = InnerSerdes.Deserialize(d, context);
+                ValueAndTimestamp<V> obj = ValueAndTimestamp<V>.Make(v, t);
+                return obj;
             }
             else
                 return null;
@@ -37,17 +35,15 @@ namespace Streamiz.Kafka.Net.SerDes
         {
             if (data != null)
             {
-                using (var stream = new MemoryStream())
-                using (var writer = new BinaryWriter(stream))
-                {
-                    byte[] innerobj = InnerSerdes.Serialize(data.Value, context);
+                using var stream = new MemoryStream();
+                using var writer = new BinaryWriter(stream);
+                byte[] innerobj = InnerSerdes.Serialize(data.Value, context);
 
-                    writer.Write(data.Timestamp);
-                    writer.Write(innerobj.Length);
-                    writer.Write(innerobj);
-                    writer.Flush();
-                    return stream.ToArray();
-                }
+                writer.Write(data.Timestamp);
+                writer.Write(innerobj.Length);
+                writer.Write(innerobj);
+                writer.Flush();
+                return stream.ToArray();
             }
             else
                 return null;

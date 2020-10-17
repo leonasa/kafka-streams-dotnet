@@ -16,9 +16,9 @@ namespace Streamiz.Kafka.Net.Processors
         public override void Process(K key, V value)
         {
             LogProcessingKeyValue(key, value);
-            this.action.Invoke(key, value);
-            if (this.forwardDownStream)
-                this.Forward(key, value);
+            action.Invoke(key, value);
+            if (forwardDownStream)
+                Forward(key, value);
         }
     }
 }

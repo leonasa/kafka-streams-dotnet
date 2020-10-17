@@ -13,7 +13,7 @@ namespace Streamiz.Kafka.Net.State.Internal
 
         public IEnumerable<T> Stores(string storeName, IQueryableStoreType<T, K, V> queryableStoreType)
         {
-            return this.globalStateStoreProvider.Stores(StoreQueryParameters.FromNameAndType(storeName, queryableStoreType));
+            return globalStateStoreProvider.Stores(StoreQueryParameters.FromNameAndType(storeName, queryableStoreType));
         }
     }
 }

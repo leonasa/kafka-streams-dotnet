@@ -24,28 +24,26 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("table-stream");
-                var expected = new List<KeyValuePair<string, string>>();
-                expected.Add(KeyValuePair.Create("A", "a"));
-                expected.Add(KeyValuePair.Create("B", "b"));
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("table-stream");
+            var expected = new List<KeyValuePair<string, string>>();
+            expected.Add(KeyValuePair.Create("A", "a"));
+            expected.Add(KeyValuePair.Create("B", "b"));
 
-                inputTopic.PipeInput("key1", "a");
-                inputTopic.PipeInput("key2", "b");
+            inputTopic.PipeInput("key1", "a");
+            inputTopic.PipeInput("key2", "b");
 
-                var store = driver.GetKeyValueStore<string, string>("table-topic-store");
-                Assert.IsNotNull(store);
-                var resultK1 = store.Get("key1");
-                var resultK2 = store.Get("key2");
+            var store = driver.GetKeyValueStore<string, string>("table-topic-store");
+            Assert.IsNotNull(store);
+            var resultK1 = store.Get("key1");
+            var resultK2 = store.Get("key2");
 
-                Assert.AreEqual("a", resultK1);
-                Assert.AreEqual("b", resultK2);
+            Assert.AreEqual("a", resultK1);
+            Assert.AreEqual("b", resultK2);
 
-                var results = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value));
-                Assert.AreEqual(expected, results);
-            }
+            var results = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value));
+            Assert.AreEqual(expected, results);
         }
 
         [Test]
@@ -61,30 +59,28 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("table-stream");
-                var expected = new List<KeyValuePair<string, string>>();
-                expected.Add(KeyValuePair.Create("key1", "a"));
-                expected.Add(KeyValuePair.Create("key2", "b"));
-                expected.Add(KeyValuePair.Create("key2", "c"));
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("table-stream");
+            var expected = new List<KeyValuePair<string, string>>();
+            expected.Add(KeyValuePair.Create("key1", "a"));
+            expected.Add(KeyValuePair.Create("key2", "b"));
+            expected.Add(KeyValuePair.Create("key2", "c"));
 
-                inputTopic.PipeInput("key1", "a");
-                inputTopic.PipeInput("key2", "b");
-                inputTopic.PipeInput("key2", "c");
+            inputTopic.PipeInput("key1", "a");
+            inputTopic.PipeInput("key2", "b");
+            inputTopic.PipeInput("key2", "c");
 
-                var store = driver.GetKeyValueStore<string, string>("table-topic-store");
-                Assert.IsNotNull(store);
-                var resultK1 = store.Get("key1");
-                var resultK2 = store.Get("key2");
+            var store = driver.GetKeyValueStore<string, string>("table-topic-store");
+            Assert.IsNotNull(store);
+            var resultK1 = store.Get("key1");
+            var resultK2 = store.Get("key2");
 
-                Assert.AreEqual("a", resultK1);
-                Assert.AreEqual("c", resultK2);
+            Assert.AreEqual("a", resultK1);
+            Assert.AreEqual("c", resultK2);
 
-                var results = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value));
-                Assert.AreEqual(expected, results);
-            }
+            var results = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value));
+            Assert.AreEqual(expected, results);
         }
 
         [Test]
@@ -100,30 +96,28 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("table-stream");
-                var expected = new List<KeyValuePair<string, string>>();
-                expected.Add(KeyValuePair.Create("key1", "a"));
-                expected.Add(KeyValuePair.Create("key2", "b"));
-                expected.Add(KeyValuePair.Create("key2", (string)null));
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("table-stream");
+            var expected = new List<KeyValuePair<string, string>>();
+            expected.Add(KeyValuePair.Create("key1", "a"));
+            expected.Add(KeyValuePair.Create("key2", "b"));
+            expected.Add(KeyValuePair.Create("key2", (string)null));
 
-                inputTopic.PipeInput("key1", "a");
-                inputTopic.PipeInput("key2", "b");
-                inputTopic.PipeInput("key2", null);
+            inputTopic.PipeInput("key1", "a");
+            inputTopic.PipeInput("key2", "b");
+            inputTopic.PipeInput("key2", null);
 
-                var store = driver.GetKeyValueStore<string, string>("table-topic-store");
-                Assert.IsNotNull(store);
-                var resultK1 = store.Get("key1");
-                var resultK2 = store.Get("key2");
+            var store = driver.GetKeyValueStore<string, string>("table-topic-store");
+            Assert.IsNotNull(store);
+            var resultK1 = store.Get("key1");
+            var resultK2 = store.Get("key2");
 
-                Assert.AreEqual("a", resultK1);
-                Assert.AreEqual(null, resultK2);
+            Assert.AreEqual("a", resultK1);
+            Assert.AreEqual(null, resultK2);
 
-                var results = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value));
-                Assert.AreEqual(expected, results);
-            }
+            var results = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value));
+            Assert.AreEqual(expected, results);
         }
     }
 }

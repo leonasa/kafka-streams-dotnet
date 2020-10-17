@@ -56,15 +56,13 @@ namespace Streamiz.Kafka.Net.SerDes
             if (data == null)
                 return null;
 
-            using (var mStream = new MemoryStream())
+            using var mStream = new MemoryStream();
+            using (var bufferStream = new BufferedStream(mStream))
             {
-                using (var bufferStream = new BufferedStream(mStream))
-                {
-                    bufferStream.Write(innerSerdes.Serialize(data.Key, context));
-                    bufferStream.Write(BitConverter.GetBytes(data.Window.StartMs));
-                }
-                return mStream.ToArray();
+                bufferStream.Write(innerSerdes.Serialize(data.Key, context));
+                bufferStream.Write(BitConverter.GetBytes(data.Window.StartMs));
             }
+            return mStream.ToArray();
         }
     }
 }

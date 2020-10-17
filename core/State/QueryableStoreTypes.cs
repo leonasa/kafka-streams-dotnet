@@ -92,7 +92,7 @@ namespace Streamiz.Kafka.Net.State
 
         public bool Accepts(IStateStore stateStore)
         {
-            return this.matchTo.Any(type => type.IsInstanceOfType(stateStore));
+            return matchTo.Any(type => type.IsInstanceOfType(stateStore));
         }
     }
 }

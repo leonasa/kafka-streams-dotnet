@@ -45,15 +45,15 @@ namespace Streamiz.Kafka.Net.Table.Internal
 
         #endregion
 
-        #region Reducer
+        #region IReducer
 
-        public IKTable<K, V> Reduce(Reducer<V> adder, Reducer<V> substractor)
+        public IKTable<K, V> Reduce(IReducer<V> adder, IReducer<V> substractor)
             => Reduce(adder, substractor, Materialized<K, V, IKeyValueStore<Bytes, byte[]>>.Create(), null);
 
         public IKTable<K, V> Reduce(Func<V, V, V> adder, Func<V, V, V> substractor)
             => Reduce(new WrappedReducer<V>(adder), new WrappedReducer<V>(substractor), Materialized<K, V, IKeyValueStore<Bytes, byte[]>>.Create(), null);
 
-        public IKTable<K, V> Reduce(Reducer<V> adder, Reducer<V> substractor, Materialized<K, V, IKeyValueStore<Bytes, byte[]>> materialized, string named = null)
+        public IKTable<K, V> Reduce(IReducer<V> adder, IReducer<V> substractor, Materialized<K, V, IKeyValueStore<Bytes, byte[]>> materialized, string named = null)
         {
             CheckIfParamNull(adder, "adder");
             CheckIfParamNull(substractor, "substractor");

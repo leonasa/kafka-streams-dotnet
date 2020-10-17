@@ -159,7 +159,7 @@ namespace Streamiz.Kafka.Net.State.InMemory
 
         object IEnumerator.Current => Current;
 
-        public void Dispose() => base.Close();
+        public void Dispose() => Close();
 
         public bool MoveNext() => HasNext;
 
@@ -207,7 +207,7 @@ namespace Streamiz.Kafka.Net.State.InMemory
 
         object IEnumerator.Current => Current;
 
-        public void Dispose() => base.Close();
+        public void Dispose() => Close();
 
         public bool MoveNext() => HasNext;
 

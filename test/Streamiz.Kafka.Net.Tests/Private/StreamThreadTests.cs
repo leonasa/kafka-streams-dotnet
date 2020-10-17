@@ -207,7 +207,7 @@ namespace Streamiz.Kafka.Net.Tests.Private
             };
 
             thread.Start(source.Token);
-            producer.Produce("topic", new Confluent.Kafka.Message<byte[], byte[]>
+            producer.Produce("topic", new Message<byte[], byte[]>
             {
                 Key = serdes.Serialize("key1", new SerializationContext()),
                 Value = serdes.Serialize("coucou", new SerializationContext())
@@ -286,7 +286,7 @@ namespace Streamiz.Kafka.Net.Tests.Private
             // WAIT PARTITONS REBALANCING
             System.Threading.Thread.Sleep(50);
 
-            producer.Produce("topic", new Confluent.Kafka.Message<byte[], byte[]>
+            producer.Produce("topic", new Message<byte[], byte[]>
             {
                 Key = serdes.Serialize("key1", new SerializationContext()),
                 Value = serdes.Serialize("coucou", new SerializationContext())
@@ -337,7 +337,7 @@ namespace Streamiz.Kafka.Net.Tests.Private
                 0) as StreamThread;
 
             thread.Start(source.Token);
-            producer.Produce("topic", new Confluent.Kafka.Message<byte[], byte[]>
+            producer.Produce("topic", new Message<byte[], byte[]>
             {
                 Key = serdes.Serialize("key1", new SerializationContext()),
                 Value = serdes.Serialize("coucou", new SerializationContext())

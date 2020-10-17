@@ -44,21 +44,19 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<string, string>("topic-mapvalues");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<string, string>("topic-mapvalues");
 
-                inputTopic.PipeInputs(data);
-                var result = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
+            inputTopic.PipeInputs(data);
+            var result = outputTopic.ReadKeyValueList().Select(r => KeyValuePair.Create(r.Message.Key, r.Message.Value)).ToList();
 
-                var expected = new List<KeyValuePair<string, string>>();
-                expected.Add(KeyValuePair.Create("key1", "ABC"));
-                expected.Add(KeyValuePair.Create("key2", "TEST"));
+            var expected = new List<KeyValuePair<string, string>>();
+            expected.Add(KeyValuePair.Create("key1", "ABC"));
+            expected.Add(KeyValuePair.Create("key2", "TEST"));
 
-                Assert.IsNotNull(result);
-                Assert.AreEqual(expected, result);
-            }
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expected, result);
         }
 
         [Test]
@@ -77,18 +75,16 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var outputTopic = driver.CreateOuputTopic<string, int, StringSerDes, Int32SerDes>("topic-mapvalues");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var outputTopic = driver.CreateOuputTopic<string, int, StringSerDes, Int32SerDes>("topic-mapvalues");
 
-                inputTopic.PipeInputs(data);
-                var result = outputTopic.ReadKeyValue();
+            inputTopic.PipeInputs(data);
+            var result = outputTopic.ReadKeyValue();
 
-                Assert.IsNotNull(result);
-                Assert.AreEqual(result.Message.Key, "key1");
-                Assert.AreEqual(result.Message.Value, 6);
-            }
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.Message.Key, "key1");
+            Assert.AreEqual(result.Message.Value, 6);
         }
     }
 }

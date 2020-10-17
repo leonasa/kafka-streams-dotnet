@@ -515,7 +515,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
 
         private void DescribeGlobalStore(TopologyDescription description, ISet<string> values, int key)
         {
-            var enumerator = values.GetEnumerator();
+            using var enumerator = values.GetEnumerator();
             while (enumerator.MoveNext())
             {
                 string node = enumerator.Current;

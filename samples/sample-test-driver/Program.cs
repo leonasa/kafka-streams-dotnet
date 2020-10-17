@@ -26,18 +26,22 @@ namespace sample_test_driver
                             .WindowedBy(TumblingWindowOptions.Of(TimeSpan.FromSeconds(10)))
                             .Count(InMemoryWindows<string, long>.As("count-store"));
 
+            Console.WriteLine(table);
+
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
+            using var driver = new TopologyTestDriver(t, config);
+            DateTime dt = DateTime.Now;
+            var inputTopic = driver.CreateInputTopic<string, string>("test");
+            inputTopic.PipeInput("renault", "clio", dt);
+            inputTopic.PipeInput("renault", "megane", dt.AddMilliseconds(10));
+            Thread.Sleep((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
+            inputTopic.PipeInput("renault", "scenic", dt.AddSeconds(1));
+            var store = driver.GetWindowStore<string, long>("count-store");
+            var elements = store.All().ToList();
+            foreach (var element in elements)
             {
-                DateTime dt = DateTime.Now;
-                var inputTopic = driver.CreateInputTopic<string, string>("test");
-                inputTopic.PipeInput("renault", "clio", dt);
-                inputTopic.PipeInput("renault", "megane", dt.AddMilliseconds(10));
-                Thread.Sleep((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
-                inputTopic.PipeInput("renault", "scenic", dt.AddSeconds(1));
-                var store = driver.GetWindowStore<string, long>("count-store");
-                var elements = store.All().ToList();
+                Console.WriteLine(element);
             }
         }
     }

@@ -4,7 +4,7 @@
     {
         public override void Process(K key, V value)
         {
-            this.Forward(key, value);
+            Forward(key, value);
         }
     }
 }

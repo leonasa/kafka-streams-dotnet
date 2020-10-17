@@ -11,10 +11,10 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph
         public KStreamBranch(Func<K, V, bool>[] predicates,
                       String[] childNodes)
         {
-            this.Predicates = predicates;
-            this.ChildNodes = childNodes;
+            Predicates = predicates;
+            ChildNodes = childNodes;
         }
 
-        public IProcessor<K, V> Get() => new KStreamBranchProcessor<K, V>(this.Predicates, this.ChildNodes);
+        public IProcessor<K, V> Get() => new KStreamBranchProcessor<K, V>(Predicates, ChildNodes);
     }
 }

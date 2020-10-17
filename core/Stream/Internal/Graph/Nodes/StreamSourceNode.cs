@@ -16,7 +16,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph.Nodes
 
         public override void WriteToTopology(InternalTopologyBuilder builder)
         {
-            builder.AddSourceOperator(topicName, this.streamGraphNode, consumed);
+            builder.AddSourceOperator(topicName, streamGraphNode, consumed);
         }
     }
 }

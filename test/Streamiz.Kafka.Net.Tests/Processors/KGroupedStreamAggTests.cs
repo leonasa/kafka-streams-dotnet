@@ -71,11 +71,9 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             var topology = builder.Build();
             Assert.Throws<StreamsException>(() =>
             {
-                using (var driver = new TopologyTestDriver(topology, config))
-                {
-                    var input = driver.CreateInputTopic<string, string>("topic");
-                    input.PipeInput("test", "1");
-                }
+                using var driver = new TopologyTestDriver(topology, config);
+                var input = driver.CreateInputTopic<string, string>("topic");
+                input.PipeInput("test", "1");
             });
         }
 
@@ -102,11 +100,9 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             var topology = builder.Build();
             Assert.Throws<StreamsException>(() =>
             {
-                using (var driver = new TopologyTestDriver(topology, config))
-                {
-                    var input = driver.CreateInputTopic<string, string>("topic");
-                    input.PipeInput("test", "1");
-                }
+                using var driver = new TopologyTestDriver(topology, config);
+                var input = driver.CreateInputTopic<string, string>("topic");
+                input.PipeInput("test", "1");
             });
         }
 
@@ -164,35 +160,33 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                 );
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
+            using var driver = new TopologyTestDriver(topology, config);
+            Dictionary<char, int> testExpected = new Dictionary<char, int>
             {
-                Dictionary<char, int> testExpected = new Dictionary<char, int>
-                {
-                    {'1', 2 },
-                    {'2', 1 },
-                    {'3', 1 },
-                    {'0', 1 },
-                };
-                var input = driver.CreateInputTopic<string, string>("topic");
-                input.PipeInput("test", "1");
-                input.PipeInput("test", "12");
-                input.PipeInput("test", "30");
-                input.PipeInput("coucou", "120");
+                {'1', 2 },
+                {'2', 1 },
+                {'3', 1 },
+                {'0', 1 },
+            };
+            var input = driver.CreateInputTopic<string, string>("topic");
+            input.PipeInput("test", "1");
+            input.PipeInput("test", "12");
+            input.PipeInput("test", "30");
+            input.PipeInput("coucou", "120");
 
-                var store = driver.GetKeyValueStore<string, Dictionary<char, int>>("agg-store");
-                Assert.IsNotNull(store);
-                Assert.AreEqual(2, store.ApproximateNumEntries());
-                var el = store.Get("TEST");
-                Assert.IsNotNull(el);
-                Assert.AreEqual(testExpected, el);
+            var store = driver.GetKeyValueStore<string, Dictionary<char, int>>("agg-store");
+            Assert.IsNotNull(store);
+            Assert.AreEqual(2, store.ApproximateNumEntries());
+            var el = store.Get("TEST");
+            Assert.IsNotNull(el);
+            Assert.AreEqual(testExpected, el);
 
-                var storeCount = driver.GetKeyValueStore<string, long>("count-store");
-                Assert.IsNotNull(storeCount);
-                Assert.AreEqual(2, store.ApproximateNumEntries());
-                var e = storeCount.Get("TEST");
-                Assert.IsNotNull(e);
-                Assert.AreEqual(3, e);
-            }
+            var storeCount = driver.GetKeyValueStore<string, long>("count-store");
+            Assert.IsNotNull(storeCount);
+            Assert.AreEqual(2, store.ApproximateNumEntries());
+            var e = storeCount.Get("TEST");
+            Assert.IsNotNull(e);
+            Assert.AreEqual(3, e);
         }
 
         [Test]
@@ -223,25 +217,23 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                 );
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
+            using var driver = new TopologyTestDriver(topology, config);
+            Dictionary<char, int> testExpected = new Dictionary<char, int>
             {
-                Dictionary<char, int> testExpected = new Dictionary<char, int>
-                {
-                    {'1', 2 },
-                    {'2', 1 }
-                };
-                var input = driver.CreateInputTopic<string, string>("topic");
-                var output = driver.CreateOuputTopic<Dictionary<char, int>, DictionarySerDes>("output");
-                input.PipeInput("test", "1");
-                input.PipeInput("test", "12");
+                {'1', 2 },
+                {'2', 1 }
+            };
+            var input = driver.CreateInputTopic<string, string>("topic");
+            var output = driver.CreateOuputTopic<Dictionary<char, int>, DictionarySerDes>("output");
+            input.PipeInput("test", "1");
+            input.PipeInput("test", "12");
 
-                var store = driver.GetKeyValueStore<string, Dictionary<char, int>>("KSTREAM-AGGREGATE-STATE-STORE-0000000003");
-                Assert.IsNotNull(store);
-                Assert.AreEqual(1, store.ApproximateNumEntries());
-                var el = store.Get("TEST");
-                Assert.IsNotNull(el);
-                Assert.AreEqual(testExpected, el);
-            }
+            var store = driver.GetKeyValueStore<string, Dictionary<char, int>>("KSTREAM-AGGREGATE-STATE-STORE-0000000003");
+            Assert.IsNotNull(store);
+            Assert.AreEqual(1, store.ApproximateNumEntries());
+            var el = store.Get("TEST");
+            Assert.IsNotNull(el);
+            Assert.AreEqual(testExpected, el);
         }
 
         [Test]
@@ -261,25 +253,23 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                 );
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
+            using var driver = new TopologyTestDriver(topology, config);
+            Dictionary<char, int> testExpected = new Dictionary<char, int>
             {
-                Dictionary<char, int> testExpected = new Dictionary<char, int>
-                {
-                    {'1', 2 },
-                    {'2', 1 }
-                };
-                var input = driver.CreateInputTopic<string, string>("topic");
-                var output = driver.CreateOuputTopic<Dictionary<char, int>, DictionarySerDes>("output");
-                input.PipeInput("test", "1");
-                input.PipeInput("test", "12");
+                {'1', 2 },
+                {'2', 1 }
+            };
+            var input = driver.CreateInputTopic<string, string>("topic");
+            var output = driver.CreateOuputTopic<Dictionary<char, int>, DictionarySerDes>("output");
+            input.PipeInput("test", "1");
+            input.PipeInput("test", "12");
 
-                var store = driver.GetKeyValueStore<string, Dictionary<char, int>>("KSTREAM-AGGREGATE-STATE-STORE-0000000003");
-                Assert.IsNotNull(store);
-                Assert.AreEqual(1, store.ApproximateNumEntries());
-                var el = store.Get("TEST");
-                Assert.IsNotNull(el);
-                Assert.AreEqual(testExpected, el);
-            }
+            var store = driver.GetKeyValueStore<string, Dictionary<char, int>>("KSTREAM-AGGREGATE-STATE-STORE-0000000003");
+            Assert.IsNotNull(store);
+            Assert.AreEqual(1, store.ApproximateNumEntries());
+            var el = store.Get("TEST");
+            Assert.IsNotNull(el);
+            Assert.AreEqual(testExpected, el);
         }
 
         [Test]
@@ -299,21 +289,19 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                     InMemory<string, long>.As("agg-store").WithValueSerdes<Int64SerDes>());
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                var input = driver.CreateInputTopic<string, string>("topic");
-                input.PipeInput("test", "1");
-                input.PipeInput("test", null);
-                input.PipeInput("test", "12");
+            using var driver = new TopologyTestDriver(topology, config);
+            var input = driver.CreateInputTopic<string, string>("topic");
+            input.PipeInput("test", "1");
+            input.PipeInput("test", null);
+            input.PipeInput("test", "12");
 
-                var store = driver.GetKeyValueStore<string, long>("agg-store");
-                Assert.IsNotNull(store);
-                // null doesn't matter
-                Assert.AreEqual(1, store.ApproximateNumEntries());
-                var el = store.Get("TEST");
-                Assert.IsNotNull(el);
-                Assert.AreEqual(2, el);
-            }
+            var store = driver.GetKeyValueStore<string, long>("agg-store");
+            Assert.IsNotNull(store);
+            // null doesn't matter
+            Assert.AreEqual(1, store.ApproximateNumEntries());
+            var el = store.Get("TEST");
+            Assert.IsNotNull(el);
+            Assert.AreEqual(2, el);
         }
 
 
@@ -333,11 +321,9 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             var topology = builder.Build();
             Assert.Throws<StreamsException>(() =>
             {
-                using (var driver = new TopologyTestDriver(topology, config))
-                {
-                    var input = driver.CreateInputTopic<string, string>("topic");
-                    input.PipeInput("test", "1");
-                }
+                using var driver = new TopologyTestDriver(topology, config);
+                var input = driver.CreateInputTopic<string, string>("topic");
+                input.PipeInput("test", "1");
             });
         }
 

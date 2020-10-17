@@ -1,12 +1,12 @@
 ﻿using Streamiz.Kafka.Net.Crosscutting;
 using Streamiz.Kafka.Net.Processors;
-using Streamiz.Kafka.Net.Processors.Internal;
 using Streamiz.Kafka.Net.SerDes;
 using Streamiz.Kafka.Net.State;
 using Streamiz.Kafka.Net.Stream;
 using Streamiz.Kafka.Net.Stream.Internal;
 using Streamiz.Kafka.Net.Table;
 using System;
+using Streamiz.Kafka.Net.Processors.Internal;
 
 namespace Streamiz.Kafka.Net
 {
@@ -16,7 +16,6 @@ namespace Streamiz.Kafka.Net
     public class StreamBuilder
     {
         private readonly Topology topology = new Topology();
-        private readonly InternalTopologyBuilder internalTopologyBuilder;
         private readonly InternalStreamBuilder internalStreamBuilder;
 
         /// <summary>
@@ -24,8 +23,7 @@ namespace Streamiz.Kafka.Net
         /// </summary>
         public StreamBuilder()
         {
-            internalTopologyBuilder = topology.Builder;
-            internalStreamBuilder = new InternalStreamBuilder(internalTopologyBuilder);
+            internalStreamBuilder = new InternalStreamBuilder(topology.Builder);
         }
 
         #region KStream

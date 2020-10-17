@@ -87,7 +87,7 @@ namespace Streamiz.Kafka.Net.State.InMemory
         /// <returns>An iterator of all key/value pairs in the store.</returns>
         public IEnumerable<KeyValuePair<Bytes, byte[]>> All()
         {
-            var enumerator = map.GetEnumerator();
+            using var enumerator = map.GetEnumerator();
             while (enumerator.MoveNext())
             {
                 yield return enumerator.Current;

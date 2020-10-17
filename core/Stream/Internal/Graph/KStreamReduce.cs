@@ -7,10 +7,10 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph
     internal class KStreamReduce<K, V> : IKStreamAggProcessorSupplier<K, K, V, V>
     {
         private readonly string storeName;
-        private readonly Reducer<V> reducer;
+        private readonly IReducer<V> reducer;
         private bool sendOldValues;
 
-        public KStreamReduce(string storeName, Reducer<V> reducer)
+        public KStreamReduce(string storeName, IReducer<V> reducer)
         {
             this.storeName = storeName;
             this.reducer = reducer;

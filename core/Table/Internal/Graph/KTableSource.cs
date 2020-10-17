@@ -11,22 +11,22 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
 
         public KTableSource(string storeName, string queryableName)
         {
-            this.StoreName = storeName;
-            this.QueryableName = queryableName;
-            this.sendOldValues = false;
+            StoreName = storeName;
+            QueryableName = queryableName;
+            sendOldValues = false;
         }
 
         public void EnableSendingOldValues()
         {
-            this.sendOldValues = true;
-            this.QueryableName = StoreName;
+            sendOldValues = true;
+            QueryableName = StoreName;
         }
 
         public void Materialize()
         {
-            this.QueryableName = StoreName;
+            QueryableName = StoreName;
         }
 
-        public IProcessor<K, V> Get() => new KTableSourceProcessor<K, V>(this.QueryableName, this.sendOldValues);
+        public IProcessor<K, V> Get() => new KTableSourceProcessor<K, V>(QueryableName, sendOldValues);
     }
 }

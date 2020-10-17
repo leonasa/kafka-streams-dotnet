@@ -19,15 +19,13 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                inputTopic.PipeInput("test", "coucou");
-                var store = driver.GetKeyValueStore<string, string>("global-store");
-                var ele = store.Get("test");
-                Assert.IsNotNull(ele);
-                Assert.AreEqual("coucou", ele);
-            }
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            inputTopic.PipeInput("test", "coucou");
+            var store = driver.GetKeyValueStore<string, string>("global-store");
+            var ele = store.Get("test");
+            Assert.IsNotNull(ele);
+            Assert.AreEqual("coucou", ele);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Streamiz.Kafka.Net.Stream
     {
         private Printed(TextWriter writer)
         {
-            this.Writer = writer;
+            Writer = writer;
         }
 
         internal TextWriter Writer { get; }
@@ -25,7 +25,7 @@ namespace Streamiz.Kafka.Net.Stream
 
         internal IProcessorSupplier<K, V> Build(string processorName) => 
             new KStreamPrint<K, V>(
-                new PrintForeachAction<K, V>(this.Writer, this.Mapper, this.Label == null ? this.Name : this.Label));
+                new PrintForeachAction<K, V>(Writer, Mapper, Label == null ? Name : Label));
 
         #region Static
 
@@ -51,7 +51,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// <returns>Itself</returns>
         public Printed<K, V> WithLabel(string label)
         {
-            this.Label = label;
+            Label = label;
             return this;
         }
 
@@ -62,7 +62,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// <returns>Itself</returns>
         public Printed<K, V> WithKeyValueMapper(Func<K, V, string> mapper)
         {
-            this.Mapper = new WrappedKeyValueMapper<K, V, string>(mapper);
+            Mapper = new WrappedKeyValueMapper<K, V, string>(mapper);
             return this;
         }
 
@@ -73,7 +73,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// <returns>Itself</returns>
         public Printed<K, V> WithName(string name)
         {
-            this.Name = name;
+            Name = name;
             return this;
         }
     }

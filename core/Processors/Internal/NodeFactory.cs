@@ -130,7 +130,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
         {
             var processor = Supplier.Get();
 
-            processor.Name = this.Name;
+            processor.Name = Name;
             foreach(var s in stateStores)
                 processor.StateStores.Add(s);
 
@@ -138,7 +138,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
         }
 
         public override NodeDescription Describe()
-            => new ProcessorNodeDescription(this.Name, this.stateStores);
+            => new ProcessorNodeDescription(Name, stateStores);
     }
 
     #endregion

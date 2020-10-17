@@ -96,13 +96,13 @@ namespace Streamiz.Kafka.Net.Stream.Internal
 
         #region Reduce
 
-        public IKTable<Windowed<K>, V> Reduce(Reducer<V> reducer)
+        public IKTable<Windowed<K>, V> Reduce(IReducer<V> reducer)
             => Reduce(reducer, null);
 
         public IKTable<Windowed<K>, V> Reduce(Func<V, V, V> reducer)
             => Reduce(new WrappedReducer<V>(reducer));
 
-        public IKTable<Windowed<K>, V> Reduce(Reducer<V> reducer, Materialized<K, V, IWindowStore<Bytes, byte[]>> materialized, string named = null)
+        public IKTable<Windowed<K>, V> Reduce(IReducer<V> reducer, Materialized<K, V, IWindowStore<Bytes, byte[]>> materialized, string named = null)
         {
             CheckIfParamNull(reducer, "reducer");
 

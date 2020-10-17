@@ -2039,7 +2039,7 @@ namespace Streamiz.Kafka.Net
         /// </summary>
         public int? SchemaRegistryRequestTimeoutMs
         {
-            get => this.ContainsKey(schemaRegistryRequestTimeoutMsCst) ? this[schemaRegistryRequestTimeoutMsCst] : null;
+            get => ContainsKey(schemaRegistryRequestTimeoutMsCst) ? this[schemaRegistryRequestTimeoutMsCst] : null;
             set => this.AddOrUpdate(schemaRegistryRequestTimeoutMsCst, value);
         }
 
@@ -2048,7 +2048,7 @@ namespace Streamiz.Kafka.Net
         /// </summary>
         public int? SchemaRegistryMaxCachedSchemas
         {
-            get => this.ContainsKey(schemaRegistryMaxCachedSchemasCst) ? this[schemaRegistryMaxCachedSchemasCst] : null;
+            get => ContainsKey(schemaRegistryMaxCachedSchemasCst) ? this[schemaRegistryMaxCachedSchemasCst] : null;
             set => this.AddOrUpdate(schemaRegistryMaxCachedSchemasCst, value);
         }
 
@@ -2057,7 +2057,7 @@ namespace Streamiz.Kafka.Net
         /// </summary>
         public string SchemaRegistryUrl
         {
-            get => this.ContainsKey(schemaRegistryUrlCst) ? this[schemaRegistryUrlCst] : null;
+            get => ContainsKey(schemaRegistryUrlCst) ? this[schemaRegistryUrlCst] : null;
             set => this.AddOrUpdate(schemaRegistryUrlCst, value);
         }
 
@@ -2066,7 +2066,7 @@ namespace Streamiz.Kafka.Net
         /// </summary>
         public bool? AutoRegisterSchemas
         {
-            get => this.ContainsKey(schemaRegistryAutoRegisterCst) ? this[schemaRegistryAutoRegisterCst] : null;
+            get => ContainsKey(schemaRegistryAutoRegisterCst) ? this[schemaRegistryAutoRegisterCst] : null;
             set => this.AddOrUpdate(schemaRegistryAutoRegisterCst, value);
         }
 

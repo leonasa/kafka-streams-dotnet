@@ -72,9 +72,9 @@ namespace Streamiz.Kafka.Net.Crosscutting
                 XmlDocument log4netConfig = new XmlDocument();
                 log4netConfig.Load(File.OpenRead(configFile));
 
-                var repo = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
+                var repo = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(Hierarchy));
 
-                log4net.Config.XmlConfigurator.Configure(repo, log4netConfig["log4net"]);
+                XmlConfigurator.Configure(repo, log4netConfig["log4net"]);
                 configure = true;
             }
         }

@@ -14,7 +14,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
 
             public KTableFilterValueGetter(bool filterNot, Func<K, V, bool> predicate, IKTableValueGetter<K, V> getter)
             {
-                this.ktablegetter = getter;
+                ktablegetter = getter;
                 this.filterNot = filterNot;
                 this.predicate = predicate;
             }
@@ -62,7 +62,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
             {
                 // if the KTable is materialized, use the materialized store to return getter value;
                 // otherwise rely on the parent getter and apply filter on-the-fly
-                if (this.queryableStoreName != null)
+                if (queryableStoreName != null)
                 {
                     return new KTableMaterializedValueGetterSupplier<K, V>(queryableStoreName);
                 }
@@ -71,7 +71,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
                     var supplier = parent.ValueGetterSupplier;
                     return new GenericKTableValueGetterSupplier<K, V>(
                         supplier.StoreNames,
-                        new KTableFilterValueGetter(this.filterNot, this.predicate, supplier.Get()));
+                        new KTableFilterValueGetter(filterNot, predicate, supplier.Get()));
                 }
             }
         }
@@ -82,6 +82,6 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
             sendOldValues = true;
         }
 
-        public IProcessor<K, Change<V>> Get() => new KTableFilterProcessor<K, V>(this.predicate, this.filterNot, this.queryableStoreName, this.sendOldValues);
+        public IProcessor<K, Change<V>> Get() => new KTableFilterProcessor<K, V>(predicate, filterNot, queryableStoreName, sendOldValues);
     }
 }

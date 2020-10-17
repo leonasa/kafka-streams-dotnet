@@ -29,17 +29,17 @@ namespace Streamiz.Kafka.Net.Table
     public class Materialized<K, V, S>
         where S : IStateStore
     {
-        private bool queriable;
+        private bool queryable;
 
         /// <summary>
         /// Name of state store
         /// </summary>
-        protected string storeName;
+        private string storeName;
 
         /// <summary>
         /// Retention time
         /// </summary>
-        protected TimeSpan retention;
+        private TimeSpan retention;
 
         #region Ctor
 
@@ -277,7 +277,7 @@ namespace Streamiz.Kafka.Net.Table
         /// <summary>
         /// Return <see cref="StoreName"/> if the <see cref="Materialized{K, V, S}"/> is queryable.
         /// </summary>
-        public string QueryableStoreName => queriable ? StoreName : null;
+        public string QueryableStoreName => queryable ? StoreName : null;
 
         /// <summary>
         /// Retention configuration (default : one day)
@@ -391,17 +391,6 @@ namespace Streamiz.Kafka.Net.Table
         }
 
         /// <summary>
-        /// Configure value serdes
-        /// </summary>
-        /// <param name="valueSerdes">Value serdes</param>
-        /// <returns>Itself</returns>
-        public Materialized<K, V, S> WithValueSerdes(ISerDes<V> valueSerdes)
-        {
-            ValueSerdes = valueSerdes;
-            return this;
-        }
-
-        /// <summary>
         /// Configure key serdes
         /// </summary>
         /// <typeparam name="KRS">New key serdes type</typeparam>
@@ -410,6 +399,17 @@ namespace Streamiz.Kafka.Net.Table
             where KRS : ISerDes<K>, new()
         {
             KeySerdes = new KRS();
+            return this;
+        }
+
+        /// <summary>
+        /// Configure value serdes
+        /// </summary>
+        /// <param name="valueSerdes">Value serdes</param>
+        /// <returns>Itself</returns>
+        public Materialized<K, V, S> WithValueSerdes(ISerDes<V> valueSerdes)
+        {
+            ValueSerdes = valueSerdes;
             return this;
         }
 
@@ -429,11 +429,11 @@ namespace Streamiz.Kafka.Net.Table
 
         internal Materialized<K, V, S> UseProvider(INameProvider provider, string generatedStorePrefix)
         {
-            queriable = !string.IsNullOrEmpty(StoreName);
-            if (!queriable && provider != null)
+            queryable = !string.IsNullOrEmpty(StoreName);
+            if (!queryable && provider != null)
             {
                 storeName = provider.NewStoreName(generatedStorePrefix);
-                queriable = true;
+                queryable = true;
             }
 
             return this;

@@ -34,6 +34,6 @@ namespace Streamiz.Kafka.Net.Stream
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "Mapper function can't be null");
         }
 
-        public VR Apply(K readOnlyKey, V value) => this.mapper(readOnlyKey, value);
+        public VR Apply(K readOnlyKey, V value) => mapper(readOnlyKey, value);
     }
 }

@@ -62,24 +62,24 @@ namespace Streamiz.Kafka.Net.Table
         /// Furthermore, updates to the store are sent downstream into a <see cref="IKeyValueStore{K, V}"/>  changelog stream.
         /// <p>
         /// Each update to the original <see cref="IKTable{K, V}"/> results in a two step update of the result <see cref="IKTable{K, V}"/>.
-        /// The specified <see cref="Reducer{V}"/> adder is applied for each update record and computes a new aggregate using the
+        /// The specified <see cref="IIReducer{V}"/> adder is applied for each update record and computes a new aggregate using the
         /// current aggregate (first argument) and the record's value (second argument) by adding the new record to the
         /// aggregate.
-        /// The specified <see cref="Reducer{V}"/> subtractor is applied for each "replaced" record of the original <see cref="IKTable{K, V}"/>
+        /// The specified <see cref="IIReducer{V}"/> subtractor is applied for each "replaced" record of the original <see cref="IKTable{K, V}"/>
         /// and computes a new aggregate using the current aggregate (first argument) and the record's value (second
         /// argument) by "removing" the "replaced" record from the aggregate.
-        /// If there is no current aggregate the <see cref="Reducer{V}"/> is not applied and the new aggregate will be the record's
+        /// If there is no current aggregate the <see cref="IIReducer{V}"/> is not applied and the new aggregate will be the record's
         /// value as-is.
         /// </p>
-        /// Thus, <see cref="Reduce(Reducer{V}, Reducer{V})" /> can be used to compute aggregate functions like sum.
+        /// Thus, <see cref="Reduce(IReducer{V}, IReducer{V})" /> can be used to compute aggregate functions like sum.
         /// <example>
         /// <code>
-        /// public class SumAdder : Reducer&lt;int&gt; {
+        /// public class SumAdder : IReducer&lt;int&gt; {
         ///   public int Apply(int currentAgg, int newValue) {
         ///     return currentAgg + newValue;
         ///   }
         /// }
-        /// public class SumSubtractor : Reducer&lt;int&gt; {
+        /// public class SumSubtractor : IReducer&lt;int&gt; {
         ///   public int Apply(int currentAgg, int oldValue) {
         ///     return currentAgg - oldValue;
         ///   }
@@ -87,10 +87,10 @@ namespace Streamiz.Kafka.Net.Table
         /// </code>
         /// </example>
         /// </summary>
-        /// <param name="adder">a <see cref="Reducer{V}"/> that adds a new value to the aggregate result</param>
-        /// <param name="substractor">a <see cref="Reducer{V}"/> that removed an old value from the aggregate result</param>
+        /// <param name="adder">a <see cref="IIReducer{V}"/> that adds a new value to the aggregate result</param>
+        /// <param name="substractor">a <see cref="IIReducer{V}"/> that removed an old value from the aggregate result</param>
         /// <returns>a <see cref="IKTable{K, V}"/> that contains "update" records with unmodified keys, and values that represent the latest (rolling) aggregate for each key</returns>
-        IKTable<K, V> Reduce(Reducer<V> adder, Reducer<V> substractor);
+        IKTable<K, V> Reduce(IReducer<V> adder, IReducer<V> substractor);
 
         /// <summary>
         /// Combine the value of records of the original <see cref="IKTable{K, V}"/> that got <see cref="IKTable{K, V}.GroupBy{KR, VR}(Func{K, V, System.Collections.Generic.KeyValuePair{KR, VR}}, string)"/>
@@ -128,24 +128,24 @@ namespace Streamiz.Kafka.Net.Table
         /// Furthermore, updates to the store are sent downstream into a <see cref="IKeyValueStore{K, V}"/>  changelog stream.
         /// <p>
         /// Each update to the original <see cref="IKTable{K, V}"/> results in a two step update of the result <see cref="IKTable{K, V}"/>.
-        /// The specified <see cref="Reducer{V}"/> adder is applied for each update record and computes a new aggregate using the
+        /// The specified <see cref="IIReducer{V}"/> adder is applied for each update record and computes a new aggregate using the
         /// current aggregate (first argument) and the record's value (second argument) by adding the new record to the
         /// aggregate.
-        /// The specified <see cref="Reducer{V}"/> subtractor is applied for each "replaced" record of the original <see cref="IKTable{K, V}"/>
+        /// The specified <see cref="IIReducer{V}"/> subtractor is applied for each "replaced" record of the original <see cref="IKTable{K, V}"/>
         /// and computes a new aggregate using the current aggregate (first argument) and the record's value (second
         /// argument) by "removing" the "replaced" record from the aggregate.
-        /// If there is no current aggregate the <see cref="Reducer{V}"/> is not applied and the new aggregate will be the record's
+        /// If there is no current aggregate the <see cref="IIReducer{V}"/> is not applied and the new aggregate will be the record's
         /// value as-is.
         /// </p>
-        /// Thus, <see cref="Reduce(Reducer{V}, Reducer{V})" /> can be used to compute aggregate functions like sum.
+        /// Thus, <see cref="Reduce(IReducer{V}, IReducer{V})" /> can be used to compute aggregate functions like sum.
         /// <example>
         /// <code>
-        /// public class SumAdder : Reducer&lt;int&gt; {
+        /// public class SumAdder : IReducer&lt;int&gt; {
         ///   public int Apply(int currentAgg, int newValue) {
         ///     return currentAgg + newValue;
         ///   }
         /// }
-        /// public class SumSubtractor : Reducer&lt;int&gt; {
+        /// public class SumSubtractor : IReducer&lt;int&gt; {
         ///   public int Apply(int currentAgg, int oldValue) {
         ///     return currentAgg - oldValue;
         ///   }
@@ -153,12 +153,12 @@ namespace Streamiz.Kafka.Net.Table
         /// </code>
         /// </example>
         /// </summary>
-        /// <param name="adder">a <see cref="Reducer{V}"/> that adds a new value to the aggregate result</param>
-        /// <param name="substractor">a <see cref="Reducer{V}"/> that removed an old value from the aggregate result</param>
+        /// <param name="adder">a <see cref="IIReducer{V}"/> that adds a new value to the aggregate result</param>
+        /// <param name="substractor">a <see cref="IIReducer{V}"/> that removed an old value from the aggregate result</param>
         /// <param name="materialized">the instance of materialized used to materialize the state store</param>
         /// <param name="named">a named config used to name the processor in the topology</param>
         /// <returns>a <see cref="IKTable{K, V}"/> that contains "update" records with unmodified keys, and values that represent the latest (rolling) aggregate for each key</returns>
-        IKTable<K, V> Reduce(Reducer<V> adder, Reducer<V> substractor, Materialized<K, V, IKeyValueStore<Bytes, byte[]>> materialized, string named = null);
+        IKTable<K, V> Reduce(IReducer<V> adder, IReducer<V> substractor, Materialized<K, V, IKeyValueStore<Bytes, byte[]>> materialized, string named = null);
 
         /// <summary>
         /// Combine the value of records of the original <see cref="IKTable{K, V}"/> that got <see cref="IKTable{K, V}.GroupBy{KR, VR}(Func{K, V, System.Collections.Generic.KeyValuePair{KR, VR}}, string)"/>

@@ -99,20 +99,18 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                 .To<StringTimeWindowedSerDes, Int64SerDes>("output-topic");
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                var input = driver.CreateInputTopic<string, string>("topic");
-                var output = driver.CreateOuputTopic("output-topic", TimeSpan.FromSeconds(1), new StringTimeWindowedSerDes(), new Int64SerDes());
-                input.PipeInput("test", "1");
-                input.PipeInput("test-test", "30");
-                var records = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(2, records.Count);
-                Assert.AreEqual("test", records[0].Message.Key.Key);
-                Assert.AreEqual(1, records[0].Message.Value);
-                Assert.AreEqual("test-test", records[1].Message.Key.Key);
-                Assert.AreEqual(1, records[1].Message.Value);
-                Assert.AreEqual(records[0].Message.Key.Window, records[1].Message.Key.Window);
-            }
+            using var driver = new TopologyTestDriver(topology, config);
+            var input = driver.CreateInputTopic<string, string>("topic");
+            var output = driver.CreateOuputTopic("output-topic", TimeSpan.FromSeconds(1), new StringTimeWindowedSerDes(), new Int64SerDes());
+            input.PipeInput("test", "1");
+            input.PipeInput("test-test", "30");
+            var records = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(2, records.Count);
+            Assert.AreEqual("test", records[0].Message.Key.Key);
+            Assert.AreEqual(1, records[0].Message.Value);
+            Assert.AreEqual("test-test", records[1].Message.Key.Key);
+            Assert.AreEqual(1, records[1].Message.Value);
+            Assert.AreEqual(records[0].Message.Key.Window, records[1].Message.Key.Window);
         }
 
         [Test]
@@ -131,25 +129,23 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                 .To<StringTimeWindowedSerDes, Int64SerDes>("output");
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                var input = driver.CreateInputTopic<string, string>("topic");
-                var output = driver.CreateOuputTopic("output", TimeSpan.FromSeconds(1), new StringTimeWindowedSerDes(), new Int64SerDes());
-                input.PipeInput("test", "1");
-                input.PipeInput("test", "2");
-                input.PipeInput("test", "3");
-                var elements = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(3, elements.Count);
-                Assert.AreEqual("test", elements[0].Message.Key.Key);
-                Assert.AreEqual((long)TimeSpan.FromSeconds(10).TotalMilliseconds, elements[0].Message.Key.Window.EndMs - elements[0].Message.Key.Window.StartMs);
-                Assert.AreEqual(1, elements[0].Message.Value);
-                Assert.AreEqual("test", elements[1].Message.Key.Key);
-                Assert.AreEqual(elements[0].Message.Key.Window, elements[1].Message.Key.Window);
-                Assert.AreEqual(2, elements[1].Message.Value);
-                Assert.AreEqual("test", elements[2].Message.Key.Key);
-                Assert.AreEqual(elements[0].Message.Key.Window, elements[2].Message.Key.Window);
-                Assert.AreEqual(3, elements[2].Message.Value);
-            }
+            using var driver = new TopologyTestDriver(topology, config);
+            var input = driver.CreateInputTopic<string, string>("topic");
+            var output = driver.CreateOuputTopic("output", TimeSpan.FromSeconds(1), new StringTimeWindowedSerDes(), new Int64SerDes());
+            input.PipeInput("test", "1");
+            input.PipeInput("test", "2");
+            input.PipeInput("test", "3");
+            var elements = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(3, elements.Count);
+            Assert.AreEqual("test", elements[0].Message.Key.Key);
+            Assert.AreEqual((long)TimeSpan.FromSeconds(10).TotalMilliseconds, elements[0].Message.Key.Window.EndMs - elements[0].Message.Key.Window.StartMs);
+            Assert.AreEqual(1, elements[0].Message.Value);
+            Assert.AreEqual("test", elements[1].Message.Key.Key);
+            Assert.AreEqual(elements[0].Message.Key.Window, elements[1].Message.Key.Window);
+            Assert.AreEqual(2, elements[1].Message.Value);
+            Assert.AreEqual("test", elements[2].Message.Key.Key);
+            Assert.AreEqual(elements[0].Message.Key.Window, elements[2].Message.Key.Window);
+            Assert.AreEqual(3, elements[2].Message.Value);
         }
 
         [Test]
@@ -168,25 +164,23 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                 .To<StringTimeWindowedSerDes, Int64SerDes>("output");
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                var input = driver.CreateInputTopic<string, string>("topic");
-                var output = driver.CreateOuputTopic("output", TimeSpan.FromSeconds(1), new StringTimeWindowedSerDes(), new Int64SerDes());
-                input.PipeInput("test", "1");
-                input.PipeInput("test", "2");
-                input.PipeInput("test", "3");
-                var elements = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(3, elements.Count);
-                Assert.AreEqual("test", elements[0].Message.Key.Key);
-                Assert.AreEqual((long)TimeSpan.FromSeconds(10).TotalMilliseconds, elements[0].Message.Key.Window.EndMs - elements[0].Message.Key.Window.StartMs);
-                Assert.AreEqual(1, elements[0].Message.Value);
-                Assert.AreEqual("test", elements[1].Message.Key.Key);
-                Assert.AreEqual(elements[0].Message.Key.Window, elements[1].Message.Key.Window);
-                Assert.AreEqual(2, elements[1].Message.Value);
-                Assert.AreEqual("test", elements[2].Message.Key.Key);
-                Assert.AreEqual(elements[0].Message.Key.Window, elements[2].Message.Key.Window);
-                Assert.AreEqual(3, elements[2].Message.Value);
-            }
+            using var driver = new TopologyTestDriver(topology, config);
+            var input = driver.CreateInputTopic<string, string>("topic");
+            var output = driver.CreateOuputTopic("output", TimeSpan.FromSeconds(1), new StringTimeWindowedSerDes(), new Int64SerDes());
+            input.PipeInput("test", "1");
+            input.PipeInput("test", "2");
+            input.PipeInput("test", "3");
+            var elements = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(3, elements.Count);
+            Assert.AreEqual("test", elements[0].Message.Key.Key);
+            Assert.AreEqual((long)TimeSpan.FromSeconds(10).TotalMilliseconds, elements[0].Message.Key.Window.EndMs - elements[0].Message.Key.Window.StartMs);
+            Assert.AreEqual(1, elements[0].Message.Value);
+            Assert.AreEqual("test", elements[1].Message.Key.Key);
+            Assert.AreEqual(elements[0].Message.Key.Window, elements[1].Message.Key.Window);
+            Assert.AreEqual(2, elements[1].Message.Value);
+            Assert.AreEqual("test", elements[2].Message.Key.Key);
+            Assert.AreEqual(elements[0].Message.Key.Window, elements[2].Message.Key.Window);
+            Assert.AreEqual(3, elements[2].Message.Value);
         }
 
         [Test]
@@ -205,25 +199,23 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                 .To<StringTimeWindowedSerDes, Int64SerDes>("output");
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                var input = driver.CreateInputTopic<string, string>("topic");
-                var output = driver.CreateOuputTopic("output", TimeSpan.FromSeconds(1), new StringTimeWindowedSerDes(), new Int64SerDes());
-                input.PipeInput("test", "1");
-                input.PipeInput("test", "2");
-                input.PipeInput("test", "3");
-                var elements = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(3, elements.Count);
-                Assert.AreEqual("test", elements[0].Message.Key.Key);
-                Assert.AreEqual((long)TimeSpan.FromSeconds(10).TotalMilliseconds, elements[0].Message.Key.Window.EndMs - elements[0].Message.Key.Window.StartMs);
-                Assert.AreEqual(1, elements[0].Message.Value);
-                Assert.AreEqual("test", elements[1].Message.Key.Key);
-                Assert.AreEqual(elements[0].Message.Key.Window, elements[1].Message.Key.Window);
-                Assert.AreEqual(2, elements[1].Message.Value);
-                Assert.AreEqual("test", elements[2].Message.Key.Key);
-                Assert.AreEqual(elements[0].Message.Key.Window, elements[2].Message.Key.Window);
-                Assert.AreEqual(3, elements[2].Message.Value);
-            }
+            using var driver = new TopologyTestDriver(topology, config);
+            var input = driver.CreateInputTopic<string, string>("topic");
+            var output = driver.CreateOuputTopic("output", TimeSpan.FromSeconds(1), new StringTimeWindowedSerDes(), new Int64SerDes());
+            input.PipeInput("test", "1");
+            input.PipeInput("test", "2");
+            input.PipeInput("test", "3");
+            var elements = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(3, elements.Count);
+            Assert.AreEqual("test", elements[0].Message.Key.Key);
+            Assert.AreEqual((long)TimeSpan.FromSeconds(10).TotalMilliseconds, elements[0].Message.Key.Window.EndMs - elements[0].Message.Key.Window.StartMs);
+            Assert.AreEqual(1, elements[0].Message.Value);
+            Assert.AreEqual("test", elements[1].Message.Key.Key);
+            Assert.AreEqual(elements[0].Message.Key.Window, elements[1].Message.Key.Window);
+            Assert.AreEqual(2, elements[1].Message.Value);
+            Assert.AreEqual("test", elements[2].Message.Key.Key);
+            Assert.AreEqual(elements[0].Message.Key.Window, elements[2].Message.Key.Window);
+            Assert.AreEqual(3, elements[2].Message.Value);
         }
 
         [Test]
@@ -244,11 +236,9 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             var topology = builder.Build();
             Assert.Throws<StreamsException>(() =>
             {
-                using (var driver = new TopologyTestDriver(topology, config))
-                {
-                    var input = driver.CreateInputTopic<string, string>("topic");
-                    input.PipeInput("test", "1");
-                }
+                using var driver = new TopologyTestDriver(topology, config);
+                var input = driver.CreateInputTopic<string, string>("topic");
+                input.PipeInput("test", "1");
             });
         }
 
@@ -268,13 +258,11 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                 .To<StringTimeWindowedSerDes, Int64SerDes>("output");
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                var input = driver.CreateInputTopic<string, string>("topic");
-                var output = driver.CreateOuputTopic("output", TimeSpan.FromSeconds(1), new StringTimeWindowedSerDes(), new Int64SerDes());
-                var elements = output.ReadKeyValueList().ToList();
-                Assert.AreEqual(0, elements.Count);
-            }
+            using var driver = new TopologyTestDriver(topology, config);
+            var input = driver.CreateInputTopic<string, string>("topic");
+            var output = driver.CreateOuputTopic("output", TimeSpan.FromSeconds(1), new StringTimeWindowedSerDes(), new Int64SerDes());
+            var elements = output.ReadKeyValueList().ToList();
+            Assert.AreEqual(0, elements.Count);
         }
 
         [Test]
@@ -292,19 +280,17 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                 .Count(InMemoryWindows<string, long>.As("count-store"));
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                var input = driver.CreateInputTopic<string, string>("topic");
-                input.PipeInput("test", "1");
-                input.PipeInput("test", "2");
-                input.PipeInput("test", "3");
-                var store = driver.GetWindowStore<string, long>("count-store");
-                var elements = store.All().ToList();
-                Assert.AreEqual(1, elements.Count);
-                Assert.AreEqual("test", elements[0].Key.Key);
-                Assert.AreEqual((long)TimeSpan.FromSeconds(10).TotalMilliseconds, elements[0].Key.Window.EndMs - elements[0].Key.Window.StartMs);
-                Assert.AreEqual(3, elements[0].Value);
-            }
+            using var driver = new TopologyTestDriver(topology, config);
+            var input = driver.CreateInputTopic<string, string>("topic");
+            input.PipeInput("test", "1");
+            input.PipeInput("test", "2");
+            input.PipeInput("test", "3");
+            var store = driver.GetWindowStore<string, long>("count-store");
+            var elements = store.All().ToList();
+            Assert.AreEqual(1, elements.Count);
+            Assert.AreEqual("test", elements[0].Key.Key);
+            Assert.AreEqual((long)TimeSpan.FromSeconds(10).TotalMilliseconds, elements[0].Key.Window.EndMs - elements[0].Key.Window.StartMs);
+            Assert.AreEqual(3, elements[0].Value);
         }
 
         [Test]
@@ -322,23 +308,21 @@ namespace Streamiz.Kafka.Net.Tests.Processors
                 .Count(InMemoryWindows<string, long>.As("count-store"));
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                DateTime dt = DateTime.Now;
-                var input = driver.CreateInputTopic<string, string>("topic");
-                input.PipeInput("test", "1", dt);
-                input.PipeInput("test", "2", dt);
-                input.PipeInput("test", "3", dt.AddMinutes(1));
-                var store = driver.GetWindowStore<string, long>("count-store");
-                var elements = store.All().ToList();
-                Assert.AreEqual(2, elements.Count);
-                Assert.AreEqual("test", elements[0].Key.Key);
-                Assert.AreEqual((long)TimeSpan.FromSeconds(5).TotalMilliseconds, elements[0].Key.Window.EndMs - elements[0].Key.Window.StartMs);
-                Assert.AreEqual(2, elements[0].Value);
-                Assert.AreEqual("test", elements[1].Key.Key);
-                Assert.AreEqual((long)TimeSpan.FromSeconds(5).TotalMilliseconds, elements[1].Key.Window.EndMs - elements[1].Key.Window.StartMs);
-                Assert.AreEqual(1, elements[1].Value);
-            }
+            using var driver = new TopologyTestDriver(topology, config);
+            DateTime dt = DateTime.Now;
+            var input = driver.CreateInputTopic<string, string>("topic");
+            input.PipeInput("test", "1", dt);
+            input.PipeInput("test", "2", dt);
+            input.PipeInput("test", "3", dt.AddMinutes(1));
+            var store = driver.GetWindowStore<string, long>("count-store");
+            var elements = store.All().ToList();
+            Assert.AreEqual(2, elements.Count);
+            Assert.AreEqual("test", elements[0].Key.Key);
+            Assert.AreEqual((long)TimeSpan.FromSeconds(5).TotalMilliseconds, elements[0].Key.Window.EndMs - elements[0].Key.Window.StartMs);
+            Assert.AreEqual(2, elements[0].Value);
+            Assert.AreEqual("test", elements[1].Key.Key);
+            Assert.AreEqual((long)TimeSpan.FromSeconds(5).TotalMilliseconds, elements[1].Key.Window.EndMs - elements[1].Key.Window.StartMs);
+            Assert.AreEqual(1, elements[1].Value);
         }
     }
 }

@@ -8,11 +8,11 @@ namespace Streamiz.Kafka.Net.Processors
 {
     internal class KTableReduceProcessor<K, V> : AbstractKTableProcessor<K, V, K, V>
     {
-        private readonly Reducer<V> adder;
-        private readonly Reducer<V> substractor;
+        private readonly IReducer<V> adder;
+        private readonly IReducer<V> substractor;
 
 
-        public KTableReduceProcessor(string storeName, bool sendOldValues, Reducer<V> adder, Reducer<V> substractor)
+        public KTableReduceProcessor(string storeName, bool sendOldValues, IReducer<V> adder, IReducer<V> substractor)
             : base(storeName, sendOldValues, true)
         {
             this.adder = adder;

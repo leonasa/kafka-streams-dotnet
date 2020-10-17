@@ -6,7 +6,7 @@
 
         public GenericKTableValueGetterSupplier(string[] storeName, IKTableValueGetter<K, V> getter)
         {
-            this.StoreNames = storeName;
+            StoreNames = storeName;
             this.getter = getter;
         }
 

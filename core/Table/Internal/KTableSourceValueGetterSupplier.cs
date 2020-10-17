@@ -34,6 +34,6 @@ namespace Streamiz.Kafka.Net.Table.Internal
 
         public string[] StoreNames => new string[1] { queryableStoreName };
 
-        public IKTableValueGetter<K, V> Get() => new KTableSourceValueGetter(this.queryableStoreName);
+        public IKTableValueGetter<K, V> Get() => new KTableSourceValueGetter(queryableStoreName);
     }
 }

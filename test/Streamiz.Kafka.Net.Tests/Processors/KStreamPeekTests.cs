@@ -25,21 +25,19 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            var expected = new List<KeyValuePair<string, string>>();
+            for (int i = 0; i < 32; i++)
             {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
-                var expected = new List<KeyValuePair<string, string>>();
-                for (int i = 0; i < 32; i++)
-                {
-                    string key = i.ToString();
-                    string value = $"V{i}";
-                    inputTopic.PipeInput(key, value);
-                    expected.Add(KeyValuePair.Create(key, value));
-                }
-                
-                Assert.AreEqual(expected, peekObserved);
-                Assert.AreEqual(expected, streamObserved);
+                string key = i.ToString();
+                string value = $"V{i}";
+                inputTopic.PipeInput(key, value);
+                expected.Add(KeyValuePair.Create(key, value));
             }
+                
+            Assert.AreEqual(expected, peekObserved);
+            Assert.AreEqual(expected, streamObserved);
         }
 
         [Test]

@@ -24,14 +24,12 @@ namespace Streamiz.Kafka.Net.Tests.TestDriver
                 .Count(InMemoryWindows<string, long>.As("count-store"));
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                DateTime dt = DateTime.Now;
-                var input = driver.CreateInputTopic<string, string>("topic");
-                input.PipeInput("test", "1", dt);
-                var store = driver.GetWindowStore<string, long>("store");
-                Assert.IsNull(store);
-            }
+            using var driver = new TopologyTestDriver(topology, config);
+            DateTime dt = DateTime.Now;
+            var input = driver.CreateInputTopic<string, string>("topic");
+            input.PipeInput("test", "1", dt);
+            var store = driver.GetWindowStore<string, long>("store");
+            Assert.IsNull(store);
         }
 
         [Test]
@@ -49,14 +47,12 @@ namespace Streamiz.Kafka.Net.Tests.TestDriver
                 .Count(InMemoryWindows<string, long>.As("count-store"));
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                DateTime dt = DateTime.Now;
-                var input = driver.CreateInputTopic<string, string>("topic");
-                input.PipeInput("test", "1", dt);
-                var store = driver.GetWindowStore<int, long>("count-store");
-                Assert.IsNull(store);
-            }
+            using var driver = new TopologyTestDriver(topology, config);
+            DateTime dt = DateTime.Now;
+            var input = driver.CreateInputTopic<string, string>("topic");
+            input.PipeInput("test", "1", dt);
+            var store = driver.GetWindowStore<int, long>("count-store");
+            Assert.IsNull(store);
         }
 
         [Test]
@@ -73,14 +69,12 @@ namespace Streamiz.Kafka.Net.Tests.TestDriver
                 .Count(InMemory<string, long>.As("count-store"));
 
             var topology = builder.Build();
-            using (var driver = new TopologyTestDriver(topology, config))
-            {
-                DateTime dt = DateTime.Now;
-                var input = driver.CreateInputTopic<string, string>("topic");
-                input.PipeInput("test", "1", dt);
-                var store = driver.GetWindowStore<string, long>("count-store");
-                Assert.IsNull(store);
-            }
+            using var driver = new TopologyTestDriver(topology, config);
+            DateTime dt = DateTime.Now;
+            var input = driver.CreateInputTopic<string, string>("topic");
+            input.PipeInput("test", "1", dt);
+            var store = driver.GetWindowStore<string, long>("count-store");
+            Assert.IsNull(store);
         }
     }
 }

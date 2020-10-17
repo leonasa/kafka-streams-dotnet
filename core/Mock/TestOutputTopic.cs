@@ -88,7 +88,7 @@ namespace Streamiz.Kafka.Net.Mock
         /// Read one record from the output topic and return record's value.
         /// </summary>
         /// <returns>Next value for output topic.</returns>
-        public V ReadValue() => this.ReadRecord().Value;
+        public V ReadValue() => ReadRecord().Value;
 
         /// <summary>
         /// Read one record from the output topic and return its key and value as pair.
@@ -96,7 +96,7 @@ namespace Streamiz.Kafka.Net.Mock
         /// <returns>Next output as <see cref="ConsumeResult{TKey, TValue}"/></returns>
         public ConsumeResult<K, V> ReadKeyValue()
         {
-            var r = this.ReadRecord();
+            var r = ReadRecord();
 
             return r != null ? new ConsumeResult<K, V> {Message = new Message<K, V> {Key = r.Key, Value = r.Value, Timestamp = new Timestamp(r.Timestamp ?? DateTime.Now)}} : null;
         }

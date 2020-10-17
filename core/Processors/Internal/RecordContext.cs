@@ -6,11 +6,11 @@ namespace Streamiz.Kafka.Net.Processors.Internal
     {
         public RecordContext(ConsumeResult<byte[], byte[]> result)
         {
-            this.Offset = result.Offset;
-            this.Timestamp = result.Message.Timestamp.UnixTimestampMs;
-            this.Topic = result.Topic;
-            this.Partition = result.Partition;
-            this.Headers = result.Message.Headers;
+            Offset = result.Offset;
+            Timestamp = result.Message.Timestamp.UnixTimestampMs;
+            Topic = result.Topic;
+            Partition = result.Partition;
+            Headers = result.Message.Headers;
         }
 
         public long Offset { get; }

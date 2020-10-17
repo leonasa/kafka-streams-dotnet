@@ -41,7 +41,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
 
         public KTableRepartitionMap(IKTableGetter<K, V> parent, IKeyValueMapper<K, V, KeyValuePair<K1, V1>> mapper)
         {
-            this.parentTable = parent;
+            parentTable = parent;
             this.mapper = mapper;
         }
 
@@ -52,7 +52,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
                 var supplier = parentTable.ValueGetterSupplier;
                 return new GenericKTableValueGetterSupplier<K, KeyValuePair<K1, V1>>(
                     null,
-                    new KTableMapValueGetter(this.mapper, supplier.Get()));
+                    new KTableMapValueGetter(mapper, supplier.Get()));
             }
         }
 
@@ -61,6 +61,6 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
             throw new InvalidOperationException("KTableRepartitionMap should always require sending old values.");
         }
 
-        public IProcessor<K, Change<V>> Get() => new KTableMapProcessor<K, V, K1, V1>(this.mapper);
+        public IProcessor<K, Change<V>> Get() => new KTableMapProcessor<K, V, K1, V1>(mapper);
     }
 }

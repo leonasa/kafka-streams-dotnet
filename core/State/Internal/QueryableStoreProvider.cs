@@ -31,13 +31,13 @@ namespace Streamiz.Kafka.Net.State.Internal
         public T GetStore<T, K, V>(StoreQueryParameters<T, K, V> storeQueryParameters) 
             where T : class
         {
-            IEnumerable<T> globalStore = this.globalStateStoreProvider.Stores(storeQueryParameters);
+            IEnumerable<T> globalStore = globalStateStoreProvider.Stores(storeQueryParameters);
             if (globalStore.Any())
             {
-                return storeQueryParameters.QueryableStoreType.Create(new GlobalStateStoreProviderFacade<T, K, V>(this.globalStateStoreProvider), storeQueryParameters.StoreName);
+                return storeQueryParameters.QueryableStoreType.Create(new GlobalStateStoreProviderFacade<T, K, V>(globalStateStoreProvider), storeQueryParameters.StoreName);
             }
 
-            IEnumerable<T> allStores = this.storeProviders
+            IEnumerable<T> allStores = storeProviders
                 .SelectMany(store => store.Stores(storeQueryParameters));
 
             if (!allStores.Any())
@@ -48,7 +48,7 @@ namespace Streamiz.Kafka.Net.State.Internal
             return storeQueryParameters
                 .QueryableStoreType
                 .Create(
-                    new WrappingStoreProvider<T, K, V>(this.storeProviders, storeQueryParameters),
+                    new WrappingStoreProvider<T, K, V>(storeProviders, storeQueryParameters),
                     storeQueryParameters.StoreName);
         }
     }

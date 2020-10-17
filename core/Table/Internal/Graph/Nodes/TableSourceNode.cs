@@ -36,7 +36,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph.Nodes
 
         public string SourceName => sourceName;
 
-        public string NodeName => this.streamGraphNode;
+        public string NodeName => streamGraphNode;
 
         public void ReuseSourceTopicForChangeLog(bool shouldReuseSourceTopicForChangelog)
         {
@@ -57,7 +57,7 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph.Nodes
         {
             // TODO: we assume source KTables can only be timestamped-key-value stores for now.
             // should be expanded for other types of stores as well.
-            IStoreBuilder<State.ITimestampedKeyValueStore<K, V>> storeBuilder = new TimestampedKeyValueStoreMaterializer<K, V>(materialized as Materialized<K, V, IKeyValueStore<Bytes, byte[]>>).Materialize();
+            IStoreBuilder<ITimestampedKeyValueStore<K, V>> storeBuilder = new TimestampedKeyValueStoreMaterializer<K, V>(materialized as Materialized<K, V, IKeyValueStore<Bytes, byte[]>>).Materialize();
 
             if (isGlobalKTable)
             {
@@ -65,14 +65,14 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph.Nodes
             }
             else
             {
-                builder.AddSourceOperator(this.topicName, sourceName, consumed);
+                builder.AddSourceOperator(topicName, sourceName, consumed);
                 builder.AddProcessor(processorParameters.ProcessorName, processorParameters.Processor, sourceName);
 
                 //// only add state store if the source KTable should be materialized
                 KTableSource<K, V> ktableSource = (KTableSource<K, V>)processorParameters.Processor;
                 if (ktableSource.QueryableName != null)
                 {
-                    builder.AddStateStore(storeBuilder, this.streamGraphNode);
+                    builder.AddStateStore(storeBuilder, streamGraphNode);
 
                     // TODO :
 

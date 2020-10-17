@@ -32,17 +32,15 @@ namespace Streamiz.Kafka.Net.Tests.Private
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic1 = driver.CreateInputTopic<string, string>("topic1");
-                var inputTopic2 = driver.CreateInputTopic<string, string>("topic2");
-                var outputTopic = driver.CreateOuputTopic<string, string>("output");
-                inputTopic1.PipeInput("key", "i1");
-                inputTopic1.PipeInput("key", "i2");
-                inputTopic1.PipeInput("key", "i3");
-                var items = outputTopic.ReadKeyValueList().ToList();
-                Assert.AreEqual(0, items.Count);
-            }
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic1 = driver.CreateInputTopic<string, string>("topic1");
+            var inputTopic2 = driver.CreateInputTopic<string, string>("topic2");
+            var outputTopic = driver.CreateOuputTopic<string, string>("output");
+            inputTopic1.PipeInput("key", "i1");
+            inputTopic1.PipeInput("key", "i2");
+            inputTopic1.PipeInput("key", "i3");
+            var items = outputTopic.ReadKeyValueList().ToList();
+            Assert.AreEqual(0, items.Count);
         }
 
         //[Test]
@@ -83,7 +81,7 @@ namespace Streamiz.Kafka.Net.Tests.Private
 
             for (int i = 0; i < maxBuffered + 1; ++i)
             {
-                producer.Produce("topic1", new Confluent.Kafka.Message<byte[], byte[]>
+                producer.Produce("topic1", new Message<byte[], byte[]>
                 {
                     Key = serdes.Serialize("key", new SerializationContext()),
                     Value = serdes.Serialize($"coucou{i}", new SerializationContext())
@@ -93,7 +91,7 @@ namespace Streamiz.Kafka.Net.Tests.Private
             System.Threading.Thread.Sleep(50);
 
             // Add one message more with consumer in stream thread in pause
-            producer.Produce("topic1", new Confluent.Kafka.Message<byte[], byte[]>
+            producer.Produce("topic1", new Message<byte[], byte[]>
             {
                 Key = serdes.Serialize("key", new SerializationContext()),
                 Value = serdes.Serialize($"coucou{maxBuffered+1}", new SerializationContext())
@@ -107,7 +105,7 @@ namespace Streamiz.Kafka.Net.Tests.Private
             Assert.AreEqual(maxBuffered+1, task.Grouper.NumBuffered(new TopicPartition("topic1", 0)));
             Assert.AreEqual(0, task.Grouper.NumBuffered(new TopicPartition("topic2", 0)));
 
-            producer.Produce("topic2", new Confluent.Kafka.Message<byte[], byte[]>
+            producer.Produce("topic2", new Message<byte[], byte[]>
             {
                 Key = serdes.Serialize("key", new SerializationContext()),
                 Value = serdes.Serialize($"test", new SerializationContext())

@@ -33,14 +33,12 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic");
 
-                inputTopic.PipeInputs(data);
+            inputTopic.PipeInputs(data);
 
-                Assert.AreEqual(data, foreachObserved);
-            }
+            Assert.AreEqual(data, foreachObserved);
         }
     }
 }

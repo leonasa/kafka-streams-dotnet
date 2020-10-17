@@ -48,7 +48,7 @@ namespace Streamiz.Kafka.Net.Mock
         internal StreamTask GetTask(string topicName)
         {
             StreamTask task;
-            var id = builder.GetTaskIdFromPartition(new Confluent.Kafka.TopicPartition(topicName, 0));
+            var id = builder.GetTaskIdFromPartition(new TopicPartition(topicName, 0));
             if (tasks.ContainsKey(id))
                 task = tasks[id];
             else

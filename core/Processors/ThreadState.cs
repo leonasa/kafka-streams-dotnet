@@ -97,8 +97,8 @@ namespace Streamiz.Kafka.Net.Processors
         private ThreadState(int order, string name, params int[] validTransitions)
         {
             Ordinal = order;
-            this.Name = name;
-            this.Transitions.AddRange(validTransitions);
+            Name = name;
+            Transitions.AddRange(validTransitions);
         }
 
         public bool IsRunning()
@@ -128,6 +128,6 @@ namespace Streamiz.Kafka.Net.Processors
         {
             return obj is ThreadState state && state.Ordinal.Equals(Ordinal);
         }
-        public bool Equals(ThreadState other) => this.Ordinal.Equals(other.Ordinal);
+        public bool Equals(ThreadState other) => Ordinal.Equals(other.Ordinal);
     }
 }

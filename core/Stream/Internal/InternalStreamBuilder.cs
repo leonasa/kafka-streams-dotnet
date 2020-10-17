@@ -39,7 +39,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
         {
             var name = new Named(consumed.Named).OrElseGenerateWithPrefix(this, KStream.SOURCE_NAME);
             var node = new StreamSourceNode<K,V>(topic, name, consumed);
-            this.AddGraphNode(root, node);
+            AddGraphNode(root, node);
             KStream<K, V> stream = new KStream<K, V>(name, consumed.KeySerdes, consumed.ValueSerdes, new List<string> { name }, node, this);
             return stream;
         }
@@ -70,7 +70,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
                 topic, tableSourceName, sourceName, consumed,
                 materialized, processorParameters, false);
 
-            this.AddGraphNode(root, tableSourceNode);
+            AddGraphNode(root, tableSourceNode);
 
             return new KTable<K,V,V>(tableSourceName,
                                     consumed.KeySerdes,
@@ -107,7 +107,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
                 topic, tableSourceName, sourceName, consumed,
                 materialized, processorParameters, true);
 
-            this.AddGraphNode(root, tableSourceNode);
+            AddGraphNode(root, tableSourceNode);
 
             return new GlobalKTable<K, V>(new KTableSourceValueGetterSupplier<K, V>(storeName), materialized.QueryableStoreName);
         }

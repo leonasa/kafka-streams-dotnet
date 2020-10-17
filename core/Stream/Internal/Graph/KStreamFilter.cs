@@ -15,6 +15,6 @@ namespace Streamiz.Kafka.Net.Stream.Internal.Graph.Nodes
             Not = not;
         }
 
-        public IProcessor<K, V> Get() => new KStreamFilterProcessor<K, V>(this.Predicate, this.Not);
+        public IProcessor<K, V> Get() => new KStreamFilterProcessor<K, V>(Predicate, Not);
     }
 }

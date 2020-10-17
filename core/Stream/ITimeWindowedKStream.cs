@@ -263,14 +263,14 @@ namespace Streamiz.Kafka.Net.Stream
         /// </p>
         /// <para>
         /// The value of the first record per window initialized the aggregation result.
-        /// The specified <see cref="Reducer{V}"/> is applied for each additional input record per window and computes a new
+        /// The specified <see cref="IIReducer{V}"/> is applied for each additional input record per window and computes a new
         /// aggregate using the current aggregate (first argument) and the record's value (second argument):
         /// Thus, reducer can be used to compute aggregate functions like sum, min, or max.
         /// </para>
         /// </summary>
-        /// <param name="reducer">a <see cref="Reducer{V}"/> that computes a new aggregate result. Cannot be null.</param>
+        /// <param name="reducer">a <see cref="IIReducer{V}"/> that computes a new aggregate result. Cannot be null.</param>
         /// <returns>a windowed <see cref="IKTable{K, V}"/> that contains "update" records with unmodified keys, and values that represent the latest (rolling) aggregate for each key within a window. </returns>
-        IKTable<Windowed<K>, V> Reduce(Reducer<V> reducer);
+        IKTable<Windowed<K>, V> Reduce(IReducer<V> reducer);
 
         /// <summary>
         /// Combine the values of records in this stream by the grouped key and defined windows.
@@ -303,16 +303,16 @@ namespace Streamiz.Kafka.Net.Stream
         /// </p>
         /// <para>
         /// The value of the first record per window initialized the aggregation result.
-        /// The specified <see cref="Reducer{V}"/> is applied for each additional input record per window and computes a new
+        /// The specified <see cref="IIReducer{V}"/> is applied for each additional input record per window and computes a new
         /// aggregate using the current aggregate (first argument) and the record's value (second argument):
         /// Thus, reducer can be used to compute aggregate functions like sum, min, or max.
         /// </para>
         /// </summary>
-        /// <param name="reducer">a <see cref="Reducer{V}"/> that computes a new aggregate result. Cannot be null.</param>
+        /// <param name="reducer">a <see cref="IIReducer{V}"/> that computes a new aggregate result. Cannot be null.</param>
         /// <param name="materialized">a <see cref="Materialized{K, V, S}"/> config used to materialize a state store.</param>
         /// <param name="named">a named config used to name the processor in the topology.</param>
         /// <returns>a windowed <see cref="IKTable{K, V}"/> that contains "update" records with unmodified keys, and values that represent the latest (rolling) aggregate for each key within a window. </returns>
-        IKTable<Windowed<K>, V> Reduce(Reducer<V> reducer, Materialized<K, V, IWindowStore<Bytes, byte[]>> materialized, string named = null);
+        IKTable<Windowed<K>, V> Reduce(IReducer<V> reducer, Materialized<K, V, IWindowStore<Bytes, byte[]>> materialized, string named = null);
 
         /// <summary>
         /// Combine the values of records in this stream by the grouped key and defined windows.

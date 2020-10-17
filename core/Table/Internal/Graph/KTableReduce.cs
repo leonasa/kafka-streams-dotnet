@@ -6,13 +6,13 @@ namespace Streamiz.Kafka.Net.Table.Internal.Graph
     internal class KTableReduce<K, V> : IKTableProcessorSupplier<K, V, V>
     {
         private readonly string storeName;
-        private readonly Reducer<V> adder;
-        private readonly Reducer<V> substractor;
+        private readonly IReducer<V> adder;
+        private readonly IReducer<V> substractor;
 
         private bool sendOldValues;
 
 
-        public KTableReduce(string storeName, Reducer<V> adder, Reducer<V> substractor)
+        public KTableReduce(string storeName, IReducer<V> adder, IReducer<V> substractor)
         {
             this.storeName = storeName;
             this.adder = adder;

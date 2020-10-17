@@ -38,20 +38,18 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic1");
-                var inputTopic2 = driver.CreateInputTopic<string, string>("topic2");
-                var outputTopic = driver.CreateOuputTopic<string, string>("output-join");
-                inputTopic.PipeInput("test", "test");
-                inputTopic2.PipeInput("test", "coucou");
-                var records = outputTopic.ReadKeyValueList().ToList();
-                Assert.AreEqual(2, records.Count);
-                Assert.AreEqual("test", records[0].Message.Key);
-                Assert.AreEqual("-test", records[0].Message.Value);
-                Assert.AreEqual("test", records[1].Message.Key);
-                Assert.AreEqual("coucou-test", records[1].Message.Value);
-            }
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic1");
+            var inputTopic2 = driver.CreateInputTopic<string, string>("topic2");
+            var outputTopic = driver.CreateOuputTopic<string, string>("output-join");
+            inputTopic.PipeInput("test", "test");
+            inputTopic2.PipeInput("test", "coucou");
+            var records = outputTopic.ReadKeyValueList().ToList();
+            Assert.AreEqual(2, records.Count);
+            Assert.AreEqual("test", records[0].Message.Key);
+            Assert.AreEqual("-test", records[0].Message.Value);
+            Assert.AreEqual("test", records[1].Message.Key);
+            Assert.AreEqual("coucou-test", records[1].Message.Value);
         }
 
         [Test]
@@ -76,20 +74,18 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic1");
-                var inputTopic2 = driver.CreateInputTopic<string, string>("topic2");
-                var outputTopic = driver.CreateOuputTopic<string, string>("output-join");
-                inputTopic.PipeInput("test", "test");
-                inputTopic2.PipeInput("test", "coucou");
-                var records = outputTopic.ReadKeyValueList().ToList();
-                Assert.AreEqual(2, records.Count);
-                Assert.AreEqual("test", records[0].Message.Key);
-                Assert.AreEqual("-test", records[0].Message.Value);
-                Assert.AreEqual("test", records[1].Message.Key);
-                Assert.AreEqual("coucou-test", records[1].Message.Value);
-            }
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic1");
+            var inputTopic2 = driver.CreateInputTopic<string, string>("topic2");
+            var outputTopic = driver.CreateOuputTopic<string, string>("output-join");
+            inputTopic.PipeInput("test", "test");
+            inputTopic2.PipeInput("test", "coucou");
+            var records = outputTopic.ReadKeyValueList().ToList();
+            Assert.AreEqual(2, records.Count);
+            Assert.AreEqual("test", records[0].Message.Key);
+            Assert.AreEqual("-test", records[0].Message.Value);
+            Assert.AreEqual("test", records[1].Message.Key);
+            Assert.AreEqual("coucou-test", records[1].Message.Value);
         }
 
         [Test]
@@ -114,20 +110,18 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic1");
-                var inputTopic2 = driver.CreateInputTopic<string, string>("topic2");
-                var outputTopic = driver.CreateOuputTopic<string, string>("output-join");
-                inputTopic.PipeInput("test", "test");
-                inputTopic2.PipeInput("test", "coucou");
-                var records = outputTopic.ReadKeyValueList().ToList();
-                Assert.AreEqual(2, records.Count);
-                Assert.AreEqual("test", records[0].Message.Key);
-                Assert.AreEqual("-test", records[0].Message.Value);
-                Assert.AreEqual("test", records[1].Message.Key);
-                Assert.AreEqual("coucou-test", records[1].Message.Value);
-            }
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic1");
+            var inputTopic2 = driver.CreateInputTopic<string, string>("topic2");
+            var outputTopic = driver.CreateOuputTopic<string, string>("output-join");
+            inputTopic.PipeInput("test", "test");
+            inputTopic2.PipeInput("test", "coucou");
+            var records = outputTopic.ReadKeyValueList().ToList();
+            Assert.AreEqual(2, records.Count);
+            Assert.AreEqual("test", records[0].Message.Key);
+            Assert.AreEqual("-test", records[0].Message.Value);
+            Assert.AreEqual("test", records[1].Message.Key);
+            Assert.AreEqual("coucou-test", records[1].Message.Value);
         }
 
         [Test]
@@ -152,20 +146,18 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic1");
-                var inputTopic2 = driver.CreateInputTopic<string, string>("topic2");
-                var outputTopic = driver.CreateOuputTopic<string, string>("output-join");
-                inputTopic.PipeInput("test", "test");
-                inputTopic2.PipeInput("test", "coucou");
-                var records = outputTopic.ReadKeyValueList().ToList();
-                Assert.AreEqual(2, records.Count);
-                Assert.AreEqual("test", records[0].Message.Key);
-                Assert.AreEqual("-test", records[0].Message.Value);
-                Assert.AreEqual("test", records[1].Message.Key);
-                Assert.AreEqual("coucou-test", records[1].Message.Value);
-            }
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic1");
+            var inputTopic2 = driver.CreateInputTopic<string, string>("topic2");
+            var outputTopic = driver.CreateOuputTopic<string, string>("output-join");
+            inputTopic.PipeInput("test", "test");
+            inputTopic2.PipeInput("test", "coucou");
+            var records = outputTopic.ReadKeyValueList().ToList();
+            Assert.AreEqual(2, records.Count);
+            Assert.AreEqual("test", records[0].Message.Key);
+            Assert.AreEqual("-test", records[0].Message.Value);
+            Assert.AreEqual("test", records[1].Message.Key);
+            Assert.AreEqual("coucou-test", records[1].Message.Value);
         }
 
         [Test]
@@ -218,8 +210,8 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             var stream = builder.Stream<string, string>("topic1");
 
             var joinProps = StreamJoinProps.From<string, string, string>(StreamJoinProps.With(
-                Streamiz.Kafka.Net.State.Stores.InMemoryWindowStore("test", TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10)),
-                Streamiz.Kafka.Net.State.Stores.InMemoryWindowStore("test", TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10))));
+                State.Stores.InMemoryWindowStore("test", TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10)),
+                State.Stores.InMemoryWindowStore("test", TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10))));
 
             Assert.Throws<StreamsException>(() => builder
                .Stream<string, string>("topic2")
@@ -239,8 +231,8 @@ namespace Streamiz.Kafka.Net.Tests.Processors
             var stream = builder.Stream<string, string>("topic1");
 
             var joinProps = StreamJoinProps.From<string, string, string>(StreamJoinProps.With(
-                Streamiz.Kafka.Net.State.Stores.InMemoryWindowStore("test1", TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10)),
-                Streamiz.Kafka.Net.State.Stores.InMemoryWindowStore("test2", TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10))));
+                State.Stores.InMemoryWindowStore("test1", TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10)),
+                State.Stores.InMemoryWindowStore("test2", TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10))));
 
             // JoinWindowOptions.Of => use default retention => One Day
             // joinProps use supplier with retention 10 secondes => BAD THING !!
@@ -271,16 +263,14 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic2 = driver.CreateInputTopic<string, string>("topic2");
-                var outputTopic = driver.CreateOuputTopic<string, string>("output-join");
-                inputTopic2.PipeInput("test", "coucou");
-                var record = outputTopic.ReadKeyValue();
-                Assert.IsNotNull(record);
-                Assert.AreEqual("test", record.Message.Key);
-                Assert.AreEqual("coucou-", record.Message.Value);
-            }
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic2 = driver.CreateInputTopic<string, string>("topic2");
+            var outputTopic = driver.CreateOuputTopic<string, string>("output-join");
+            inputTopic2.PipeInput("test", "coucou");
+            var record = outputTopic.ReadKeyValue();
+            Assert.IsNotNull(record);
+            Assert.AreEqual("test", record.Message.Key);
+            Assert.AreEqual("coucou-", record.Message.Value);
         }
 
         [Test]
@@ -305,16 +295,14 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("topic1");
-                var outputTopic = driver.CreateOuputTopic<string, string>("output-join");
-                inputTopic.PipeInput("test", "test");
-                var record = outputTopic.ReadKeyValue();
-                Assert.IsNotNull(record);
-                Assert.AreEqual("test", record.Message.Key);
-                Assert.AreEqual("-test", record.Message.Value);
-            }
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("topic1");
+            var outputTopic = driver.CreateOuputTopic<string, string>("output-join");
+            inputTopic.PipeInput("test", "test");
+            var record = outputTopic.ReadKeyValue();
+            Assert.IsNotNull(record);
+            Assert.AreEqual("test", record.Message.Key);
+            Assert.AreEqual("-test", record.Message.Value);
         }
     }
 }

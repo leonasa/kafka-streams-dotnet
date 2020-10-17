@@ -42,20 +42,18 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                inputTopic.PipeInput("key1", "1");
-                inputTopic.PipeInput("key2", "2");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            inputTopic.PipeInput("key1", "1");
+            inputTopic.PipeInput("key2", "2");
 
-                var store = driver.GetKeyValueStore<string, string>("table-topic-store");
-                Assert.IsNotNull(store);
-                var resultK1 = store.Get("key1");
-                var resultK2 = store.Get("key2");
+            var store = driver.GetKeyValueStore<string, string>("table-topic-store");
+            Assert.IsNotNull(store);
+            var resultK1 = store.Get("key1");
+            var resultK2 = store.Get("key2");
 
-                Assert.AreEqual("1", resultK1);
-                Assert.AreEqual("2", resultK2);
-            }
+            Assert.AreEqual("1", resultK1);
+            Assert.AreEqual("2", resultK2);
         }
 
         [Test]
@@ -72,20 +70,18 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                inputTopic.PipeInput("key1", "1");
-                inputTopic.PipeInput("key2", "2");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            inputTopic.PipeInput("key1", "1");
+            inputTopic.PipeInput("key2", "2");
 
-                var store = driver.GetKeyValueStore<string, string>("table-topic-store");
-                Assert.IsNotNull(store);
-                var resultK1 = store.Get("key1");
-                var resultK2 = store.Get("key2");
+            var store = driver.GetKeyValueStore<string, string>("table-topic-store");
+            Assert.IsNotNull(store);
+            var resultK1 = store.Get("key1");
+            var resultK2 = store.Get("key2");
 
-                Assert.AreEqual("1", resultK1);
-                Assert.AreEqual("2", resultK2);
-            }
+            Assert.AreEqual("1", resultK1);
+            Assert.AreEqual("2", resultK2);
         }
 
         [Test]
@@ -101,20 +97,18 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                inputTopic.PipeInput("key1", "1");
-                inputTopic.PipeInput("key2", "2");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            inputTopic.PipeInput("key1", "1");
+            inputTopic.PipeInput("key2", "2");
 
-                var store = driver.GetKeyValueStore<string, string>("table-topic-store");
-                Assert.IsNotNull(store);
-                var resultK1 = store.Get("key1");
-                var resultK2 = store.Get("key2");
+            var store = driver.GetKeyValueStore<string, string>("table-topic-store");
+            Assert.IsNotNull(store);
+            var resultK1 = store.Get("key1");
+            var resultK2 = store.Get("key2");
 
-                Assert.AreEqual("1", resultK1);
-                Assert.AreEqual("2", resultK2);
-            }
+            Assert.AreEqual("1", resultK1);
+            Assert.AreEqual("2", resultK2);
         }
 
         [Test]
@@ -130,20 +124,18 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                inputTopic.PipeInput("key1", "1");
-                inputTopic.PipeInput("key2", "2");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            inputTopic.PipeInput("key1", "1");
+            inputTopic.PipeInput("key2", "2");
 
-                var store = driver.GetKeyValueStore<string, string>("table-topic-store");
-                Assert.IsNotNull(store);
-                var resultK1 = store.Get("key1");
-                var resultK2 = store.Get("key2");
+            var store = driver.GetKeyValueStore<string, string>("table-topic-store");
+            Assert.IsNotNull(store);
+            var resultK1 = store.Get("key1");
+            var resultK2 = store.Get("key2");
 
-                Assert.AreEqual("1", resultK1);
-                Assert.AreEqual("2", resultK2);
-            }
+            Assert.AreEqual("1", resultK1);
+            Assert.AreEqual("2", resultK2);
         }
 
         [Test]
@@ -159,20 +151,18 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                inputTopic.PipeInput("key1", "1");
-                inputTopic.PipeInput("key2", "2");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            inputTopic.PipeInput("key1", "1");
+            inputTopic.PipeInput("key2", "2");
 
-                var store = driver.GetKeyValueStore<string, string>("table-topic-store");
-                Assert.IsNotNull(store);
-                var resultK1 = store.Get("key1");
-                var resultK2 = store.Get("key2");
+            var store = driver.GetKeyValueStore<string, string>("table-topic-store");
+            Assert.IsNotNull(store);
+            var resultK1 = store.Get("key1");
+            var resultK2 = store.Get("key2");
 
-                Assert.AreEqual("1", resultK1);
-                Assert.AreEqual("2", resultK2);
-            }
+            Assert.AreEqual("1", resultK1);
+            Assert.AreEqual("2", resultK2);
         }
 
         [Test]
@@ -188,20 +178,18 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                inputTopic.PipeInput("key1", "1");
-                inputTopic.PipeInput("key2", "2");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            inputTopic.PipeInput("key1", "1");
+            inputTopic.PipeInput("key2", "2");
 
-                var store = driver.GetKeyValueStore<string, string>("table-topic-store");
-                Assert.IsNotNull(store);
-                var resultK1 = store.Get("key1");
-                var resultK2 = store.Get("key2");
+            var store = driver.GetKeyValueStore<string, string>("table-topic-store");
+            Assert.IsNotNull(store);
+            var resultK1 = store.Get("key1");
+            var resultK2 = store.Get("key2");
 
-                Assert.AreEqual("1", resultK1);
-                Assert.AreEqual("2", resultK2);
-            }
+            Assert.AreEqual("1", resultK1);
+            Assert.AreEqual("2", resultK2);
         }
 
         [Test]
@@ -216,15 +204,13 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                inputTopic.PipeInput(null, "1");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            inputTopic.PipeInput(null, "1");
 
-                var store = driver.GetKeyValueStore<string, string>("table-topic-store");
-                Assert.IsNotNull(store);
-                Assert.AreEqual(0, store.ApproximateNumEntries());
-            }
+            var store = driver.GetKeyValueStore<string, string>("table-topic-store");
+            Assert.IsNotNull(store);
+            Assert.AreEqual(0, store.ApproximateNumEntries());
         }
 
         [Test]
@@ -239,28 +225,26 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                inputTopic.PipeInput("key1", "1");
-                inputTopic.PipeInput("key2", "2");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            inputTopic.PipeInput("key1", "1");
+            inputTopic.PipeInput("key2", "2");
 
-                var store = driver.GetKeyValueStore<string, string>("table-topic-store");
-                Assert.IsNotNull(store);
-                var resultK1 = store.Get("key1");
-                var resultK2 = store.Get("key2");
+            var store = driver.GetKeyValueStore<string, string>("table-topic-store");
+            Assert.IsNotNull(store);
+            var resultK1 = store.Get("key1");
+            var resultK2 = store.Get("key2");
 
-                Assert.AreEqual("1", resultK1);
-                Assert.AreEqual("2", resultK2);
+            Assert.AreEqual("1", resultK1);
+            Assert.AreEqual("2", resultK2);
 
-                inputTopic.PipeInput("key1", "11");
+            inputTopic.PipeInput("key1", "11");
 
-                resultK1 = store.Get("key1");
-                resultK2 = store.Get("key2");
+            resultK1 = store.Get("key1");
+            resultK2 = store.Get("key2");
 
-                Assert.AreEqual("11", resultK1);
-                Assert.AreEqual("2", resultK2);
-            }
+            Assert.AreEqual("11", resultK1);
+            Assert.AreEqual("2", resultK2);
         }
 
         [Test]
@@ -275,31 +259,29 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                inputTopic.PipeInput("key1", "1");
-                inputTopic.PipeInput("key2", "2");
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            inputTopic.PipeInput("key1", "1");
+            inputTopic.PipeInput("key2", "2");
 
-                var store = driver.GetKeyValueStore<string, string>("table-topic-store");
-                Assert.IsNotNull(store);
+            var store = driver.GetKeyValueStore<string, string>("table-topic-store");
+            Assert.IsNotNull(store);
 
-                var resultK1 = store.Get("key1");
-                var resultK2 = store.Get("key2");
+            var resultK1 = store.Get("key1");
+            var resultK2 = store.Get("key2");
 
-                Assert.AreEqual(2, store.All().Count());
-                Assert.AreEqual("1", resultK1);
-                Assert.AreEqual("2", resultK2);
+            Assert.AreEqual(2, store.All().Count());
+            Assert.AreEqual("1", resultK1);
+            Assert.AreEqual("2", resultK2);
 
-                inputTopic.PipeInput("key1", null);
+            inputTopic.PipeInput("key1", null);
 
-                resultK1 = store.Get("key1");
-                resultK2 = store.Get("key2");
+            resultK1 = store.Get("key1");
+            resultK2 = store.Get("key2");
 
-                Assert.AreEqual(1, store.All().Count());
-                Assert.AreEqual(null, resultK1);
-                Assert.AreEqual("2", resultK2);
-            }
+            Assert.AreEqual(1, store.All().Count());
+            Assert.AreEqual(null, resultK1);
+            Assert.AreEqual("2", resultK2);
         }
 
         [Test]
@@ -314,12 +296,10 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                inputTopic.PipeInput("key1", "1");
-                inputTopic.PipeInput("key2", "2");
-            }
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            inputTopic.PipeInput("key1", "1");
+            inputTopic.PipeInput("key2", "2");
         }
 
         [Test]
@@ -334,12 +314,10 @@ namespace Streamiz.Kafka.Net.Tests.Processors
 
             Topology t = builder.Build();
 
-            using (var driver = new TopologyTestDriver(t, config))
-            {
-                var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
-                inputTopic.PipeInput("key1", "1");
-                inputTopic.PipeInput("key2", "2");
-            }
+            using var driver = new TopologyTestDriver(t, config);
+            var inputTopic = driver.CreateInputTopic<string, string>("table-topic");
+            inputTopic.PipeInput("key1", "1");
+            inputTopic.PipeInput("key2", "2");
         }
     }
 }
