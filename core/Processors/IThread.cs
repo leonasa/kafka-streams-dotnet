@@ -13,7 +13,7 @@ namespace Streamiz.Kafka.Net.Processors
         string Name { get; }
         bool IsRunning { get; }
         void Run();
-        void Start(CancellationToken token);
+        void Start(CancellationToken cancellationToken);
         IEnumerable<ITask> ActiveTasks { get;  }
 
         event ThreadStateListener StateChanged;
