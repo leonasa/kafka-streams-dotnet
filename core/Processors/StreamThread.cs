@@ -246,7 +246,6 @@ namespace Streamiz.Kafka.Net.Processors
             if (IsRunning)
             {
                 while (!token.IsCancellationRequested)
-                {
                     try
                     {
                         RunConsumers();
@@ -263,7 +262,6 @@ namespace Streamiz.Kafka.Net.Processors
                         HandleException(message, exception);
                         break;
                     }
-                }
 
                 WaitingEndOfDisposing();
             }
@@ -325,38 +323,56 @@ namespace Streamiz.Kafka.Net.Processors
             int processed;
             do
             {
-                processed = 0;
-                for (var i = 0; i < numIterations; ++i)
-                {
-                    processed = manager.Process(now);
-
-                    if (processed == 0)
-                        break;
-                    // NOT AVAILABLE NOW, NEED PROCESSOR API
-                    //if (processed > 0)
-                    //    manager.MaybeCommitPerUserRequested();
-                    //else
-                    //    break;
-                }
+                processed = GetProcessedThreads(now);
 
                 var timeSinceLastPoll = Math.Max(DateTime.Now.GetMilliseconds() - lastPollMs, 0);
 
-
-                if (MaybeCommit())
-                {
-                    numIterations = numIterations > 1 ? numIterations / 2 : numIterations;
-                }
-
-                else if (streamConfig.MaxPollIntervalMs != null && timeSinceLastPoll > streamConfig.MaxPollIntervalMs.Value / 2)
-                {
-                    numIterations = numIterations > 1 ? numIterations / 2 : numIterations;
+                if (ShouldBreakProcessing(timeSinceLastPoll, processed))
                     break;
-                }
-                else if (processed > 0)
-                {
-                    numIterations++;
-                }
             } while (processed > 0);
+        }
+
+        private bool ShouldBreakProcessing(long timeSinceLastPoll, int processed)
+        {
+            if (MaybeCommit())
+            {
+                numIterations = CalculateNumIterations();
+            }
+            else if (streamConfig.MaxPollIntervalMs != null && timeSinceLastPoll > streamConfig.MaxPollIntervalMs.Value / 2)
+            {
+                numIterations = CalculateNumIterations();
+                return true;
+            }
+            else if (processed > 0)
+            {
+                numIterations++;
+            }
+
+            return false;
+        }
+
+        private int CalculateNumIterations()
+        {
+            return numIterations > 1 ? numIterations / 2 : numIterations;
+        }
+
+        private int GetProcessedThreads(long now)
+        {
+            var processed = 0;
+            for (var i = 0; i < numIterations; ++i)
+            {
+                processed = manager.Process(now);
+
+                if (processed == 0)
+                    break;
+                // NOT AVAILABLE NOW, NEED PROCESSOR API
+                //if (processed > 0)
+                //    manager.MaybeCommitPerUserRequested();
+                //else
+                //    break;
+            }
+
+            return processed;
         }
 
         private List<ConsumeResult<byte[], byte[]>> BuildConsumeResults()
