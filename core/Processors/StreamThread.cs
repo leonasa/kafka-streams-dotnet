@@ -311,7 +311,7 @@ namespace Streamiz.Kafka.Net.Processors
                 else
                 {
                     log.Error($"Unable to locate active task for received-record partition {record.TopicPartition}. Current tasks: {string.Join(",", manager.ActiveTaskIds)}");
-                    throw new NullReferenceException($"Task was unexpectedly missing for partition {record.TopicPartition}");
+                    throw new MissingTaskForPartitionException($"Task was unexpectedly missing for partition {record.TopicPartition}");
                 }
             }
 
