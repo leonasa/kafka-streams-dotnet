@@ -7,6 +7,7 @@ using Streamiz.Kafka.Net.SerDes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Streamiz.Kafka.Net
@@ -217,7 +218,7 @@ namespace Streamiz.Kafka.Net
     /// Implementation of <see cref="IStreamConfig"/>. Contains all configuration for your stream.
     /// By default, Kafka Streams does not allow users to overwrite the following properties (Streams setting shown in parentheses)
     ///    - EnableAutoCommit = (false) - Streams client will always disable/turn off auto committing
-    ///    - PartitionAssignmentStrategy = <see cref="PartitionAssignmentStrategy.Range"/> - Streams application must have a partition assignment stategy to RANGE for join processing
+    ///    - PartitionAssignmentStrategy = <see cref="Range"/> - Streams application must have a partition assignment stategy to RANGE for join processing
     /// If <see cref="IStreamConfig.Guarantee"/> is set to <see cref="ProcessingGuarantee.EXACTLY_ONCE"/>, Kafka Streams does not allow users to overwrite the following properties (Streams setting shown in parentheses):
     ///    - <see cref="IsolationLevel"/> (<see cref="IsolationLevel.ReadCommitted"/>) - Consumers will always read committed data only
     ///    - <see cref="EnableIdempotence"/> (true) - Producer will always have idempotency enabled
@@ -232,6 +233,7 @@ namespace Streamiz.Kafka.Net
     /// </code>
     /// </exemple>
     /// </summary>
+    [Serializable]
     public class StreamConfig : Dictionary<string, dynamic>, IStreamConfig, ISchemaRegistryConfig
     {
         #region Not used for moment
@@ -1780,6 +1782,16 @@ namespace Streamiz.Kafka.Net
             PartitionAssignmentStrategy = Confluent.Kafka.PartitionAssignmentStrategy.Range;
         }
 
+        /// <summary>
+        /// Constructor for Serialization
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        protected StreamConfig(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+
         #endregion
 
         #region IStreamConfig Impl
@@ -2189,7 +2201,7 @@ namespace Streamiz.Kafka.Net
 
         /// <summary>
         /// Constructor with properties. 
-        /// See <see cref="StreamConfig.StreamConfig(IDictionary{string, dynamic})"/>
+        /// See <see cref="StreamConfig"/>
         /// <para>
         /// <see cref="IStreamConfig.DefaultKeySerDes"/> is set to <code>new KS();</code>
         /// <see cref="IStreamConfig.DefaultValueSerDes"/> is set to <code>new VS();</code>
