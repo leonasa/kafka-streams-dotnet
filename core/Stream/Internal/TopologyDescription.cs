@@ -162,7 +162,7 @@ namespace Streamiz.Kafka.Net.Stream.Internal
 
         public IEnumerable<INodeDescription> Previous => previous;
 
-        public NodeDescription(string name)
+        protected NodeDescription(string name)
         {
             Name = name;
         }

@@ -41,7 +41,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// <param name="startMs">the start timestamp of the window</param>
         /// <param name="endMs">the end timestamp of the window</param>
         /// <exception cref="ArgumentException">if <paramref name="startMs"/> is negative or if <paramref name="endMs"/> is smaller than or equal to <paramref name="startMs"/></exception>
-        public Window(long startMs, long endMs)
+        protected Window(long startMs, long endMs)
         {
             if (startMs < 0)
                 throw new ArgumentException("Window startMs time cannot be negative.");

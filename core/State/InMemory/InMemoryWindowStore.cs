@@ -78,7 +78,7 @@ namespace Streamiz.Kafka.Net.State.InMemory
             return e;
         }
 
-        public InMemoryWindowStoreIteratorWrapper(
+        protected InMemoryWindowStoreIteratorWrapper(
             Bytes keyFrom,
             Bytes keyTo,
             List<KeyValuePair<long, ConcurrentDictionary<Bytes, byte[]>>> dataIterator,
