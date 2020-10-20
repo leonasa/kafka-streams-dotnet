@@ -2,6 +2,7 @@
 
 namespace Streamiz.Kafka.Net
 {
+/*
     /// <summary>
     /// NOT USED FOR MOMENT
     /// </summary>
@@ -31,4 +32,5 @@ namespace Streamiz.Kafka.Net
             return this;
         }
     }
+*/
 }

@@ -95,7 +95,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// The specified <see cref="IAggregator{K,V,VA}"/> is applied for each input record and computes a new aggregate using the current
         /// aggregate (or for the very first record using the intermediate aggregation result provided via the
         /// <see cref="Initializer{VR}"/>) and the record's value.
-        /// Thus, <see cref="Aggregate{VR}(Initializer{VR}, IAggregator{K,V,VA})"/> can be used to compute aggregate functions like
+        /// Thus, <see cref="Aggregate{VR}(Initializer{VR}, IAggregator{K,V,VR})"/> can be used to compute aggregate functions like
         /// count (c.f. <see cref="Count(Materialized{K, long, IKeyValueStore{Bytes, byte[]}}, string)"/>).
         /// </p>
         /// </summary>
@@ -150,7 +150,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// The specified <see cref="IAggregator{K,V,VA}"/> is applied for each input record and computes a new aggregate using the current
         /// aggregate (or for the very first record using the intermediate aggregation result provided via the
         /// <see cref="Initializer{VR}"/>) and the record's value.
-        /// Thus, <see cref="Aggregate{VR, VRS}(Initializer{VR}, IAggregator{K,V,VA})"/> can be used to compute aggregate functions like
+        /// Thus, <see cref="Aggregate{VR, VRS}(Initializer{VR}, IAggregator{K,V,VR})"/> can be used to compute aggregate functions like
         /// count (c.f. <see cref="Count(Materialized{K, long, IKeyValueStore{Bytes, byte[]}}, string)"/>).
         /// </p>
         /// </summary>
@@ -207,7 +207,7 @@ namespace Streamiz.Kafka.Net.Stream
         /// The specified <see cref="IAggregator{K,V,VA}"/> is applied for each input record and computes a new aggregate using the current
         /// aggregate (or for the very first record using the intermediate aggregation result provided via the
         /// <see cref="Initializer{VR}"/>) and the record's value.
-        /// Thus, <see cref="Aggregate{VR}(Initializer{VR}, IAggregator{K,V,VA}, Materialized{K, VR, IKeyValueStore{Bytes, byte[]}}, string)"/> can be used to compute aggregate functions like
+        /// Thus, <see cref="Aggregate{VR}(Initializer{VR}, IAggregator{K,V,VR}, Materialized{K, VR, IKeyValueStore{Bytes, byte[]}}, string)"/> can be used to compute aggregate functions like
         /// count (c.f. <see cref="Count(Materialized{K, long, IKeyValueStore{Bytes, byte[]}}, string)"/>).
         /// </p>
         /// </summary>
