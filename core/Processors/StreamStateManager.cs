@@ -100,12 +100,9 @@ namespace Streamiz.Kafka.Net.Processors
                     {
                         MaybeSetRunning();
                     }
-                    else if (newState == GlobalThreadState.DEAD)
+                    else if (newState == GlobalThreadState.DEAD && stream.SetState(KafkaStream.State.ERROR))
                     {
-                        if (stream.SetState(KafkaStream.State.ERROR))
-                        {
-                            log.Error("Global thread has died. The instance will be in error state and should be closed.");
-                        }
+                        log.Error("Global thread has died. The instance will be in error state and should be closed.");
                     }
                 }
             }
