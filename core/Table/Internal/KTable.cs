@@ -269,9 +269,9 @@ namespace Streamiz.Kafka.Net.Table.Internal
                 }
                 // we can inherit parent key and value serde if user do not provide specific overrides, more specifically:
                 // we preserve the key following the order of 1) materialized, 2) parent
-                keySerde = materializedInternal.KeySerdes != null ? materializedInternal.KeySerdes : KeySerdes;
+                keySerde = materializedInternal.KeySerdes ?? KeySerdes;
                 // we preserve the value following the order of 1) materialized, 2) parent
-                valueSerde = materializedInternal.ValueSerdes != null ? materializedInternal.ValueSerdes : ValueSerdes;
+                valueSerde = materializedInternal.ValueSerdes ?? ValueSerdes;
                 // ONLY FOR CALCULATE PROPERTY queriable
                 materializedInternal.UseProvider(null, null);
                 queryableStoreName = materializedInternal.QueryableStoreName;
@@ -312,7 +312,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
         private IKTable<K, VR> DoMapValues<VR>(IValueMapperWithKey<K, V, VR> mapper, string named, Materialized<K, VR, IKeyValueStore<Bytes, byte[]>> materializedInternal)
         {
             if (mapper == null)
-                throw new ArgumentNullException("MapValues() doesn't allow null mapper function");
+                throw new ArgumentNullException(nameof(mapper),"MapValues() doesn't allow null mapper function");
 
             ISerDes<K> keySerde;
             ISerDes<VR> valueSerde;
@@ -327,8 +327,8 @@ namespace Streamiz.Kafka.Net.Table.Internal
                 {
                     builder.NewStoreName(KTable.MAPVALUES_NAME);
                 }
-                keySerde = materializedInternal.KeySerdes != null ? materializedInternal.KeySerdes : KeySerdes;
-                valueSerde = materializedInternal.ValueSerdes != null ? materializedInternal.ValueSerdes : null;
+                keySerde = materializedInternal.KeySerdes ?? KeySerdes;
+                valueSerde = materializedInternal.ValueSerdes;
                 // ONLY FOR CALCULATE PROPERTY queriable 
                 materializedInternal.UseProvider(null, null);
                 queryableStoreName = materializedInternal.QueryableStoreName;
@@ -373,7 +373,7 @@ namespace Streamiz.Kafka.Net.Table.Internal
         private IKGroupedTable<K1, V1> DoGroup<K1, V1>(IKeyValueMapper<K, V, KeyValuePair<K1, V1>> keySelector, Grouped<K1, V1> grouped)
         {
             if (keySelector == null)
-                throw new ArgumentNullException("GroupBy() doesn't allow null selector function");
+                throw new ArgumentNullException(nameof(grouped), "GroupBy() doesn't allow null selector function");
 
             var selectName = new Named(grouped.Named).OrElseGenerateWithPrefix(builder, KTable.SELECT_NAME);
 
