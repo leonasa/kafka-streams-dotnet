@@ -175,7 +175,7 @@ namespace Streamiz.Kafka.Net.Processors.Internal
         {
             string processorName = processorParameters.ProcessorName;
 
-            ValidateGlobalStoreArguments(sourceName, topicName, processorName, processorParameters.Processor, storeBuilder.Name, storeBuilder.LoggingEnabled);
+            ValidateGlobalStoreArguments(sourceName, processorName, storeBuilder.Name, storeBuilder.LoggingEnabled);
             ValidateTopicNotAlreadyRegistered(topicName);
 
             var predecessors = new[] { sourceName };
@@ -214,10 +214,8 @@ namespace Streamiz.Kafka.Net.Processors.Internal
             //}
         }
 
-        private void ValidateGlobalStoreArguments<K, V>(string sourceName,
-                                              string topicName,
+        private void ValidateGlobalStoreArguments(string sourceName,
                                               string processorName,
-                                              IProcessorSupplier<K, V> stateUpdateSupplier,
                                               string storeName,
                                               bool loggingEnabled)
         {
